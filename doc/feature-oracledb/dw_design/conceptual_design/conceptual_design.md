@@ -1,8 +1,8 @@
-# Toronto Bike Share Data Warehouse Documentation - Conceptual Design
+# Toronto Shared Bike Data Analysis: Data Warehouse - Conceptual Design
 
 [Back](../../../../README.md)
 
-- [Toronto Bike Share Data Warehouse Documentation - Conceptual Design](#toronto-bike-share-data-warehouse-documentation---conceptual-design)
+- [Toronto Shared Bike Data Analysis: Data Warehouse - Conceptual Design](#toronto-shared-bike-data-analysis-data-warehouse---conceptual-design)
   - [Project Overview and Purpose](#project-overview-and-purpose)
   - [Business Requirements](#business-requirements)
   - [Stakeholder Identification](#stakeholder-identification)

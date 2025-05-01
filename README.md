@@ -1,8 +1,8 @@
-# Project-Toronto_Shared-Bike
+# Project: Toronto Shared Bike Data Analysis
 
 A repo of data analysis project for Toronto shared bike.
 
-- [Project-Toronto\_Shared-Bike](#project-toronto_shared-bike)
+- [Project: Toronto Shared Bike Data Analysis](#project-toronto-shared-bike-data-analysis)
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
 
 ---
@@ -10,6 +10,7 @@ A repo of data analysis project for Toronto shared bike.
 ## Data Warehouse (Oracle 19c)
 
 - Data Warehouse Design
+
   - [Conceptual Design](./doc/feature-oracledb/dw_design/conceptual_design/conceptual_design.md)
   - [Logical Design](./doc/feature-oracledb/dw_design/logical_design/logical_design.md)
   - [Physical Design](./doc/feature-oracledb/dw_design/physical_design/physical_design.md)

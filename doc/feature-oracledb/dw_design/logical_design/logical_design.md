@@ -1,8 +1,8 @@
-# Toronto Bike Share Data Warehouse Documentation - Logical Design
+# Toronto Shared Bike Data Analysis: Data Warehouse - Logical Design
 
 [Back](../../../../README.md)
 
-- [Toronto Bike Share Data Warehouse Documentation - Logical Design](#toronto-bike-share-data-warehouse-documentation---logical-design)
+- [Toronto Shared Bike Data Analysis: Data Warehouse - Logical Design](#toronto-shared-bike-data-analysis-data-warehouse---logical-design)
   - [Data Modeling Approach](#data-modeling-approach)
   - [Entity Definitions](#entity-definitions)
     - [Fact Entity](#fact-entity)

@@ -1,22 +1,22 @@
-# Toronto Bike Share Data Warehouse Documentation - Physical Design
+# Toronto Shared Bike Data Analysis: Data Warehouse - Physical Design
 
 [Back](../../../../README.md)
 
-- [Toronto Bike Share Data Warehouse Documentation - Physical Design](#toronto-bike-share-data-warehouse-documentation---physical-design)
-- [Database Platform](#database-platform)
-- [Physical Schema Design](#physical-schema-design)
-  - [General Considerations](#general-considerations)
-  - [Fact Table: `fact_trip`](#fact-table-fact_trip)
-  - [Dimension Table: `dim_time`](#dimension-table-dim_time)
-  - [Dimension Table: `dim_station`](#dimension-table-dim_station)
-  - [Dimension Table: `dim_bike`](#dimension-table-dim_bike)
-  - [Dimension Table: `dim_user_type`](#dimension-table-dim_user_type)
-- [Security \& Access Control](#security--access-control)
-- [Backup Strategy](#backup-strategy)
+- [Toronto Shared Bike Data Analysis: Data Warehouse - Physical Design](#toronto-shared-bike-data-analysis-data-warehouse---physical-design)
+  - [Database Platform](#database-platform)
+  - [Physical Schema Design](#physical-schema-design)
+    - [General Considerations](#general-considerations)
+    - [Fact Table: `fact_trip`](#fact-table-fact_trip)
+    - [Dimension Table: `dim_time`](#dimension-table-dim_time)
+    - [Dimension Table: `dim_station`](#dimension-table-dim_station)
+    - [Dimension Table: `dim_bike`](#dimension-table-dim_bike)
+    - [Dimension Table: `dim_user_type`](#dimension-table-dim_user_type)
+  - [Security \& Access Control](#security--access-control)
+  - [Backup Strategy](#backup-strategy)
 
 ---
 
-# Database Platform
+## Database Platform
 
 - Chosen Platform: `Oracle 19c`
 
@@ -28,11 +28,11 @@
 
 ---
 
-# Physical Schema Design
+## Physical Schema Design
 
 Define the physical schema for the Toronto bike share data warehouse in Oracle 19c, optimizing for analytical performance and scalability, based on a star schema in the logical design.
 
-## General Considerations
+### General Considerations
 
 - **Project dedicated PDB**:
   - `toronto_shared_bike`
@@ -50,7 +50,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-## Fact Table: `fact_trip`
+### Fact Table: `fact_trip`
 
 | Column Name                  | Data Type  | Constraints                                  |
 | ---------------------------- | ---------- | -------------------------------------------- |
@@ -104,7 +104,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-## Dimension Table: `dim_time`
+### Dimension Table: `dim_time`
 
 | Column Name          | Data Type  | Constraints                                 | Description                           |
 | -------------------- | ---------- | ------------------------------------------- | ------------------------------------- |
@@ -137,7 +137,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-## Dimension Table: `dim_station`
+### Dimension Table: `dim_station`
 
 | Column Name        | Data Type     | Constraints | Description                        |
 | ------------------ | ------------- | ----------- | ---------------------------------- |
@@ -159,7 +159,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-## Dimension Table: `dim_bike`
+### Dimension Table: `dim_bike`
 
 | Column Name      | Data Type    | Constraints | Description            |
 | ---------------- | ------------ | ----------- | ---------------------- |
@@ -178,7 +178,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-## Dimension Table: `dim_user_type`
+### Dimension Table: `dim_user_type`
 
 | Column Name          | Data Type    | Constraints                      |
 | -------------------- | ------------ | -------------------------------- |
@@ -197,7 +197,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-# Security & Access Control
+## Security & Access Control
 
 - **Guiding Principles**
   **Least Privilege**: Grant only the permissions required for each role’s tasks.
@@ -221,7 +221,7 @@ Define the physical schema for the Toronto bike share data warehouse in Oracle 1
 
 ---
 
-# Backup Strategy
+## Backup Strategy
 
 - Backup Plan
 

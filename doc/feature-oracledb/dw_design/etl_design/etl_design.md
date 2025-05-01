@@ -1,8 +1,8 @@
-# Toronto Bike Share Data Warehouse Documentation - ELT Design
+# Toronto Shared Bike Data Analysis: Data Warehouse - ELT Design
 
 [Back](../../../../README.md)
 
-- [Toronto Bike Share Data Warehouse Documentation - ELT Design](#toronto-bike-share-data-warehouse-documentation---elt-design)
+- [Toronto Shared Bike Data Analysis: Data Warehouse - ELT Design](#toronto-shared-bike-data-analysis-data-warehouse---elt-design)
   - [Data Quality Strategy](#data-quality-strategy)
   - [External Table: Extract](#external-table-extract)
     - [Source File](#source-file)
@@ -47,9 +47,11 @@
 
 - Strategy:
 
-  - Capture as many record as possible, by large length size varchar2
-  - No validation
-  - enable log file and bad file to capture error
+  - 1. Capture as many record as possible, by large length size varchar2
+  - 2. No validation
+  - 3. enable log file and bad file to capture error
+
+---
 
 ### Source File
 

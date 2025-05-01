@@ -1,8 +1,8 @@
-# Toronto Bike Share Data Warehouse Documentation - Materialized Design
+# Toronto Shared Bike Data Analysis: Data Warehouse - Materialized Design
 
 [Back](../../../../README.md)
 
-- [Toronto Bike Share Data Warehouse Documentation - Materialized Design](#toronto-bike-share-data-warehouse-documentation---materialized-design)
+- [Toronto Shared Bike Data Analysis: Data Warehouse - Materialized Design](#toronto-shared-bike-data-analysis-data-warehouse---materialized-design)
   - [Materialized Design](#materialized-design)
     - [General](#general)
   - [KPI: Trip Volume Trends](#kpi-trip-volume-trends)
