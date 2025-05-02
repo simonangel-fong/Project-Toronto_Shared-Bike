@@ -1,0 +1,64 @@
+# docker compose for development Windows OS
+name: toronto-shared-bike
+
+services:
+  oracle19cDB-dev:
+    container_name: oracle19cDB-dev
+    restart: unless-stopped
+    image: simonangelfong/oracledb19c:1.0
+    # image: simonangelfong/toronto-shared-bike-db-prebuilt:year2019 # using prebuild image
+    env_file:
+      - ./env/dev.env
+    environment:
+      # - ORACLE_SID=${ORCLDB_SID}
+      - ORACLE_PWD=/run/secrets/orcl_sys_token
+    secrets:
+      - orcl_sys_token
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 8g
+        reservations:
+          memory: 4g
+    # volumes:
+      # - ./setup:/opt/oracle/scripts/setup # script to run after setup
+      # - ./startup:/opt/oracle/scripts/startup # script to run after startup
+      # - ../data:/tmp # source data
+      # - oracledata:/opt/oracle/oradata # persist data
+      # - oracledata:/opt/oracle/ # persist data
+    networks:
+      - private-net
+      - public-net
+    ports:
+      - 1521:1521
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sqlplus",
+          "-S",
+          "sys/${ORACLE_PWD}@${ORACLE_SID}",
+          "as",
+          "sysdba",
+          "<<<",
+          "exit",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5m
+
+volumes:
+  oracledata:
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true
+
+secrets:
+  orcl_sys_token:
+    file: ./env/orcl_sys_token.txt

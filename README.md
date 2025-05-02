@@ -18,5 +18,19 @@ A repo of data analysis project for Toronto shared bike.
     - [Materialized View Design](./doc/feature-oracledb/dw_design/mv_design/mv_design.md)
 
 - Data Warehouse Development
-  - [Dockerize Oracle Database 19c]
-  - [SQL Script Catalog]
+
+  - [Docker Compose Oracle 19c](./doc/feature-oracledb/dw_development/docker-compose/docker-compose.md)
+  - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
+
+- Data Warehouse Deployment
+  - [RHEL 9.3 Deployment](./doc/feature-oracledb/dw_development/rhel_deploy/rhel_deploy.md)
+
+
+
+CREATE PLUGGABLE DATABASE toronto_shared_bike 
+    ADMIN USER pdb_adm IDENTIFIED BY PDBSecurePassword123
+    ROLES = (DBA)
+    DEFAULT TABLESPACE users 
+    FILE_NAME_CONVERT=(
+        '/opt/oracle/oradata/ORCLCDB/pdbseed'
+        ,'/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/');
