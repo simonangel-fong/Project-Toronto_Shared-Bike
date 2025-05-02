@@ -21,12 +21,12 @@ services:
           memory: 8g
         reservations:
           memory: 4g
-    # volumes:
-      # - ./setup:/opt/oracle/scripts/setup # script to run after setup
-      # - ./startup:/opt/oracle/scripts/startup # script to run after startup
-      # - ../data:/tmp # source data
-      # - oracledata:/opt/oracle/oradata # persist data
-      # - oracledata:/opt/oracle/ # persist data
+    volumes:
+      - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
+      - ./scripts:/project/scripts # scripts
+      - ../data:/project/data # source data
+      - oracledata:/opt/oracle/oradata # persist data
+    # entrypoint: ["/project/scripts/entrypoint.sh"]
     networks:
       - private-net
       - public-net

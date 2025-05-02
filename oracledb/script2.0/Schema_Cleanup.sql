@@ -1,5 +1,0 @@
-SET SERVEROUTPUT ON;
-ALTER SESSION SET CONTAINER = toronto_shared_bike;
-
--- Drop existing objects
-DROP USER DW_SCHEMA CASCADE;

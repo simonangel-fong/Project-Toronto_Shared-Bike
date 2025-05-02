@@ -4,7 +4,7 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 
 -- Create directory
 CREATE OR REPLACE DIRECTORY dir_target 
-AS '/tmp/2019';
+AS '/project/data/2019';
 
 -- Grant read permissions
 GRANT READ ON DIRECTORY dir_target TO DW_SCHEMA;

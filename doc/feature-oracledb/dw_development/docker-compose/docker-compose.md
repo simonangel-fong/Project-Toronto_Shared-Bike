@@ -11,6 +11,7 @@
     - [Healthcheck](#healthcheck)
     - [Resource Limits](#resource-limits)
   - [Commnad to build](#commnad-to-build)
+  - [Execute ETL](#execute-etl)
 
 ---
 
@@ -98,4 +99,19 @@
 # build
 docker compose -f compose.oracledb.dev.yaml up --build -d
 docker compose -f compose.oracledb.dev.yaml down
+```
+
+---
+
+## Execute ETL
+
+```sh
+# set script permission
+docker exec -it -u root:root oracle19cDB-dev bash /project/scripts/01set_permission.sh
+
+# execute ETL batch job
+docker exec -it oracle19cDB-dev bash /project/scripts/etl/sh02_etl_job.sh
+
+# execute MV refresh job
+docker exec -it oracle19cDB-dev bash /project/scripts/mv/sh01_refresh.sh
 ```

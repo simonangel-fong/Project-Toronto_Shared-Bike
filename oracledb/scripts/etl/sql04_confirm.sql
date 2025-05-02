@@ -1,0 +1,18 @@
+-- Set PDB context
+SET SERVEROUTPUT ON;
+ALTER SESSION SET CONTAINER = toronto_shared_bike;
+
+SELECT COUNT(*)
+FROM DW_SCHEMA.dim_time;
+
+SELECT COUNT(*)
+FROM DW_SCHEMA.dim_station;
+
+SELECT COUNT(*)
+FROM DW_SCHEMA.dim_bike;
+
+SELECT COUNT(*)
+FROM DW_SCHEMA.dim_user_type;
+
+SELECT COUNT(*)
+FROM DW_SCHEMA.fact_trip;

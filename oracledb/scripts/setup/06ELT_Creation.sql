@@ -1,8 +1,9 @@
-ALTER SESSION SET CONTAINER = CDB$ROOT;
-BEGIN
-  DW_PKG.switch_container;
-END;
-/
+-- ELT-Extraction
+ALTER SESSION SET CONTAINER = toronto_shared_bike;
+
+-- Create directory
+CREATE OR REPLACE DIRECTORY data_dir 
+AS '/project/data/2019';
 
 -- Grant read permissions
 GRANT READ ON DIRECTORY data_dir TO DW_SCHEMA;
