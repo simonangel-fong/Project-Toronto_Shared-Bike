@@ -1,0 +1,47 @@
+---
+- name: Configure NFS server on working_node
+  hosts: working_node
+  become: yes
+  tasks:
+
+    - name: Install NFS server packages
+      dnf:
+        name: nfs-utils
+        state: present
+
+    - name: Enable and start the NFS server
+      systemd:
+        name: nfs-server
+        enabled: yes
+        state: started
+
+    - name: Create export directory
+      file:
+        path: /srv/nfs_share
+        state: directory
+        mode: '0777'
+        owner: nobody
+        group: nobody
+
+    - name: Configure /etc/exports
+      copy:
+        dest: /etc/exports
+        content: "/srv/nfs_share  *(rw,sync,no_root_squash,no_subtree_check)\n"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Export the shared directory
+      command: exportfs -ra
+
+    - name: Allow NFS through the firewall
+      ansible.posix.firewalld:
+        service: nfs
+        state: enabled
+        immediate: yes
+        permanent: yes
+
+    - name: Reload firewalld
+      systemd:
+        name: firewalld
+        state: restarted

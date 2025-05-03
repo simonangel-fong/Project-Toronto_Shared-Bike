@@ -3,7 +3,14 @@
 A repo of data analysis project for Toronto shared bike.
 
 - [Project: Toronto Shared Bike Data Analysis](#project-toronto-shared-bike-data-analysis)
+  - [DevOps](#devops)
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
+
+---
+
+## DevOps
+
+- [Ansible](./doc/devops/ansible/ansible.md)
 
 ---
 
@@ -25,12 +32,10 @@ A repo of data analysis project for Toronto shared bike.
 - Data Warehouse Deployment
   - [RHEL 9.3 Deployment](./doc/feature-oracledb/dw_development/rhel_deploy/rhel_deploy.md)
 
-
-
-CREATE PLUGGABLE DATABASE toronto_shared_bike 
-    ADMIN USER pdb_adm IDENTIFIED BY PDBSecurePassword123
-    ROLES = (DBA)
-    DEFAULT TABLESPACE users 
-    FILE_NAME_CONVERT=(
-        '/opt/oracle/oradata/ORCLCDB/pdbseed'
-        ,'/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/');
+CREATE PLUGGABLE DATABASE toronto_shared_bike
+ADMIN USER pdb_adm IDENTIFIED BY PDBSecurePassword123
+ROLES = (DBA)
+DEFAULT TABLESPACE users
+FILE_NAME_CONVERT=(
+'/opt/oracle/oradata/ORCLCDB/pdbseed'
+,'/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/');
