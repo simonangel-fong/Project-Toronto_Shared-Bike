@@ -84,28 +84,46 @@ WHEN NOT MATCHED THEN
     INSERT (ds.dim_station_id, ds.dim_station_name)
     VALUES (src.dim_station_id, src.dim_station_name);
 
--- Merge into dim_bike
+COMMIT;
+
+---- Merge into dim_bike
+--MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
+--USING (
+--  SELECT 
+--    TO_NUMBER(TRIM(bike_id)) AS bike_id,
+--    MAX(TRIM(REPLACE(model, CHR(13), ''))) AS bike_model
+--  FROM DW_SCHEMA.staging_trip
+--  WHERE UPPER(TRIM(model)) != 'UNKNOWN'
+--  GROUP BY TO_NUMBER(TRIM(bike_id))
+--) src
+--ON (tgt.dim_bike_id = src.bike_id)
+--WHEN MATCHED THEN
+--  UPDATE SET 
+--    tgt.dim_bike_model = src.bike_model
+--  WHERE tgt.dim_bike_model != src.bike_model
+--WHEN NOT MATCHED THEN
+--  INSERT (dim_bike_id, dim_bike_model)
+--  VALUES (src.bike_id, src.bike_model);
+
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
 USING (
-  SELECT DISTINCT
-    TO_NUMBER(bike_id) AS bike_id,
-    model AS bike_model
+  SELECT 
+    TO_NUMBER(TRIM(bike_id)) AS bike_id,
+    COALESCE(
+      MAX(CASE WHEN UPPER(TRIM(model)) != 'UNKNOWN' THEN TRIM(REPLACE(model, CHR(13), '')) END),
+      'UNKNOWN'
+    ) AS bike_model
   FROM DW_SCHEMA.staging_trip
+  GROUP BY TO_NUMBER(TRIM(bike_id))
 ) src
 ON (tgt.dim_bike_id = src.bike_id)
 WHEN MATCHED THEN
   UPDATE SET 
     tgt.dim_bike_model = src.bike_model
-  WHERE tgt.dim_bike_model != src.bike_model  -- Update only if model differs
+  WHERE tgt.dim_bike_model != src.bike_model
 WHEN NOT MATCHED THEN
-  INSERT (
-    dim_bike_id,
-    dim_bike_model
-  )
-  VALUES (
-    src.bike_id,
-    src.bike_model
-  );
+  INSERT (dim_bike_id, dim_bike_model)
+  VALUES (src.bike_id, src.bike_model);
 
 COMMIT;
 

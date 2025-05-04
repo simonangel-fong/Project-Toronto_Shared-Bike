@@ -12,6 +12,7 @@
     - [Resource Limits](#resource-limits)
   - [Commnad to build](#commnad-to-build)
   - [Execute ETL](#execute-etl)
+  - [Refresh MV](#refresh-mv)
 
 ---
 
@@ -35,8 +36,8 @@
 
 | Element        | Value                                     | Description                                      |
 | -------------- | ----------------------------------------- | ------------------------------------------------ |
-| Service        | `oracle19cDB-dev`                         | Oracle 19c service for development               |
-| Container Name | `oracle19cDB-dev`                         | Name of the running container                    |
+| Service        | `oracle19cDB`                             | Oracle 19c service for development               |
+| Container Name | `oracle19cDB`                             | Name of the running container                    |
 | Image          | `simonangelfong/oracledb19c:1.0`          | Custom Oracle 19c image                          |
 | Restart Policy | `unless-stopped`                          | Keeps container running unless stopped manually  |
 | Secrets        | `./oracle19cDB/oracle19cDB_sys_token.txt` | SYS password stored securely                     |
@@ -98,7 +99,10 @@
 ```sh
 # build
 docker compose -f compose.oracledb.dev.yaml up --build -d
-docker compose -f compose.oracledb.dev.yaml down
+# docker compose -f compose.oracledb.dev.yaml down
+
+# Set script permission
+docker exec -it -u root:root oracle19cDB bash /project/scripts/sysadmin/set_script_permission.sh
 ```
 
 ---
@@ -106,12 +110,15 @@ docker compose -f compose.oracledb.dev.yaml down
 ## Execute ETL
 
 ```sh
-# set script permission
-docker exec -it -u root:root oracle19cDB-dev bash /project/scripts/01set_permission.sh
+# execute to reset oracle dir
+docker exec -it oracle19cDB bash /project/scripts/etl/etl_job.sh
+```
 
-# execute ETL batch job
-docker exec -it oracle19cDB-dev bash /project/scripts/etl/sh02_etl_job.sh
+---
 
+## Refresh MV
+
+```sh
 # execute MV refresh job
-docker exec -it oracle19cDB-dev bash /project/scripts/mv/sh01_refresh.sh
+docker exec -it oracle19cDB bash /project/scripts/mv/mv_refresh.sh
 ```
