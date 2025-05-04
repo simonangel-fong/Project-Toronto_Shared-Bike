@@ -2,9 +2,14 @@
 SET SERVEROUTPUT ON;
 alter session set container = toronto_shared_bike;
 
+-- show current dir
 SELECT directory_path 
 FROM all_directories 
 WHERE directory_name = UPPER('dir_target');
+
+-- apply dir
+ALTER TABLE dw_schema.external_ridership
+DEFAULT DIRECTORY dir_target;
 
 -- confirm
 select *

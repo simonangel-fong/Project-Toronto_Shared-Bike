@@ -23,14 +23,6 @@ A repo of data analysis project for Toronto shared bike.
   - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
 
 - Data Warehouse Deployment
-  - [RHEL 9.3 Deployment](./doc/feature-oracledb/dw_development/rhel_deploy/rhel_deploy.md)
-
-
-
-CREATE PLUGGABLE DATABASE toronto_shared_bike 
-    ADMIN USER pdb_adm IDENTIFIED BY PDBSecurePassword123
-    ROLES = (DBA)
-    DEFAULT TABLESPACE users 
-    FILE_NAME_CONVERT=(
-        '/opt/oracle/oradata/ORCLCDB/pdbseed'
-        ,'/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/');
+  - [Setup Scripts](./doc/feature-oracledb/dw_development/orcl_script/orcl_script.md)
+  - [Docker Compose](./doc/feature-oracledb/dw_development/docker_compose/docker_compose.md)
+  - [Backup Plan](./doc/feature-oracledb/dw_development/orcl_backup/orcl_backup.md)
