@@ -1,0 +1,42 @@
+---
+- name: Configure autofs to mount NFS share
+  hosts: application-node
+  become: true
+
+  vars:
+    nfs_server: monitor-node 
+    nfs_share: /srv/nfs_share
+    mount_point: /mnt/nfs
+
+  tasks:
+    - name: Install autofs
+      package:
+        name: autofs
+        state: present
+
+    - name: Create mount base directory
+      file:
+        path: "{{ mount_point }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Configure /etc/auto.master
+      lineinfile:
+        path: /etc/auto.master
+        line: "{{ mount_point }} /etc/auto.nfs"
+        create: yes
+        state: present
+
+    - name: Configure /etc/auto.nfs
+      copy:
+        dest: /etc/auto.nfs
+        content: |
+          share -rw,soft,intr {{ nfs_server }}:{{ nfs_share }}
+
+    - name: Restart autofs
+      service:
+        name: autofs
+        state: restarted
+        enabled: yes
