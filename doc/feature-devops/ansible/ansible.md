@@ -92,12 +92,12 @@ mkdir -pv ~/project/ansible/
 
 # create Inventory
 cat > ~/project/ansible/inventory.ini <<EOF
-[rhel9]
+[application_node]
 192.168.128.100 ansible_ssh_user=aadmin
 EOF
 
 # Test the connection, ping as root
-ansible rhel9 -i ~/project/ansible/inventory.ini -m ping --user=aadmin
+ansible application_node -i ~/project/ansible/inventory.ini -m ping --user=aadmin
 # 192.168.128.100 | SUCCESS => {
 #     "ansible_facts": {
 #         "discovered_interpreter_python": "/usr/bin/python3"
