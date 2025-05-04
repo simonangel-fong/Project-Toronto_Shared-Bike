@@ -38,6 +38,6 @@ ARCHIVE LOG LIST;
 - Script
 
 ```sh
-docker exec -it oracle19cDB-dev /project/scripts/backup/rman_configure.sh
-docker exec -it oracle19cDB-dev /project/scripts/backup/full_backup.sh
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_configure.sh
+docker exec -it oracle19cDB bash /project/scripts/backup/full_backup.dev.sh
 ```
