@@ -24,12 +24,19 @@ services:
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
-      - ../data:/project/data # source data
+      # dev volumes
       - oracledata:/opt/oracle/oradata # persist data
-    # entrypoint: ["/project/scripts/entrypoint.sh"]
+      - ../project/data:/project/data # source data
+      - ../project/orabackup:/project/orabackup # local backup
+      - ../project/nfsbackup:/project/nfsbackup # remote backup
+      # prod volumes
+      # - /project/oradata:/opt/oracle/oradata # prod: persist data
+      # - /project/data:/project/data # source data
+      # - /project/orabackup:/project/orabackup # prod: backup data
+      # - /project/nfsbackup:/project/nfsbackup # prod: remote backup data
     networks:
-      - private-net
-      - public-net
+      - private-net # Private network for prod
+      - public-net # public for dev
     ports:
       - 1521:1521
     healthcheck:

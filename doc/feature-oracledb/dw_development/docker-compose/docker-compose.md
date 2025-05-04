@@ -12,6 +12,7 @@
     - [Resource Limits](#resource-limits)
   - [Commnad to build](#commnad-to-build)
   - [Execute ETL](#execute-etl)
+  - [Backup](#backup)
 
 ---
 
@@ -109,9 +110,58 @@ docker compose -f compose.oracledb.dev.yaml down
 # set script permission
 docker exec -it -u root:root oracle19cDB-dev bash /project/scripts/01set_permission.sh
 
+# execute to reset oracle dir
+docker exec -it oracle19cDB-dev bash /project/scripts/etl/sh01_reset_directory.sh 2020
+
 # execute ETL batch job
 docker exec -it oracle19cDB-dev bash /project/scripts/etl/sh02_etl_job.sh
 
 # execute MV refresh job
 docker exec -it oracle19cDB-dev bash /project/scripts/mv/sh01_refresh.sh
+```
+
+## Backup
+
+
+- DB level
+
+```sql
+SELECT log_mode 
+FROM v$database;
+-- NOARCHIVELOG
+
+SHUTDOWN IMMEDIATE;
+STARTUP MOUNT;
+ALTER DATABASE ARCHIVELOG;
+ALTER DATABASE OPEN;
+SELECT log_mode 
+FROM v$database;
+```
+
+- RMAN manual
+
+```sh
+docker exec -it oracle19cDB-dev bash
+
+rman TARGET /
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+
+-- Backup the whole database and archived logs
+RUN {
+  BACKUP AS BACKUPSET DATABASE FORMAT '/project/orabackup/db_%T_%U.bkp' TAG='MANUAL_FULL_BACKUP';
+  BACKUP ARCHIVELOG ALL FORMAT '/project/orabackup/arch_%T_%U.bkp' TAG='ARCHIVELOG_BACKUP';
+  BACKUP CURRENT CONTROLFILE FORMAT '/project/orabackup/ctl_%T_%U.bkp' TAG='CONTROLFILE_BACKUP';
+}
+
+LIST BACKUP SUMMARY;
+
+DELETE BACKUP;
+DELETE ARCHIVELOG ALL;
+```
+
+- Script
+
+```sh
+docker exec -it oracle19cDB-dev /project/scripts/backup/rman_configure.sh
+docker exec -it oracle19cDB-dev /project/scripts/backup/full_backup.sh
 ```

@@ -21,15 +21,15 @@ EOF
 # Replace $YEAR in SQL commands with the provided year
 SQL_COMMANDS=$(echo "$SQL_COMMANDS" | sed "s/\$YEAR/$YEAR/g")
 
-# Execute SQL commands using SQL*Plus
-echo "$SQL_COMMANDS" | sqlplus -S / as sysdba
+# # Execute SQL commands using SQL*Plus
+# echo "$SQL_COMMANDS" | sqlplus -S / as sysdba
 
-# Check if SQL*Plus command was successful
-if [ $? -eq 0 ]; then
-    echo "Directory reset for year $YEAR completed successfully."
-else
-    echo "Error: Failed to execute SQL commands for year $YEAR."
-    exit 1
-fi
+# # Check if SQL*Plus command was successful
+# if [ $? -eq 0 ]; then
+#     echo "Directory reset for year $YEAR completed successfully."
+# else
+#     echo "Error: Failed to execute SQL commands for year $YEAR."
+#     exit 1
+# fi
 
-exit 0
+# exit 0
