@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Create date-based subdirectory for backups (optional but recommended)
+# Create date-based subdirectory for backups
 BACKUP_DIR="/project/orabackup/$(date +%Y%m%d)"
-mkdir -p "$BACKUP_DIR"
+mkdir -pv "$BACKUP_DIR"
 
 # Run RMAN full backup
 rman target / <<EOF
