@@ -4,55 +4,12 @@
 
 - [Ansible](#ansible)
   - [Setup Ansible](#setup-ansible)
-    - [Define network](#define-network)
     - [Install Ansible Package](#install-ansible-package)
     - [Create and Test Ansible inventory](#create-and-test-ansible-inventory)
 
 [Back](../../../README.md)
 
 ## Setup Ansible
-
-### Define network
-
-- Monitor node
-
-```sh
-# setup network
-sudo nmcli c down ens160
-sudo nmcli c modify ens160 ipv4.method manual
-sudo nmcli c modify ens160 ipv4.address 192.168.128.10/24
-sudo nmcli c modify ens160 ipv4.gateway 192.168.128.2
-sudo nmcli c modify ens160 ipv4.dns 8.8.8.8
-sudo nmcli c up ens160
-
-# configure hostname
-sudo hostnamectl set-hostname monitor-host
-sudo cat <<EOF >> /etc/hosts
-192.168.128.10      monitor-host
-127.0.0.1           monitor-host
-EOF
-```
-
-- Application node
-
-```sh
-# setup network
-sudo nmcli c down ens160
-sudo nmcli c modify ens160 ipv4.method manual
-sudo nmcli c modify ens160 ipv4.address 192.168.128.100/24
-sudo nmcli c modify ens160 ipv4.gateway 192.168.128.2
-sudo nmcli c modify ens160 ipv4.dns 8.8.8.8
-sudo nmcli c up ens160
-
-# configure hostname
-sudo hostnamectl set-hostname application-node
-sudo cat <<EOF >> /etc/hosts
-192.168.128.10      application-node
-127.0.0.1           application-node
-EOF
-```
-
----
 
 - Enable SSH
 
@@ -106,5 +63,3 @@ ansible application_node -i ~/project/ansible/inventory.ini -m ping --user=aadmi
 #     "ping": "pong"
 # }
 ```
-
----

@@ -23,14 +23,21 @@ A repo of data analysis project for Toronto shared bike.
   - [Docker Compose Oracle 19c](./doc/feature-oracledb/dw_development/docker-compose/docker-compose.md)
   - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
 
-- Data Warehouse Deployment
   - [Setup Scripts](./doc/feature-oracledb/dw_development/orcl_script/orcl_script.md)
   - [Docker Compose](./doc/feature-oracledb/dw_development/docker_compose/docker_compose.md)
   - [Backup Plan](./doc/feature-oracledb/dw_development/orcl_backup/orcl_backup.md)
+
+- Data Warehouse Deployment
+  - [Test](./doc/feature-oracledb/dw_deployment/deploy/deploy.md)
 
 ---
 
 ## Devops
 
 - Server Setup
+
   - [Install Proxmox](./doc/devops/proxmox_install/proxmox_install.md)
+
+- Pipeline
+  - [NFS Server](./doc/feature-devops/nfs_server/nfs_server.md)
+  - [Jenkins](./doc/feature-devops/jenkins/jenkins.md)

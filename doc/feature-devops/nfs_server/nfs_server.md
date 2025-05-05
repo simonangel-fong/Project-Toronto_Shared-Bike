@@ -1,5 +1,11 @@
 # NFS Server
 
+[Back](../../../README.md)
+
+- [NFS Server](#nfs-server)
+    - [Server](#server)
+  - [autofs](#autofs)
+
 ### Server
 
 - Monitor node
@@ -15,16 +21,14 @@ sudo systemctl status nfs-server
 - Create and Configure the Export Directory
 
 ```sh
-sudo mkdir -vp /srv/project/data
-sudo mkdir -vp /srv/project/config
-sudo chown nobody:nobody -R /srv/project
-sudo chmod 755 /srv/project
+sudo mkdir -pv /project/share/
+sudo chown nobody:nobody -R /project/share/
+sudo chmod 755 /project/share/
 
-echo "/srv/project 192.168.128.0/24(rw,sync,no_root_squash)" | sudo tee -a /etc/exports
+echo "/project/share/ 192.168.128.0/24(rw,sync,no_root_squash)" | sudo tee -a /etc/exports
 
 # Export the Share
 sudo exportfs -rav
-
 ```
 
 - Adjust the Firewall
@@ -58,8 +62,8 @@ cat > nfs_client_mount.yml <<EOF
 
   vars:
     nfs_server: 192.168.128.10
-    export_path: /srv/project
-    mount_point: /project
+    export_path: /project/share/
+    mount_point: /project/share/
     autofs_map_dir: /etc/auto.master.d
     autofs_map_file: project.nfs
 
@@ -130,11 +134,11 @@ ansible-playbook -i inventory.ini nfs_client_mount.yml -u aadmin --ask-become-pa
 
 ```sh
 # on monitor node
-sudo cat > /srv/project/test.txt <<EOF
+sudo cat > /project/share/test.txt <<EOF
 this is a test
 EOF
 
 # connect to a app node
 ssh aadmin@192.168.128.100
-ll /project
+ll /project/share
 ```
