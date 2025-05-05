@@ -4,7 +4,7 @@ name: toronto-shared-bike
 services:
   oracle19cDB:
     container_name: oracle19cDB
-    restart: unless-stopped
+    # restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
       - /project/share/config/oraenv/prod.env
@@ -32,16 +32,16 @@ services:
       - public-net # public for dev
     ports:
       - 1521:1521
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "echo 'exit' | sqlplus -S sys/${ORACLE_PWD}@${ORACLE_SID} as sysdba",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 5m
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       "echo 'exit' | sqlplus -S sys/${ORACLE_PWD}@${ORACLE_SID} as sysdba",
+    #     ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 5m
 
 networks:
   public-net:
