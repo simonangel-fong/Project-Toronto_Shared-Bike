@@ -38,6 +38,11 @@ ARCHIVE LOG LIST;
 - Script
 
 ```sh
+docker compose -f compose.oracledb.dev.yaml up --build -d
+
 docker exec -it oracle19cDB bash /project/scripts/backup/rman_configure.sh
-docker exec -it oracle19cDB bash /project/scripts/backup/full_backup.dev.sh
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_backup.sh
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_recovery.sh
+
+docker exec -it oracle19cDB rman target /
 ```

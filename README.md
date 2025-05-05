@@ -29,6 +29,7 @@ A repo of data analysis project for Toronto shared bike.
 
 - Data Warehouse Deployment
   - [Test](./doc/feature-oracledb/dw_deployment/deploy/deploy.md)
+  - [Backup & Recovery](./doc/feature-oracledb/dw_deployment/backup_recovery/backup_recovery.md)
 
 ---
 

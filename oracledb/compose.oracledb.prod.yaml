@@ -27,10 +27,10 @@ services:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # prod
+      - /project/share/data:/project/data # source data
       - /project/local/oradata:/opt/oracle/oradata # local persist data
       - /project/local/orabackup:/project/orabackup # local backup data
-      - /project/share/orabackup:/project/remotebackup # remote backup data
-      - /project/share/data:/project/data # source data
+      # - /project/share/orabackup:/project/remotebackup # remote backup data
     networks:
       - private-net # Private network for prod
       - public-net # public for dev

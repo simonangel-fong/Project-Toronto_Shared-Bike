@@ -29,7 +29,7 @@ services:
       - oracledata:/opt/oracle/oradata # persist data
       - ../project/data:/project/data # source data
       - ../project/orabackup:/project/orabackup # local backup
-      - ../project/nfsbackup:/project/nfsbackup # remote backup
+      # - ../project/nfsbackup:/project/nfsbackup # remote backup
       # prod volumes
       # - /project/oradata:/opt/oracle/oradata # prod: persist data
       # - /project/data:/home/oracle/project/data # source data
