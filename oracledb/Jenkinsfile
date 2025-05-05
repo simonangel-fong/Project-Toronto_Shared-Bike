@@ -24,7 +24,7 @@ pipeline {
 
         stage('Start Oracle DB Container') {
             steps {
-                sh "docker-compose -f ${COMPOSE_PATH} up -d"
+                sh "docker compose -f ${COMPOSE_PATH} up -d"
             }
         }
 
@@ -70,7 +70,7 @@ pipeline {
     post {
         always {
             echo '🧹 Cleaning up Docker containers...'
-            sh "docker-compose -f ${COMPOSE_PATH} down"
+            sh "docker compose -f ${COMPOSE_PATH} down"
         }
     }
 }

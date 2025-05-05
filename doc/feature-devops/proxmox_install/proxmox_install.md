@@ -99,3 +99,13 @@ sudo systemctl enable --now docker
 
 sudo docker run hello-world
 ```
+
+- Install docker compose
+
+```sh
+sudo subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+sudo dnf install -y pass
+
+sudo dnf install gnome-terminal
+```
