@@ -12,13 +12,13 @@ services:
       - ORACLE_PWD=/run/secrets/orcl_sys_token
     secrets:
       - orcl_sys_token
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "2.0"
-    #       memory: 8g
-    #     reservations:
-    #       memory: 4g
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 8g
+        reservations:
+          memory: 4g
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts

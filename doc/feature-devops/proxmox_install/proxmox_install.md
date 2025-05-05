@@ -5,6 +5,7 @@
 - [Proxmox Installation](#proxmox-installation)
   - [Monitor Node](#monitor-node)
   - [Application Node](#application-node)
+  - [Test deploy](#test-deploy)
 
 ---
 
@@ -108,4 +109,11 @@ sudo chown root:docker /var/run/docker.sock
 sudo chmod 666 /var/run/docker.sock
 ```
 
+---
+
+## Test deploy
+
+```sh
 git clone -b feature-oracledb https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git .
+
+docker compose -f compose.oracledb.prod.yaml up --build -d
