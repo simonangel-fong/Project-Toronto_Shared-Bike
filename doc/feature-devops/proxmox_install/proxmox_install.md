@@ -39,6 +39,8 @@ EOF
 # local dir
 sudo mkdir -pv /project/local/orcldb/orabackup/
 sudo mkdir -pv /project/local/orcldb/oradata/
+
+sudo chmod 755 -R /project
 ```
 
 ---
@@ -98,14 +100,12 @@ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo systemctl enable --now docker
 
 sudo docker run hello-world
+
+sudo usermod -aG docker jenkins
+
+sudo chown root:docker /var/run/docker.sock
+
+sudo chmod 666 /var/run/docker.sock
 ```
 
-- Install docker compose
-
-```sh
-sudo subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
-sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-sudo dnf install -y pass
-
-sudo dnf install gnome-terminal
-```
+git clone -b feature-oracledb https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git .
