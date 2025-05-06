@@ -100,10 +100,10 @@
 
 ```sh
 # Build and run container in detached mode
-docker compose -f compose.oracledb.dev.yaml up --build -d
+docker compose -f ./oracledb/compose.oracledb.dev.yaml up --build -d
 
 # Stop
-docker compose -f compose.oracledb.dev.yaml down
+docker compose -f ./oracledb/compose.oracledb.dev.yaml down
 ```
 
 ### Set Script Permissions

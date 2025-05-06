@@ -4,6 +4,7 @@ A repo of data analysis project for Toronto shared bike.
 
 - [Project: Toronto Shared Bike Data Analysis](#project-toronto-shared-bike-data-analysis)
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
+  - [API](#api)
   - [Devops](#devops)
 
 ---
@@ -27,6 +28,12 @@ A repo of data analysis project for Toronto shared bike.
 
 - Data Warehouse Deployment
   - [Deployment](./doc/feature-oracledb/dw_deployment/deploy/deploy.md)
+
+---
+
+## API
+
+- [FastAPI](./doc/feature-api/fastapi/fastapi.md)
 
 ---
 

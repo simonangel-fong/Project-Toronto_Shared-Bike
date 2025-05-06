@@ -1,0 +1,87 @@
+# docker compose for development Windows OS
+# Note: this compose assume container already running
+name: toronto-shared-bike
+
+services:
+  fastapi-app:
+    container_name: fastapi-app
+    restart: unless-stopped
+    # image: simonangelfong/toronto-shared-bike-fastapi-prebuilt:v1.0 # using prebuild image
+    build:
+      # command start at fastapi
+      context: ./app/
+      dockerfile: Dockerfile
+    env_file:
+      - ./fastapi-app/fastapi-app.env
+    environment:
+      - ORCLDB_HOST=oracle19cDB
+      - ORCLDB_API_PWD=/run/secrets/oracle19cDB_api_token
+    secrets:
+      - oracle19cDB_api_token
+    networks:
+      - public-net
+      - private-net
+    depends_on:
+      oracle19cDB:
+        condition: service_healthy
+
+  oracle19cDB:
+    container_name: oracle19cDB
+    restart: unless-stopped
+    # image: simonangelfong/oracledb19c:1.0
+    image: simonangelfong/toronto-shared-bike-db-prebuilt:year2019 # using prebuild image
+    env_file:
+      - ./oracle19cDB/oracle19cDB.env
+    environment:
+      # - ORACLE_SID=${ORCLDB_SID}
+      - ORACLE_PWD=/run/secrets/orcl_sys_pwd
+    secrets:
+      - oracle19cDB_sys_token
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 8g
+        reservations:
+          memory: 4g
+    volumes:
+      - ./oracle19cDB/setup:/opt/oracle/scripts/setup # script to run after setup
+      - ./oracle19cDB/startup:/opt/oracle/scripts/startup # script to run after startup
+      - ../data:/tmp # source data
+      - oracledata:/opt/oracle/oradata # persist data
+    networks:
+      - private-net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sqlplus",
+          "-S",
+          "sys/${ORACLE_PWD}@${ORACLE_SID}",
+          "as",
+          "sysdba",
+          "<<<",
+          "exit",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5m
+
+volumes:
+  oracledata:
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true
+
+secrets:
+  oracle19cDB_api_token:
+    file: ./fastapi-app/oracle19cDB_api_token.txt
+  oracle19cDB_sys_token:
+    file: ./oracle19cDB/oracle19cDB_sys_token.txt
+  cloudflare_token:
+    file: ./cloudflare-tunnel/cloudflare_token.txt
