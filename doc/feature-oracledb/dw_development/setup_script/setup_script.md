@@ -4,7 +4,8 @@
 
 - [Toronto Shared Bike Data Analysis: Data Development - Setup Scripts](#toronto-shared-bike-data-analysis-data-development---setup-scripts)
   - [SQL Script Catalog](#sql-script-catalog)
-    - [01block\_size](#01block_size)
+    - [`01_enable_archivelog.sql`](#01_enable_archivelogsql)
+    - [`02_enable_32k_blocksize.sql`](#02_enable_32k_blocksizesql)
     - [02PDB\_Creation](#02pdb_creation)
     - [03TBSP\_Creation](#03tbsp_creation)
     - [04Schema\_Creation](#04schema_creation)
@@ -18,24 +19,28 @@
 
 ## SQL Script Catalog
 
-| Script Name             | Description                                                                |
-| ----------------------- | -------------------------------------------------------------------------- |
-| `01block_size.sql`      | Enable 32K block size for fact table tablespace (requires SPFILE restart). |
-| `02PDB_Creation.sql`    | Create a pluggable database (PDB) for the project.                         |
-| `03TBSP_Creation.sql`   | Create tablespaces including a 32K tablespace for fact tables.             |
-| `04Schema_Creation.sql` | Create application schemas and grant necessary privileges.                 |
-| `05DW_Creation.sql`     | Create dimension and fact tables for the data warehouse (star schema).     |
-| `06ELT_Creation.sql`    | Create staging tables and control tables for ELT process.                  |
-| `07MV_Creation.sql`     | Create materialized views for aggregated and pre-computed data.            |
-| `08User_Creation.sql`   | Create users (e.g., developer, analyst) and assign roles.                  |
-| `09ELT_Extract.sql`     | Extract data from OLTP source into staging tables.                         |
-| `10ELT_Transform.sql`   | Transform staging data into dimension and fact format.                     |
-| `11ELT_Load.sql`        | Load transformed data into the data warehouse schema.                      |
-| `12MV_Refresh.sql`      | Refresh materialized views to reflect latest data changes.                 |
+| Script Name                   | Description                                                                |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `01_enable_archivelog.sql`    | Enable archivelog.                                                         |
+| `02_enable_32k_blocksize.sql` | Enable 32K block size for fact table tablespace (requires SPFILE restart). |
+| `03_create_pdb.sql`           | Create a pluggable database (PDB) for the project.                         |
+| `04_create_tbsp.sql`          | Create tablespaces including a 32K tablespace for fact tables.             |
+| `05_create_schema.sql`        | Create application schemas and grant necessary privileges.                 |
+| `06_create_dw.sql`            | Create dimension and fact tables for the data warehouse (star schema).     |
+| `07_create_etl.sql`           | Create staging tables and control tables for ELT process.                  |
+| `08_create_etl_procedure.sql` | Create a procedure for ELT process.                                        |
+| `09_create_mv.sql`            | Create materialized views for aggregated and pre-computed data.            |
+| `10_create_user.sql`          | Create users (e.g., developer, analyst) and assign roles.                  |
 
 ---
 
-### 01block_size
+### `01_enable_archivelog.sql`
+
+- Enable archived log
+
+---
+
+### `02_enable_32k_blocksize.sql`
 
 | Configuration       | Value  | Description                                      |
 | ------------------- | ------ | ------------------------------------------------ |

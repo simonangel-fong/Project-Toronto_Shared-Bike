@@ -6,22 +6,13 @@ services:
     container_name: oracle19cDB
     restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
-    # image: simonangelfong/toronto-shared-bike-db-prebuilt:year2019 # using prebuild image
     env_file:
-      - ./env/dev.env
+      - ./env/orcl.env
     environment:
       # - ORACLE_SID=${ORCLDB_SID}
       - ORACLE_PWD=/run/secrets/orcl_sys_token
     secrets:
       - orcl_sys_token
-    # prod resrouces
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "2.0"
-    #       memory: 8g
-    #     reservations:
-    #       memory: 4g
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
@@ -29,12 +20,7 @@ services:
       - oracledata:/opt/oracle/oradata # persist data
       - ../project/data:/project/data # source data
       - ../project/orabackup:/project/orabackup # local backup
-      # - ../project/nfsbackup:/project/nfsbackup # remote backup
-      # prod volumes
-      # - /project/oradata:/opt/oracle/oradata # prod: persist data
-      # - /project/data:/home/oracle/project/data # source data
-      # - /project/orabackup:/home/oracle/project/orabackup # prod: backup data
-      # - /project/nfsbackup:/home/oracle/project/nfsbackup # prod: remote backup data
+      # - ../project/nfsbackup:/project/nfsbackup # optional: remote backup
     networks:
       - private-net # Private network for prod
       - public-net # public for dev

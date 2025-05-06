@@ -20,25 +20,20 @@ A repo of data analysis project for Toronto shared bike.
 
 - Data Warehouse Development
 
-  - [Docker Compose Oracle 19c](./doc/feature-oracledb/dw_development/docker-compose/docker-compose.md)
-  - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
-
-  - [Setup Scripts](./doc/feature-oracledb/dw_development/orcl_script/orcl_script.md)
   - [Docker Compose](./doc/feature-oracledb/dw_development/docker_compose/docker_compose.md)
-  - [Backup Plan](./doc/feature-oracledb/dw_development/orcl_backup/orcl_backup.md)
+  - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
+  - [ELT Scripts](./doc/feature-oracledb/dw_development/etl_script/etl_script.md)
+  - [Backup Plan & Scripts](./doc/feature-oracledb/dw_development/backup_script/backup_script.md)
 
 - Data Warehouse Deployment
-  - [Test](./doc/feature-oracledb/dw_deployment/deploy/deploy.md)
-  - [Backup & Recovery](./doc/feature-oracledb/dw_deployment/backup_recovery/backup_recovery.md)
+  - [Deployment](./doc/feature-oracledb/dw_deployment/deploy/deploy.md)
 
 ---
 
 ## Devops
 
-- Server Setup
+- Deployment Environment
 
-  - [Install Proxmox](./doc/devops/proxmox_install/proxmox_install.md)
+  - [Proxmox VE](./doc/feature-devops/proxmox/proxmox.md)
 
-- Pipeline
-  - [NFS Server](./doc/feature-devops/nfs_server/nfs_server.md)
-  - [Jenkins](./doc/feature-devops/jenkins/jenkins.md)
+- [Monitor Node](./doc/feature-devops/monitor_node/monitor_node.md)

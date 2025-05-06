@@ -1,124 +1,113 @@
-# Toronto Shared Bike Data Analysis: Data Development - Docker Compose Oracle Database 19c
+# Toronto Shared Bike Data Analysis: Docker Compose for Oracle 19c (Development)
 
 [Back](../../../../README.md)
 
-- [Toronto Shared Bike Data Analysis: Data Development - Docker Compose Oracle Database 19c](#toronto-shared-bike-data-analysis-data-development---docker-compose-oracle-database-19c)
+- [Toronto Shared Bike Data Analysis: Docker Compose for Oracle 19c (Development)](#toronto-shared-bike-data-analysis-docker-compose-for-oracle-19c-development)
   - [Docker Compose Configuration](#docker-compose-configuration)
+    - [Project Overview](#project-overview)
     - [Oracle DB Service](#oracle-db-service)
-    - [Evironment Variables](#evironment-variables)
+    - [Environment Variables](#environment-variables)
     - [Volumes](#volumes)
     - [Networks](#networks)
     - [Healthcheck](#healthcheck)
-    - [Resource Limits](#resource-limits)
-  - [Commnad to build](#commnad-to-build)
-  - [Execute ETL](#execute-etl)
-  - [Refresh MV](#refresh-mv)
+    - [Resource Limits (Optional)](#resource-limits-optional)
+  - [Commands](#commands)
+    - [Build and Start](#build-and-start)
+    - [Set Script Permissions](#set-script-permissions)
 
 ---
 
 ## Docker Compose Configuration
 
-- **Project Name**:
+### Project Overview
 
-  - `toronto-shared-bike`
-
-- **File**:
-
-  - `compose.oracledb.dev.yaml`
-
-- **Purpose**:
-
-  - Sets up an Oracle 19c database container for development use in the Toronto Shared Bike project.
+- Project Name: `toronto-shared-bike`
+- Compose File: `compose.oracledb.dev.yaml`
+- Prerequisites:
+  - Pre-built Image: `simonangelfong/oracledb19c:1.0`
+- Purpose:
+  - Spin up an Oracle 19c container with custom scripts, data directories, and ETL tools for development.
 
 ---
 
 ### Oracle DB Service
 
-| Element        | Value                                     | Description                                      |
-| -------------- | ----------------------------------------- | ------------------------------------------------ |
-| Service        | `oracle19cDB`                             | Oracle 19c service for development               |
-| Container Name | `oracle19cDB`                             | Name of the running container                    |
-| Image          | `simonangelfong/oracledb19c:1.0`          | Custom Oracle 19c image                          |
-| Restart Policy | `unless-stopped`                          | Keeps container running unless stopped manually  |
-| Secrets        | `./oracle19cDB/oracle19cDB_sys_token.txt` | SYS password stored securely                     |
-| Network        | `public-net`, `private-net`               | Connected to both external and internal networks |
+| Element            | Value                            | Description                                      |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| **Service**        | `oracle19cDB`                    | Oracle 19c service for development               |
+| **Container Name** | `oracle19cDB`                    | Name of the running container                    |
+| **Image**          | `simonangelfong/oracledb19c:1.0` | Custom Oracle 19c image                          |
+| **Restart Policy** | `unless-stopped`                 | Automatically restarts unless manually stopped   |
+| **Secrets**        | `./env/orcl_sys_token.txt`       | SYS password stored securely                     |
+| **Ports**          | `1521:1521`                      | Oracle listener port exposed                     |
+| **Networks**       | `public-net`, `private-net`      | Attached to public (dev) and private (prod) nets |
 
 ---
 
-### Evironment Variables
+### Environment Variables
 
-| Element                    | Value                       | Description                        |
-| -------------------------- | --------------------------- | ---------------------------------- |
-| Environment Variables File | `./env/dev.env`             | Contains values like `ORACLE_SID`  |
-| `ORACLE_PWD`               | `/run/secrets/orcl_sys_pwd` | Path to SYS password (from secret) |
+| Variable     | Source          | Description                     |
+| ------------ | --------------- | ------------------------------- |
+| `env_file`   | `./env/dev.env` | External file for env variables |
+| `ORACLE_PWD` | From secret     | Oracle SYS password path        |
 
 ---
 
 ### Volumes
 
-| Volumes               | Value                         | Description             |
-| --------------------- | ----------------------------- | ----------------------- |
-| `./setup`             | `/opt/oracle/scripts/setup`   | Initialization scripts  |
-| `./startup`           | `/opt/oracle/scripts/startup` | Startup logic/scripts   |
-| `../data`             | `/tmp`                        | Source data (e.g. CSVs) |
-| `oracledata (volume)` | `/opt/oracle/oradata`         | Oracle data persistence |
+| Host Path                  | Container Path              | Purpose                        |
+| -------------------------- | --------------------------- | ------------------------------ |
+| `./scripts/setup`          | `/opt/oracle/scripts/setup` | Scripts run at setup           |
+| `./scripts`                | `/project/scripts`          | ETL and admin scripts          |
+| `../project/data`          | `/project/data`             | CSV and source data            |
+| `../project/orabackup`     | `/project/orabackup`        | Local backups                  |
+| `oracledata` (Docker vol.) | `/opt/oracle/oradata`       | Oracle persistent data storage |
 
 ---
 
 ### Networks
 
-| Network       | Description                |
-| ------------- | -------------------------- |
-| `public-net`  | Default external bridge    |
-| `private-net` | Internal, isolated network |
+| Network       | Type                | Description                   |
+| ------------- | ------------------- | ----------------------------- |
+| `public-net`  | `bridge`            | Used for dev connectivity     |
+| `private-net` | `bridge` (internal) | Isolated for prod-only access |
 
 ---
 
 ### Healthcheck
 
-| Element      | Value | Description                                |
-| ------------ | ----- | ------------------------------------------ |
-| Interval     | `30s` | Time between health checks                 |
-| Timeout      | `10s` | Timeout for a single health check          |
-| Retries      | `5`   | Number of retries before marking as failed |
-| Start Period | `5m`  | Wait time before the first check           |
+| Setting        | Value | Description                          |
+| -------------- | ----- | ------------------------------------ |
+| `interval`     | `30s` | Time between checks                  |
+| `timeout`      | `10s` | Timeout per check                    |
+| `retries`      | `5`   | Max retries before unhealthy         |
+| `start_period` | `5m`  | Initial delay after container starts |
 
 ---
 
-### Resource Limits
+### Resource Limits (Optional)
 
-| Resource | Value                      | Description                  |
-| -------- | -------------------------- | ---------------------------- |
-| CPUs     | `2.0`                      | Max CPU usage                |
-| Memory   | `8g` max,<br>`4g` reserved | RAM allocation & reservation |
+| Resource | Value                   | Description               |
+| -------- | ----------------------- | ------------------------- |
+| CPUs     | `2.0`                   | CPU usage limit           |
+| Memory   | `8g` max, `4g` reserved | RAM limit and reservation |
 
 ---
 
-## Commnad to build
+## Commands
+
+### Build and Start
 
 ```sh
-# build
+# Build and run container in detached mode
 docker compose -f compose.oracledb.dev.yaml up --build -d
-# docker compose -f compose.oracledb.dev.yaml down
 
-# Set script permission
+# Stop
+docker compose -f compose.oracledb.dev.yaml down
+```
+
+### Set Script Permissions
+
+```sh
 docker exec -it -u root:root oracle19cDB bash /project/scripts/sysadmin/set_script_permission.sh
-```
-
----
-
-## Execute ETL
-
-```sh
-# execute to reset oracle dir
-docker exec -it oracle19cDB bash /project/scripts/etl/etl_job.sh
-```
-
----
-
-## Refresh MV
-
-```sh
-# execute MV refresh job
-docker exec -it oracle19cDB bash /project/scripts/mv/mv_refresh.sh
 ```

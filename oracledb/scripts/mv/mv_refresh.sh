@@ -1,11 +1,20 @@
 #!/bin/bash
 
-# Script: sh01_refresh.sh
-# Purpose: Execute SQL to refresh materialized view.
-# Usage: ./sh01_refresh.sh
+# -----------------------------------------------------------------------------
+# Script Name:     mv_refresh.sh
+# Description:     Refreshes materialized views and confirms the operation
+#                  by executing SQL scripts.
+# Usage:           ./mv_refresh.sh
+# Requirements:    Must be run by a user with SYSDBA privileges.
+# -----------------------------------------------------------------------------
 
-sqlplus / as sysdba<<EOF
+# Execute SQL scripts to refresh and confirm materialized views
+sqlplus / as sysdba <<EOF
+-- Refresh materialized views
 @/project/scripts/mv/01refresh.sql
+
+-- Confirm materialized view refresh status
 @/project/scripts/mv/02confirm.sql
+
 exit
 EOF

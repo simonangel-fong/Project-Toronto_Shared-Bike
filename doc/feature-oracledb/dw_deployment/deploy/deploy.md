@@ -1,19 +1,35 @@
-# Deploy
+# Toronto Shared Bike Data Analysis: Deployment
 
 [Back](../../../../README.md)
 
+- [Toronto Shared Bike Data Analysis: Deployment](#toronto-shared-bike-data-analysis-deployment)
+  - [Migrate Source Data and Configuration Files](#migrate-source-data-and-configuration-files)
+    - [Migrate Command](#migrate-command)
+
 ---
 
-##
+## Migrate Source Data and Configuration Files
 
-- Oracle
+- Configuration File
+
+| Component | Configuration File | Production Path                 | Description                    |
+| --------- | ------------------ | ------------------------------- | ------------------------------ |
+| Oracle DB | `*.csv`            | `/project/share/data`           | Source Data                    |
+| Oracle DB | `orcl.env`         | `/project/share/config/oraenv/` | Environment file for Oracle DB |
+| Oracle DB | `orcl_sys_token`   | `/project/share/config/oraenv/` | Token for SYS                  |
+
+---
+
+### Migrate Command
 
 ```sh
-# env file
-scp ./* aadmin@192.168.128.10:/project/share/config/oraenv/
-
 # data
 scp -r . root@192.168.128.10:/project/share/data
+
+# oracle env file
+scp ./* aadmin@192.168.128.10:/project/share/config/oraenv/
+
+
 ```
 
 - Create volume dir
