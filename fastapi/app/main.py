@@ -25,8 +25,6 @@ logger.info("Application starting up...")
     tags=["User Segmentation"],
     summary="Retrieve user segmentation data",
 )
-
-
 # get the user segmentation
 def get_user_segmentation(
     db: Session = Depends(get_db),
@@ -68,5 +66,6 @@ def get_user_segmentation(
         logger.error(f"Unexpected error in get_user_segmentation: {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail="An unexpected error occurred."
+            detail={str(e)}   # for dev
+            # detail="An unexpected error occurred." # for prod
         )
