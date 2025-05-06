@@ -8,11 +8,6 @@ services:
     image: simonangelfong/oracledb19c:1.0
     env_file:
       - ./env/orcl.env
-    environment:
-      # - ORACLE_SID=${ORCLDB_SID}
-      - ORACLE_PWD=/run/secrets/orcl_sys_token
-    secrets:
-      - orcl_sys_token
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
@@ -52,7 +47,3 @@ networks:
   private-net:
     driver: bridge
     internal: true
-
-secrets:
-  orcl_sys_token:
-    file: ./env/orcl_sys_token.txt
