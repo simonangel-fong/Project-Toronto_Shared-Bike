@@ -12,8 +12,6 @@
     - [Healthcheck](#healthcheck)
     - [Resource Limits (Optional)](#resource-limits-optional)
   - [Commands](#commands)
-    - [Build and Start](#build-and-start)
-    - [Set Script Permissions](#set-script-permissions)
 
 ---
 
@@ -96,18 +94,13 @@
 
 ## Commands
 
-### Build and Start
+- Build and Start
 
 ```sh
 # Build and run container in detached mode
-docker compose -f compose.oracledb.dev.yaml up --build -d
+# update packages and
+docker compose -f compose.oracledb.dev.yaml up --build -d && docker exec -it -u root:root oracle19cDB bash /project/scripts/init/init.sh
 
 # Stop
 docker compose -f compose.oracledb.dev.yaml down
-```
-
-### Set Script Permissions
-
-```sh
-docker exec -it -u root:root oracle19cDB bash /project/scripts/sysadmin/set_script_permission.sh
 ```
