@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# Script Name:     rman_configure.sh
+# Script Name:     configure_rman_backup.sh
 # Description:     Configures RMAN persistent settings for Oracle database
 #                  backups, including control file backup, retention policy,
 #                  backup size limits, and compression.
-# Usage:           ./rman_configure.sh
+# Usage:           ./configure_rman_backup.sh
 # Requirements:    Oracle RMAN must be available in the environment.
 # -----------------------------------------------------------------------------
 

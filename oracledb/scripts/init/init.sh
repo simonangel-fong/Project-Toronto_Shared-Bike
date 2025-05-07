@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 # Upgrade all installed packages to the latest version
-yum upgrade -y
+yum update -y
 
 # Install dos2unix utility to convert Windows-style line endings
 yum install -y dos2unix

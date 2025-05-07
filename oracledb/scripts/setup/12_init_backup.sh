@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# Script Name:     rman_backup.sh
+# Script Name:     run_full_backup.sh
 # Description:     Performs a full RMAN backup of the Oracle database and
 #                  archivelogs. It allocates channels, crosschecks, and deletes
 #                  expired backups before starting the new backup.
-# Usage:           ./rman_backup.sh
+# Usage:           ./run_full_backup.sh
 # Requirements:    Oracle RMAN must be available and the BACKUP_PATH must exist.
 # -----------------------------------------------------------------------------
 
@@ -44,13 +44,13 @@ RUN {
   BACKUP AS BACKUPSET DATABASE
     FORMAT '$BACKUP_PATH/db_%U.bkp'
     INCLUDE CURRENT CONTROLFILE
-    TAG 'FULL_DB_BACKUP';
+    TAG 'INIT_DB_BACKUP';
 
   # Backup archivelogs and delete them after backup
   BACKUP ARCHIVELOG ALL
     FORMAT '$BACKUP_PATH/arch_%U.bkp'
     DELETE INPUT
-    TAG 'ARCHIVELOG_BACKUP';
+    TAG 'INIT_ARCHIVELOG_BACKUP';
 
   # Release channels
   RELEASE CHANNEL ch1;

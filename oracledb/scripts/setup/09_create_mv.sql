@@ -1,7 +1,17 @@
--- Set PDB context
+-- ============================================================================
+-- Script Name : 09_create_mv.sql
+-- Purpose     : Create materialized view logs and materialized views for efficient
+--               querying and reporting in the Toronto Shared Bike Data Warehouse
+-- Author      : Wenhao Fang
+-- Date        : 2025-05-07
+-- User        : Execute as a user with appropriate privileges in the toronto_shared_bike PDB
+-- Notes       : Ensure the DW_SCHEMA, fact, and dimension tables are created and populated
+-- ============================================================================
+
+-- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
 
--- MV log on fact_trip
+-- Create materialized view log on fact_trip for fast refresh support
 CREATE MATERIALIZED VIEW LOG ON DW_SCHEMA.fact_trip
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
@@ -11,7 +21,7 @@ WITH ROWID, SEQUENCE (
     )
 INCLUDING NEW VALUES;
 
--- MV log on dim_time
+-- Create materialized view log on dim_time for fast refresh support
 CREATE MATERIALIZED VIEW LOG ON DW_SCHEMA.dim_time
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
@@ -26,7 +36,7 @@ WITH ROWID, SEQUENCE (
     )
 INCLUDING NEW VALUES;
 
--- MV log on dim_station (though typically static, included for completeness)
+-- Create materialized view log on dim_station for fast refresh support
 CREATE MATERIALIZED VIEW LOG ON DW_SCHEMA.dim_station
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
@@ -35,21 +45,21 @@ WITH ROWID, SEQUENCE (
     )
 INCLUDING NEW VALUES;
 
--- Create MV_TIME_TRIP
+-- Create materialized view for time-based trip analysis
 CREATE MATERIALIZED VIEW DW_SCHEMA.MV_TIME_TRIP
 TABLESPACE MV_TBSP
 PARTITION BY RANGE (dim_year) (
-    PARTITION p_before  VALUES LESS THAN (2019)
-    , PARTITION p_2020  VALUES LESS THAN (2020)
-    , PARTITION p_2021  VALUES LESS THAN (2021)
-    , PARTITION p_2022  VALUES LESS THAN (2022)
-    , PARTITION p_2023  VALUES LESS THAN (2023)
-    , PARTITION p_2024  VALUES LESS THAN (2024)
-    , PARTITION p_2025  VALUES LESS THAN (2025)
-    , PARTITION p_max   VALUES LESS THAN (MAXVALUE)
+    PARTITION p_before  VALUES LESS THAN (2019)  -- Partition for pre-2019 data
+    , PARTITION p_2020  VALUES LESS THAN (2020)  -- Partition for 2020 data
+    , PARTITION p_2021  VALUES LESS THAN (2021)  -- Partition for 2021 data
+    , PARTITION p_2022  VALUES LESS THAN (2022)  -- Partition for 2022 data
+    , PARTITION p_2023  VALUES LESS THAN (2023)  -- Partition for 2023 data
+    , PARTITION p_2024  VALUES LESS THAN (2024)  -- Partition for 2024 data
+    , PARTITION p_2025  VALUES LESS THAN (2025)  -- Partition for 2025 data
+    , PARTITION p_max   VALUES LESS THAN (MAXVALUE)  -- Catch-all partition
 )
 BUILD IMMEDIATE
-REFRESH FAST ON DEMAND      -- for incremental updates
+REFRESH FAST ON DEMAND  -- Enable incremental updates
 ENABLE QUERY REWRITE
 AS
 SELECT
@@ -73,18 +83,17 @@ GROUP BY
     , t.dim_time_weekday
     , t.dim_time_hour;
 
--- Composite B-tree index for year-month queries
+-- Create composite B-tree index for year-month queries on MV_TIME_TRIP
 CREATE INDEX DW_SCHEMA.idx_mv_time_trip_year_month
 ON DW_SCHEMA.MV_TIME_TRIP (dim_year, dim_month)
 TABLESPACE MV_TBSP;
 
--- Composite B-tree index for year-hour queries
+-- Create composite B-tree index for year-hour queries on MV_TIME_TRIP
 CREATE INDEX DW_SCHEMA.idx_mv_time_trip_year_hour
 ON DW_SCHEMA.MV_TIME_TRIP (dim_year, dim_hour)
 TABLESPACE MV_TBSP;
 
-
--- Create MV_STATION_TRIP
+-- Create materialized view for station-based trip analysis
 CREATE MATERIALIZED VIEW DW_SCHEMA.MV_STATION_TRIP
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -103,8 +112,7 @@ GROUP BY
     s.dim_station_id
     , s.dim_station_name;
 
-
--- Create MV_STATION_ROUTE
+-- Create materialized view for station route analysis
 CREATE MATERIALIZED VIEW DW_SCHEMA.MV_STATION_ROUTE
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -128,7 +136,7 @@ GROUP BY
     , s_end.dim_station_id
     , s_end.dim_station_name;
 
--- Create MV_BIKE_TRIP_DURATION
+-- Create materialized view for bike trip duration analysis
 CREATE MATERIALIZED VIEW DW_SCHEMA.MV_BIKE_TRIP_DURATION
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -145,7 +153,7 @@ JOIN DW_SCHEMA.dim_bike b
 GROUP BY
     b.dim_bike_id;
 
--- Create MV_USER_SEGMENTATION
+-- Create materialized view for user segmentation analysis
 CREATE MATERIALIZED VIEW DW_SCHEMA.MV_USER_SEGMENTATION
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -167,4 +175,3 @@ GROUP BY
     u.dim_user_type_id
     , u.dim_user_type_name
     , t.dim_time_year;
-

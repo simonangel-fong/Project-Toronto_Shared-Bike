@@ -1,8 +1,20 @@
--- Set PDB context
+-- ============================================================================
+-- Script Name : 03_load.sql
+-- Purpose     : Perform the Transformation and Loading steps in the ELT process
+--               by populating dimension and fact tables from the staging table
+-- Author      : Wenhao Fang
+-- Date        : 2025-05-07
+-- User        : Execute as a user with access to the toronto_shared_bike PDB and dw_schema
+-- Notes       : Ensure the staging table is populated before running this script
+-- ============================================================================
+
+-- Enable server output for debugging or messages
 SET SERVEROUTPUT ON;
+
+-- Switch to the application PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
 
--- Merge into dim_time
+-- Populate the time dimension table with unique timestamps
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_time tgt
 USING (
   -- Union start_time and end_time to capture all timestamps
@@ -30,25 +42,26 @@ WHEN NOT MATCHED THEN
     dim_time_minute
   )
   VALUES (
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYYMMDDHH24MI')), -- YYYYMMDDHHMI
-    src.timestamp_value,                                       -- DATE
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYY')),           -- Year
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'Q')),              -- Quarter (1-4)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'MM')),             -- Month (1-12)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'DD')),             -- Day (1-31)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'IW')),             -- ISO Week (1-53)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'D')),              -- Weekday (1-7, Sunday=1)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'HH24')),           -- Hour (0-23)
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'MI'))              -- Minute (0-59)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYYMMDDHH24MI')), -- Unique ID based on timestamp (YYYYMMDDHHMI)
+    src.timestamp_value,                                       -- Full timestamp
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYY')),           -- Extracted year
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'Q')),              -- Extracted quarter (1-4)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'MM')),             -- Extracted month (1-12)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'DD')),             -- Extracted day (1-31)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'IW')),             -- Extracted ISO week (1-53)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'D')),              -- Extracted weekday (1-7, Sunday=1)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'HH24')),           -- Extracted hour (0-23)
+    TO_NUMBER(TO_CHAR(src.timestamp_value, 'MI'))              -- Extracted minute (0-59)
   );
 
+-- Commit the changes to the time dimension
 COMMIT;
 
--- Load dim_station
+-- Populate the station dimension table with unique station information
 MERGE INTO DW_SCHEMA.dim_station ds
 USING (
     WITH station_times AS (
-        -- Start station records
+        -- Collect start station records
         SELECT 
             start_station_id AS station_id,
             start_station_name AS station_name,
@@ -56,7 +69,7 @@ USING (
         FROM DW_SCHEMA.staging_trip
         WHERE start_station_id IS NOT NULL AND start_station_name IS NOT NULL
         UNION ALL
-        -- End station records
+        -- Collect end station records
         SELECT 
             end_station_id AS station_id,
             end_station_name AS station_name,
@@ -65,6 +78,7 @@ USING (
         WHERE end_station_id IS NOT NULL AND end_station_name IS NOT NULL
     ),
     latest_stations AS (
+        -- Select the most recent station name for each station ID
         SELECT 
             station_id,
             station_name,
@@ -84,29 +98,13 @@ WHEN NOT MATCHED THEN
     INSERT (ds.dim_station_id, ds.dim_station_name)
     VALUES (src.dim_station_id, src.dim_station_name);
 
+-- Commit the changes to the station dimension
 COMMIT;
 
----- Merge into dim_bike
---MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
---USING (
---  SELECT 
---    TO_NUMBER(TRIM(bike_id)) AS bike_id,
---    MAX(TRIM(REPLACE(model, CHR(13), ''))) AS bike_model
---  FROM DW_SCHEMA.staging_trip
---  WHERE UPPER(TRIM(model)) != 'UNKNOWN'
---  GROUP BY TO_NUMBER(TRIM(bike_id))
---) src
---ON (tgt.dim_bike_id = src.bike_id)
---WHEN MATCHED THEN
---  UPDATE SET 
---    tgt.dim_bike_model = src.bike_model
---  WHERE tgt.dim_bike_model != src.bike_model
---WHEN NOT MATCHED THEN
---  INSERT (dim_bike_id, dim_bike_model)
---  VALUES (src.bike_id, src.bike_model);
-
+-- Populate the bike dimension table with unique bike information
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
 USING (
+  -- Aggregate bike data, handling unknown models
   SELECT 
     TO_NUMBER(TRIM(bike_id)) AS bike_id,
     COALESCE(
@@ -118,36 +116,43 @@ USING (
 ) src
 ON (tgt.dim_bike_id = src.bike_id)
 WHEN MATCHED THEN
+  -- Update bike model if it has changed
   UPDATE SET 
     tgt.dim_bike_model = src.bike_model
   WHERE tgt.dim_bike_model != src.bike_model
 WHEN NOT MATCHED THEN
+  -- Insert new bike records
   INSERT (dim_bike_id, dim_bike_model)
   VALUES (src.bike_id, src.bike_model);
 
+-- Commit the changes to the bike dimension
 COMMIT;
 
--- Merge into dim_user_type
+-- Populate the user type dimension table with unique user types
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_user_type tgt
 USING (
+  -- Select distinct user types
   SELECT DISTINCT user_type AS user_type_name
   FROM DW_SCHEMA.staging_trip
-  WHERE user_type IS NOT NULL  -- Post-transformation, no nulls expected
+  WHERE user_type IS NOT NULL
 ) src
 ON (tgt.dim_user_type_name = src.user_type_name)
 WHEN NOT MATCHED THEN
+  -- Insert new user types
   INSERT (
     dim_user_type_name
   )
   VALUES (
     src.user_type_name
   );
-  
+
+-- Commit the changes to the user type dimension
 COMMIT;
 
--- Merge into fact_trip
+-- Populate the fact table with trip data
 MERGE /*+ APPEND */ INTO DW_SCHEMA.fact_trip tgt
 USING (
+  -- Transform staging data into fact table format
   SELECT 
     TO_NUMBER(trip_id)                                                                                                  "FACT_TRIP_SOURCE_ID",
     TO_NUMBER(trip_duration)                                                                                            "FACT_TRIP_DURATION",
@@ -161,6 +166,7 @@ USING (
 ) src
 ON (tgt.fact_trip_source_id = src.FACT_TRIP_SOURCE_ID)
 WHEN MATCHED THEN
+  -- Update existing trip records if any attributes have changed
   UPDATE SET 
     tgt.fact_trip_duration = src.FACT_TRIP_DURATION,
     tgt.fact_trip_start_time_id = src.FACT_TRIP_START_TIME_ID,
@@ -177,6 +183,7 @@ WHEN MATCHED THEN
      OR tgt.fact_trip_bike_id != src.FACT_TRIP_BIKE_ID 
      OR tgt.fact_trip_user_type_id != src.FACT_TRIP_USER_TYPE_ID
 WHEN NOT MATCHED THEN
+  -- Insert new trip records
   INSERT (
     fact_trip_source_id,
     fact_trip_duration,
@@ -197,5 +204,6 @@ WHEN NOT MATCHED THEN
     src.FACT_TRIP_BIKE_ID,
     src.FACT_TRIP_USER_TYPE_ID
   );
-  
+
+-- Commit the changes to the fact table
 COMMIT;
