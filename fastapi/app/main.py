@@ -10,6 +10,7 @@ from config.exceptions import DatabaseError
 from models.MVUserSegmentation import MVUserSegmentation, UserSegmentationResponse
 from models.MVBikeTripDuration import MVBikeTripDuration, BikeTripDurationResponse
 from models.MVStationRoute import MVStationRoute, StationRouteResponse
+from models.MVStationTrip import MVStationTrip, StationTripResponse
 
 # Configure logging at startup
 # configure_logging_from_env()
@@ -128,6 +129,7 @@ def get_bike_trip_duration(
             detail="An unexpected error occurred."  # for prod
         )
 
+
 @app.get(
     "/station-route/",
     response_model=List[StationRouteResponse],
@@ -137,7 +139,8 @@ def get_bike_trip_duration(
 def get_station_routes(
     db: Session = Depends(get_db),
     skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000, description="Maximum number of records to return"),
+    limit: int = Query(100, ge=1, le=1000,
+                       description="Maximum number of records to return"),
 ) -> List[StationRouteResponse]:
     """
     Fetch station-to-station route data from the materialized view.
@@ -155,7 +158,8 @@ def get_station_routes(
     """
     logger.info(f"Fetching station route data with skip={skip}, limit={limit}")
     try:
-        query = db.query(MVStationRoute).order_by(MVStationRoute.trip_count.desc())
+        query = db.query(MVStationRoute).order_by(
+            MVStationRoute.trip_count.desc())
         result = query.offset(skip).limit(limit).all()
         logger.debug(f"Retrieved {len(result)} records from MV_STATION_ROUTE")
         return result
@@ -167,6 +171,54 @@ def get_station_routes(
         )
     except Exception as e:
         logger.error(f"Unexpected error in get_station_routes: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            # detail={str(e)}   # for dev
+            detail="An unexpected error occurred."  # for prod
+        )
+
+
+@app.get(
+    "/station-trip/",
+    response_model=List[StationTripResponse],
+    tags=["Station Trip"],
+    summary="Retrieve station trip counts (start/end)",
+)
+def get_station_trip_counts(
+    db: Session = Depends(get_db),
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(100, ge=1, le=1000,
+                       description="Maximum number of records to return"),
+) -> List[StationTripResponse]:
+    """
+    Fetch station trip data from the materialized view.
+
+    Args:
+        db: SQLAlchemy session.
+        skip: Records to skip for pagination.
+        limit: Max number of records to return.
+
+    Returns:
+        List of stations with trip counts by start and end.
+
+    Raises:
+        HTTPException: On DB errors or unexpected issues.
+    """
+    logger.info(f"Fetching station trip data with skip={skip}, limit={limit}")
+    try:
+        query = db.query(MVStationTrip).order_by(
+            MVStationTrip.trip_count_by_start.desc())
+        result = query.offset(skip).limit(limit).all()
+        logger.debug(f"Retrieved {len(result)} records from MV_STATION_TRIP")
+        return result
+    except (SQLAlchemyError, DatabaseError) as e:
+        logger.error(f"Database error in get_station_trip_counts: {str(e)}")
+        raise HTTPException(
+            status_code=503,
+            detail="Service unavailable due to a database error. Please try again later."
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in get_station_trip_counts: {str(e)}")
         raise HTTPException(
             status_code=500,
             # detail={str(e)}   # for dev
