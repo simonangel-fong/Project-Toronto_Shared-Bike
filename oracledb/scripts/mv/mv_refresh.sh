@@ -12,7 +12,6 @@
 sqlplus / as sysdba <<EOF
 -- Refresh materialized views
 @/project/scripts/mv/01refresh.sql
-
 -- Confirm materialized view refresh status
 @/project/scripts/mv/02confirm.sql
 

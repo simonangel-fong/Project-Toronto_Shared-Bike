@@ -7,53 +7,39 @@ services:
     # restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
-      - /project/share/config/oraenv/prod.env
-    environment:
-      - ORACLE_PWD=/run/secrets/orcl_sys_token
-    secrets:
-      - orcl_sys_token
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "2.0"
-    #       memory: 8g
-    #     reservations:
-    #       memory: 4g
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
+      - /project/share/env/oracle19cDB.env
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 8g
+        reservations:
+          memory: 4g
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # prod
-      - /project/share/data:/project/data # source data
-      - /project/local/oradata:/opt/oracle/oradata # local persist data
-      - /project/local/orabackup:/project/orabackup # local backup data
-      # - /project/share/orabackup:/project/remotebackup # remote backup data
+      - /project/data:/project/data # source data
+      - /project/oradata:/opt/oracle/oradata # local persist data
+      - /project/orabackup:/project/orabackup # local backup data
+      # - /project/remotebackup:/project/remotebackup # remote backup data
     networks:
       - private-net # Private network for prod
-      - public-net # public for dev
     ports:
       - 1521:1521
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD-SHELL",
-    #       "echo 'exit' | sqlplus -S sys/${ORACLE_PWD}@${ORACLE_SID} as sysdba",
-    #     ]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 5m
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "echo 'exit' | sqlplus -S sys/${ORACLE_PWD}@${ORACLE_SID} as sysdba",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5m
 
 networks:
-  public-net:
-    driver: bridge
   private-net:
     driver: bridge
     internal: true
 
-secrets:
-  orcl_sys_token:
-    file: /project/share/config/oraenv/orcl_sys_token.txt
