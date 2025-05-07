@@ -9,6 +9,7 @@ from config.database import get_db
 from config.exceptions import DatabaseError
 from models.MVUserSegmentation import MVUserSegmentation, UserSegmentationResponse
 from models.MVBikeTripDuration import MVBikeTripDuration, BikeTripDurationResponse
+from models.MVStationRoute import MVStationRoute, StationRouteResponse
 
 # Configure logging at startup
 # configure_logging_from_env()
@@ -124,5 +125,50 @@ def get_bike_trip_duration(
         raise HTTPException(
             status_code=500,
             # detail={str(e)}  # for development
+            detail="An unexpected error occurred."  # for prod
+        )
+
+@app.get(
+    "/station-route/",
+    response_model=List[StationRouteResponse],
+    tags=["Station Route"],
+    summary="Retrieve most popular station-to-station routes",
+)
+def get_station_routes(
+    db: Session = Depends(get_db),
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(100, ge=1, le=1000, description="Maximum number of records to return"),
+) -> List[StationRouteResponse]:
+    """
+    Fetch station-to-station route data from the materialized view.
+
+    Args:
+        db: SQLAlchemy session provided by dependency injection.
+        skip: Records to skip for pagination.
+        limit: Maximum records to return.
+
+    Returns:
+        List of most frequent station routes.
+
+    Raises:
+        HTTPException: On database or unexpected errors.
+    """
+    logger.info(f"Fetching station route data with skip={skip}, limit={limit}")
+    try:
+        query = db.query(MVStationRoute).order_by(MVStationRoute.trip_count.desc())
+        result = query.offset(skip).limit(limit).all()
+        logger.debug(f"Retrieved {len(result)} records from MV_STATION_ROUTE")
+        return result
+    except (SQLAlchemyError, DatabaseError) as e:
+        logger.error(f"Database error in get_station_routes: {str(e)}")
+        raise HTTPException(
+            status_code=503,
+            detail="Service unavailable due to a database error. Please try again later."
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in get_station_routes: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            # detail={str(e)}   # for dev
             detail="An unexpected error occurred."  # for prod
         )
