@@ -5,6 +5,7 @@
 - [FastAPI](#fastapi)
   - [Local Test](#local-test)
   - [Docker](#docker)
+  - [Test](#test)
 
 ---
 
@@ -42,4 +43,16 @@ docker compose -f compose.fastapi.dev.yaml up --build -d
 # Test: http://localhost:8081/user-segmentation/
 
 docker compose -f compose.fastapi.dev.yaml down
+```
+
+---
+
+## Test
+
+```sh
+https://trip-dev.arguswatcher.net/user-segmentation/
+https://trip-dev.arguswatcher.net/time-trip/
+https://trip-dev.arguswatcher.net/station-trip/
+https://trip-dev.arguswatcher.net/station-route/
+https://trip-dev.arguswatcher.net/bike-trip-duration/
 ```
