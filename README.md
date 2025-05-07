@@ -33,7 +33,8 @@ A repo of data analysis project for Toronto shared bike.
 
 ## API
 
-- [FastAPI](./doc/feature-api/fastapi/fastapi.md)
+- [FastAPI Local Build](./doc/feature-api/fastapi/fastapi.md)
+- [Pipeline: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
 
 ---
 
