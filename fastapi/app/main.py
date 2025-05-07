@@ -11,6 +11,7 @@ from models.MVUserSegmentation import MVUserSegmentation, UserSegmentationRespon
 from models.MVBikeTripDuration import MVBikeTripDuration, BikeTripDurationResponse
 from models.MVStationRoute import MVStationRoute, StationRouteResponse
 from models.MVStationTrip import MVStationTrip, StationTripResponse
+from models.MVTimeTrip import MVTimeTrip, TimeTripResponse
 
 # Configure logging at startup
 # configure_logging_from_env()
@@ -219,6 +220,54 @@ def get_station_trip_counts(
         )
     except Exception as e:
         logger.error(f"Unexpected error in get_station_trip_counts: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            # detail={str(e)}   # for dev
+            detail="An unexpected error occurred."  # for prod
+        )
+
+
+@app.get(
+    "/time-trip/",
+    response_model=List[TimeTripResponse],
+    tags=["Time Trip"],
+    summary="Retrieve trip counts aggregated by time",
+)
+def get_time_trip_data(
+    db: Session = Depends(get_db),
+    skip: int = Query(0, ge=0, description="Records to skip"),
+    limit: int = Query(100, ge=1, le=10000,
+                       description="Max number of records to return"),
+) -> List[TimeTripResponse]:
+    """
+    Fetch aggregated trip counts from the time-based materialized view.
+
+    Args:
+        db: SQLAlchemy session.
+        skip: Number of records to skip for pagination.
+        limit: Number of records to return.
+
+    Returns:
+        List of trip counts grouped by year/month/day/hour/etc.
+
+    Raises:
+        HTTPException: On database or unexpected errors.
+    """
+    logger.info(f"Fetching time trip data with skip={skip}, limit={limit}")
+    try:
+        query = db.query(MVTimeTrip).order_by(
+            MVTimeTrip.dim_year.desc(), MVTimeTrip.dim_month.desc())
+        result = query.offset(skip).limit(limit).all()
+        logger.debug(f"Retrieved {len(result)} records from MV_TIME_TRIP")
+        return result
+    except (SQLAlchemyError, DatabaseError) as e:
+        logger.error(f"Database error in get_time_trip_data: {str(e)}")
+        raise HTTPException(
+            status_code=503,
+            detail="Service unavailable due to a database error. Please try again later."
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in get_time_trip_data: {str(e)}")
         raise HTTPException(
             status_code=500,
             # detail={str(e)}   # for dev
