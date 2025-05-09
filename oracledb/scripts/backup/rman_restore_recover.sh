@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# Script Name:     restore_and_recover_db.sh
+# Script Name:     rman_restore_recover.sh
 # Description:     Restores and recovers the entire Oracle database using RMAN.
 #                  It forces a startup to mount mode, restores datafiles,
 #                  applies archive logs, and opens the database.
-# Usage:           ./restore_and_recover_db.sh
+# Usage:           ./rman_restore_recover.sh
 # Requirements:    Oracle RMAN must be available and backups must exist.
 # -----------------------------------------------------------------------------
 

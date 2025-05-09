@@ -70,7 +70,9 @@ USING (
             start_station_name AS station_name,
             TO_DATE(start_time, 'MM/DD/YYYY HH24:MI') AS trip_datetime
         FROM DW_SCHEMA.staging_trip
-        WHERE start_station_id IS NOT NULL AND start_station_name IS NOT NULL
+        WHERE 
+            start_station_id IS NOT NULL 
+            AND start_station_name IS NOT NULL
         UNION ALL
         -- Collect end station records
         SELECT 

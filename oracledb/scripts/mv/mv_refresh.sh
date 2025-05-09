@@ -11,9 +11,9 @@
 # Execute SQL scripts to refresh and confirm materialized views
 sqlplus / as sysdba <<EOF
 -- Refresh materialized views
-@/project/scripts/mv/01refresh.sql
+@/project/scripts/mv/mv_refresh.sql
 -- Confirm materialized view refresh status
-@/project/scripts/mv/02confirm.sql
+@/project/scripts/mv/mv_confirm.sql
 
 exit
 EOF

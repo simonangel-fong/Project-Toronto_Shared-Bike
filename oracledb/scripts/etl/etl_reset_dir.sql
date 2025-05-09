@@ -19,7 +19,7 @@ SHOW user;
 
 -- Call the procedure to update the directory object for the given year
 BEGIN
-    update_directory_for_year(2020);
+    update_directory_for_year(2023);
 END;
 /
 
@@ -29,10 +29,3 @@ SELECT
     , directory_path
 FROM dba_directories
 WHERE directory_name = 'DATA_DIR';
-
-SELECT 
-    table_name
-    , owner
-FROM DBA_TABLES
-WHERE owner = 'DW_SCHEMA'
-AND table_name IN ( 'EXTERNAL_RIDERSHIP', 'STAGING_TRIP');
