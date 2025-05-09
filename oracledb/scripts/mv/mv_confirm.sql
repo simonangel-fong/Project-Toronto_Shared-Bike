@@ -18,31 +18,27 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
--- Query the time-based trip materialized view, showing the 10 most recent records by year and month
+-- time-based trip materialized view
 SELECT *
-FROM DW_SCHEMA.MV_TIME_TRIP
-ORDER BY DIM_YEAR DESC, DIM_MONTH DESC
-FETCH FIRST 10 ROWS ONLY;
+FROM dw_schema.mv_time_trip
+ORDER BY dim_year DESC, dim_month DESC, dim_day DESC, dim_hour DESC;
 
--- Query the station-based trip materialized view, showing the top 10 stations by trip count (start station)
+-- Query the station-based trip materialized view
 SELECT *
-FROM DW_SCHEMA.MV_STATION_TRIP
-ORDER BY trip_count_by_start DESC
-FETCH FIRST 10 ROWS ONLY;
+FROM dw_schema.mv_station_trip
+ORDER BY trip_count_by_start DESC, trip_count_by_end DESC;
 
--- Query the station route materialized view, showing the top 10 routes by trip count
+-- Query the station route materialized view
 SELECT * 
-FROM DW_SCHEMA.MV_STATION_ROUTE
-ORDER BY trip_count DESC
-FETCH FIRST 10 ROWS ONLY;
+FROM dw_schema.mv_station_route
+ORDER BY trip_count DESC;
 
--- Query the bike trip duration materialized view, showing the top 10 bikes by trip count
+-- Query the bike trip duration materialized view
 SELECT *
-FROM DW_SCHEMA.MV_BIKE_TRIP_DURATION
-ORDER BY trip_count DESC
-FETCH FIRST 10 ROWS ONLY;
+FROM dw_schema.mv_bike_trip_duration
+ORDER BY trip_count DESC, avg_trip_duration DESC;
 
--- Query the user segmentation materialized view, showing up to 10 records
+-- Query the user segmentation materialized view
 SELECT *
 FROM DW_SCHEMA.MV_USER_SEGMENTATION
-WHERE ROWNUM < 10;
+ORDER BY user_type_name ASC, dim_year ASC;

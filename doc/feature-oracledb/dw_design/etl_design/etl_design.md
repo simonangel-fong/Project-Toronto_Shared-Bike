@@ -3,9 +3,11 @@
 [Back](../../../../README.md)
 
 - [Toronto Shared Bike Data Analysis: Data Warehouse - ELT Design](#toronto-shared-bike-data-analysis-data-warehouse---elt-design)
-  - [Data Quality Strategy](#data-quality-strategy)
-  - [External Table: Extract](#external-table-extract)
+  - [Data Processing Strategy](#data-processing-strategy)
+    - [Key Column](#key-column)
+    - [Non-Key Column](#non-key-column)
     - [Source File](#source-file)
+  - [External Table: Extract](#external-table-extract)
     - [External Table](#external-table)
     - [Staging table](#staging-table)
   - [Staging Table: Transfom](#staging-table-transfom)
@@ -13,7 +15,7 @@
 
 ---
 
-## Data Quality Strategy
+## Data Processing Strategy
 
 - Goal
 
@@ -25,21 +27,47 @@
   - `start_time`, `end_time` can be transform into date type.
   - `start_station_id`, `end_station_id` are the key to identify the station.
 
-- Column Groups
+### Key Column
 
-  - Key columns: Critical attributes for meaningful analysis
-    - `trip_id`: used in the merge condition
-    - `trip_duration`
-    - `start_time`
-    - `start_station_id`
-    - `end_station_id`
-  - Non-key columns: Attributes with less precision but for meaningful analysis
-    - `start_station_name`
-    - `end_time`
-    - `end_station_name`
-    - `bike_id`
-    - `user_type`
-    - `model`
+| Column             | Null/'Null' | Invalid Format | Invalid Value |
+| ------------------ | ----------- | -------------- | ------------- |
+| `trip_id`          | Delete      | Delete         |               |
+| `trip_duration`    | Delete      | Delete         | Delete (`<0`) |
+| `start_time`       | Delete      | Delete         |               |
+| `start_station_id` | Delete      | Delete         |               |
+| `end_station_id`   | Delete      | Delete         |               |
+
+---
+
+### Non-Key Column
+
+| Column               | Null/'Null'                        | Invalid Format                     | Invalid Value |
+| -------------------- | ---------------------------------- | ---------------------------------- | ------------- |
+| `start_station_name` | Replace(`'UNKNOWN'`)               |                                    |               |
+| `end_station_name`   | Replace(`'UNKNOWN'`)               |                                    |               |
+| `end_time`           | Calculate(`start_time`+`duration`) | Calculate(`start_time`+`duration`) |               |
+| `user_type`          | Replace(`'UNKNOWN'`)               |                                    |               |
+| `bike_id`            | Replace(`'-1`)                     |                                    |               |
+| `model`              | Replace(`'UNKNOWN'`)               |                                    |               |
+
+---
+
+### Source File
+
+- Central Source Data Repository:
+  - `/project/data/`
+  - Structure:
+    - `/project/data/`: directory for the data of year YYYY
+  - File Naming:
+    - `Ridership-YYYY-Q1*.csv`: Quarterly CSV files
+    - `Ridership-YYYY-01*.csv`: Monthly CSV files
+- Oracle Directory:
+  - Directory Name: `data_dir`
+  - Procedure: `SYS.UPDATE_DIRECTORY_FOR_YEAR()`
+- Miscellaneous
+  - Permission for database user
+  - Ownership:`oracle:oinstall`
+  - Permission: `750`
 
 ---
 
@@ -50,22 +78,6 @@
   - 1. Capture as many record as possible, by large length size varchar2
   - 2. No validation
   - 3. enable log file and bad file to capture error
-
----
-
-### Source File
-
-- Central Source Data Repository:
-  - `/data/toronto_shared_bike/`
-  - Structure:
-    - `/data/toronto_shared_bike/YYYY`: directory for the data of year YYYY
-  - Naming:
-    - `Ridership-YYYY-Q1*.csv`: Quarterly CSV files
-    - `Ridership-YYYY-01*.csv`: Monthly CSV files
-- Miscellaneous
-  - Permission for database user
-  - Ownership:`oracle:oinstall`
-  - Permission: `750`
 
 ---
 
@@ -187,5 +199,3 @@
         - update the measure
       - If no mateched
         - insert new fact record.
-
----

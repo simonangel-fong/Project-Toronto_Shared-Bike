@@ -179,25 +179,32 @@ docker compose -f compose.oracledb.dev.yaml up --build -d
 # configure RMAN
 docker exec -it oracle19cDB bash /project/scripts/backup/rman_configure.sh
 
-# backup RMAN
-docker exec -it oracle19cDB bash /project/scripts/backup/rman_backup.sh
+# List all backup
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_list_backup.sh
 
-docker exec -it oracle19cDB bash /project/scripts/backup/rman_backup_tab.sh INIT_BACKUP   
+# Create full backup
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_create_backup.sh
+
+# create a backup with a given tag name
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_create_backup_with_tag.sh INIT_BACKUP   
 
 # restore and recover
-docker exec -it oracle19cDB bash /project/scripts/backup/rman_recovery.sh
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_restore_recover.sh
 
 # cutom command
 docker exec -it oracle19cDB rman target /
 ```
 
-- Manually restore and recover
+---
+
+- Archived: Manually restore and recover
 
 ```sh
 rman target /
 shutdown immediate;
 startup nomount
-# list all available baciup, get the dbid and db name
+
+# list all available backup, get the dbid and db name
 CATALOG START WITH '/project/orabackup/';
 # File Name: /project/orabackup/arch_0g3orc5q_1_1.bkp
   # RMAN-07518: Reason: Foreign database file DBID: 2971528291  Database Name: ORCLCDB
