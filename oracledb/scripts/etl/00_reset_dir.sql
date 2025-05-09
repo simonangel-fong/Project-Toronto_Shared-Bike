@@ -7,11 +7,32 @@
 -- Notes       : Assumes the procedure `update_directory_for_year` exists in the current schema
 -- ============================================================================
 
--- Switch to the application PDB
-ALTER SESSION SET container=toronto_shared_bike;
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
 
--- Call the procedure to update the directory object for the year 2024
+-- Switch to the Toronto Shared Bike PDB
+ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
+
+-- Call the procedure to update the directory object for the given year
 BEGIN
-    update_directory_for_year(2024);
+    update_directory_for_year(2020);
 END;
 /
+
+-- Confirm
+SELECT
+    directory_name
+    , directory_path
+FROM dba_directories
+WHERE directory_name = 'DATA_DIR';
+
+SELECT 
+    table_name
+    , owner
+FROM DBA_TABLES
+WHERE owner = 'DW_SCHEMA'
+AND table_name IN ( 'EXTERNAL_RIDERSHIP', 'STAGING_TRIP');

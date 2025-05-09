@@ -15,13 +15,13 @@ BACKUP_PATH="/project/orabackup"
 # Check if the backup directory exists
 if [ ! -d "$BACKUP_PATH" ]; then
   echo "########################################################"
-  echo "# ERROR: Backup directory does not exist at $BACKUP_PATH #"
+  echo "ERROR: Backup directory does not exist at $BACKUP_PATH"
   echo "########################################################" >&2
 
 else
 
   echo "########################################################"
-  echo "# Starting full RMAN backup...                         #"
+  echo "Starting full RMAN backup...   "
   echo "########################################################"
 
   # Run RMAN full backup
@@ -63,7 +63,7 @@ LIST BACKUP SUMMARY;
 EOF
 
   echo "########################################################"
-  echo "# Full RMAN backup completed successfully.             #"
+  echo "Full RMAN backup completed successfully. "
   echo "########################################################"
 
 fi

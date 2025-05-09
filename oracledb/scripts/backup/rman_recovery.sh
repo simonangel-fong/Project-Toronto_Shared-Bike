@@ -14,13 +14,13 @@ BACKUP_PATH="/project/orabackup"
 
 if [ ! -d "$BACKUP_PATH" ]; then
   echo "########################################################"
-  echo "# ERROR: Backup directory does not exist at $BACKUP_PATH #"
+  echo "ERROR: Backup directory does not exist at $BACKUP_PATH "
   echo "########################################################" >&2
 
 else
 
   echo "########################################################"
-  echo "# Starting database restore and recovery...            #"
+  echo "Starting database restore and recovery...            "
   echo "########################################################"
 
   # Run RMAN restore and recovery
@@ -51,7 +51,7 @@ ALTER DATABASE OPEN;
 EOF
 
   echo "########################################################"
-  echo "# Database restore and recovery completed successfully #"
+  echo "Database restore and recovery completed successfully"
   echo "########################################################"
 
 fi

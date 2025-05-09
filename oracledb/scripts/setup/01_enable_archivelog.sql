@@ -7,6 +7,12 @@
 -- Notes       : Ensure that the FRA (Fast Recovery Area) is properly configured.
 -- ============================================================================
 
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
+
+-- Shutdown
 SHUTDOWN IMMEDIATE;
 
 -- Start CDB in MOUNT mode
@@ -18,5 +24,5 @@ ALTER DATABASE ARCHIVELOG;
 -- Open the CDB
 ALTER DATABASE OPEN;
 
--- Verify ARCHIVELOG mode is enabled
+-- Confirm
 ARCHIVE LOG LIST;

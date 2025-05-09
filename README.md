@@ -20,8 +20,8 @@ A repo of data analysis project for Toronto shared bike.
 
 - Data Warehouse Development
 
-  - [Docker Compose](./doc/feature-oracledb/dw_development/docker_compose/docker_compose.md)
   - [Setup SQL Script](./doc/feature-oracledb/dw_development/setup_script/setup_script.md)
+  - [Docker Compose](./doc/feature-oracledb/dw_development/docker_compose/docker_compose.md)
   - [ELT Scripts](./doc/feature-oracledb/dw_development/etl_script/etl_script.md)
   - [Backup Plan & Scripts](./doc/feature-oracledb/dw_development/backup_script/backup_script.md)
 

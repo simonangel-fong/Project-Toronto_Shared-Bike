@@ -11,7 +11,11 @@
     - [Networks](#networks)
     - [Healthcheck](#healthcheck)
     - [Resource Limits (Optional)](#resource-limits-optional)
-  - [Commands](#commands)
+    - [Commands](#commands)
+  - [ETL Job](#etl-job)
+    - [Commands](#commands-1)
+  - [Backup Plan](#backup-plan)
+  - [Commands](#commands-2)
 
 ---
 
@@ -92,7 +96,7 @@
 
 ---
 
-## Commands
+### Commands
 
 - Build and Start
 
@@ -103,4 +107,116 @@ docker compose -f compose.oracledb.dev.yaml up --build -d && docker exec -it -u 
 
 # Stop
 docker compose -f compose.oracledb.dev.yaml down
+```
+
+---
+
+## ETL Job
+
+- ETL Job workflow:
+  - 1. Reset Oracle Directory.
+  - 2. Extract data from flat file to external table, then import to stagging table.
+  - 3. Transform data in the stagging table.
+  - 4. Load transformed data from stagging table to Data warehouse.
+
+| Predefined Script           | Description                                   |
+| --------------------------- | --------------------------------------------- |
+| `single_year_etl_job.sql`   | Executes an ELT pipeline for a specified year |
+| `multiple_year_etl_job.sql` | Runs ELT jobs for a range of years            |
+
+### Commands
+
+- ETL Job
+
+```sh
+# build up container
+docker compose -f compose.oracledb.dev.yaml up --build -d
+
+# ELT for default year (2019)
+docker exec -it oracle19cDB bash /project/scripts/etl/single_year_etl_job.sh
+
+# ELT for a given year
+docker exec -it oracle19cDB bash /project/scripts/etl/single_year_etl_job.sh 2020
+
+# ELT for a range years
+docker exec -it oracle19cDB bash /project/scripts/etl/multiple_year_etl_job.sh 2019 2024
+```
+
+- Refresh MV
+
+```sh
+# refresh mv
+docker exec -it oracle19cDB bash /project/scripts/mv/mv_refresh.sh
+```
+
+---
+
+## Backup Plan
+
+| **Backup Concern**         | **Value**            | **Description**                                                                 |
+| -------------------------- | -------------------- | ------------------------------------------------------------------------------- |
+| Control file autobackup    | ON                   | Ensures the control file is backed up automatically after structural changes.   |
+| Control file backup path   | `/project/orabackup` | Sets the path and filename pattern for control file backups.                    |
+| Control file backup format | `controlfile_%F.bkp` | Sets the path and filename pattern for control file backups.                    |
+| Retention policy           | 7 days               | Keeps backups required to recover the database to any point in the last 7 days. |
+| Max backup set size        | 8G                   | Limits the size of any single backup set (optional).                            |
+| Default device type        | DISK                 | Specifies that all backups should go to disk by default.                        |
+| Disk parallelism           | 2                    | Enables two parallel backup streams to speed up disk backups.                   |
+| Backup type                | BACKUPSET            | Chooses `BACKUPSET` as the format for backups.                                  |
+| Compression algorithm      | BASIC                | Applies basic compression to reduce backup size (may require license).          |
+| Compression mode           | DEFAULT              | Uses the default compression behavior for the specified Oracle version.         |
+| Backup optimization        | ON                   | Skips backing up files that haven't changed since the last backup.              |
+| Show configuration         | `SHOW ALL`           | Displays current RMAN configuration settings.                                   |
+
+---
+
+## Commands
+
+```sh
+# build up container
+docker compose -f compose.oracledb.dev.yaml up --build -d
+
+# configure RMAN
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_configure.sh
+
+# backup RMAN
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_backup.sh
+
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_backup_tab.sh INIT_BACKUP   
+
+# restore and recover
+docker exec -it oracle19cDB bash /project/scripts/backup/rman_recovery.sh
+
+# cutom command
+docker exec -it oracle19cDB rman target /
+```
+
+- Manually restore and recover
+
+```sh
+rman target /
+shutdown immediate;
+startup nomount
+# list all available baciup, get the dbid and db name
+CATALOG START WITH '/project/orabackup/';
+# File Name: /project/orabackup/arch_0g3orc5q_1_1.bkp
+  # RMAN-07518: Reason: Foreign database file DBID: 2971528291  Database Name: ORCLCDB
+
+SET DBID = 2971528291;
+# executing command: SET DBID
+restore controlfile from '/project/orabackup/controlfile_c-2971528291-20250507-02.bkp';
+# Starting restore at 08-MAY-25
+# using channel ORA_DISK_1
+
+# channel ORA_DISK_1: restoring control file
+# channel ORA_DISK_1: restore complete, elapsed time: 00:00:01
+# output file name=/opt/oracle/oradata/ORCLCDB/control01.ctl
+# Finished restore at 08-MAY-25
+ALTER DATABASE MOUNT;
+# released channel: ORA_DISK_1
+# Statement processed
+
+RESTORE DATABASE;
+RECOVER DATABASE NOREDO;
+ALTER DATABASE OPEN RESETLOGS;
 ```

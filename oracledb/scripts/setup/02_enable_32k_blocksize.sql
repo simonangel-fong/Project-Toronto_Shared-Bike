@@ -7,7 +7,15 @@
 -- Notes       : 32K block size requires a dedicated buffer cache. Ensure the SPFILE is in use.
 -- ============================================================================
 
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
+
+-- Switch to the root container
 ALTER SESSION SET CONTAINER = CDB$ROOT;
+SHOW con_name;
+SHOW user;
 
 -- Set 32K block size buffer cache (applies to SPFILE only)
 ALTER SYSTEM SET DB_32K_CACHE_SIZE = 256M SCOPE = SPFILE;
@@ -16,5 +24,5 @@ ALTER SYSTEM SET DB_32K_CACHE_SIZE = 256M SCOPE = SPFILE;
 SHUTDOWN IMMEDIATE;
 STARTUP;
 
--- Verify the new cache size setting
+-- Confirm cache size setting
 SHOW PARAMETER db_32k_cache_size;

@@ -8,11 +8,15 @@
 -- Notes       : Ensure all dimension and fact tables are populated before refreshing materialized views
 -- ============================================================================
 
--- Enable server output for debugging or messages
+-- Output from the DBMS_OUTPUT to standard output
 SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
 
--- Switch to the application PDB
+-- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Refresh the time-based trip materialized view using fast refresh
 EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_TIME_TRIP', 'F');
@@ -24,3 +28,5 @@ EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_STATION_ROUTE', 'F');
 EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_BIKE_TRIP_DURATION', 'C');
 -- Refresh the user segmentation materialized view using complete refresh
 EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_USER_SEGMENTATION', 'C');
+
+COMMIT;

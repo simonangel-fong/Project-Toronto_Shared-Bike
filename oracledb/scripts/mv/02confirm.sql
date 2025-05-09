@@ -8,11 +8,15 @@
 -- Notes       : Ensure materialized views are refreshed before running this script
 -- ============================================================================
 
--- Enable server output for debugging or messages
+-- Output from the DBMS_OUTPUT to standard output
 SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
 
--- Switch to the application PDB
+-- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Query the time-based trip materialized view, showing the 10 most recent records by year and month
 SELECT *
