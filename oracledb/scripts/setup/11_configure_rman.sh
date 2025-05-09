@@ -15,13 +15,13 @@ BACKUP_PATH="/project/orabackup"
 # Check if the backup directory exists
 if [ ! -d "$BACKUP_PATH" ]; then
     echo "########################################################"
-    echo "# ERROR: Backup directory does not exist at $BACKUP_PATH #"
+    echo "ERROR: Backup directory does not exist at $BACKUP_PATH  "
     echo "########################################################" >&2
 
 else
 
     echo "########################################################"
-    echo "# Starting RMAN configuration...                       #"
+    echo "Starting RMAN configuration...                          "
     echo "########################################################"
 
     # Run RMAN commands to configure persistent settings
@@ -55,7 +55,7 @@ SHOW ALL;
 EOF
 
     echo "########################################################"
-    echo "# RMAN configuration completed successfully.           #"
+    echo "RMAN configuration completed successfully.              "
     echo "########################################################"
 
 fi

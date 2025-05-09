@@ -8,14 +8,15 @@
 -- Notes       : Ensure the PDB is created and open before running this script
 -- ============================================================================
 
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
+
 -- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER=toronto_shared_bike;
-
--- Display the current container name for verification
 SHOW con_name;
-
--- Display the current user for verification
-SHOW user
+SHOW user;
 
 -- Create FACT_TBSP tablespace for storing fact tables with a 32K block size
 CREATE TABLESPACE FACT_TBSP
@@ -72,5 +73,7 @@ SEGMENT SPACE MANAGEMENT AUTO;
 -- Confirm the creation of tablespaces by listing those with names ending in '_TBSP'
 SELECT 
     tablespace_name
+    , block_size
+    , status
 FROM DBA_tablespaces
 WHERE tablespace_name LIKE '%_TBSP';

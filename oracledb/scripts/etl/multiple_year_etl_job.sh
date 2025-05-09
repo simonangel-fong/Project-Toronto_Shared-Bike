@@ -14,20 +14,20 @@ START_YEAR=${1:-2019}
 END_YEAR=${2:-2020}
 
 echo "#######################################################"
-echo "# Running ETL jobs from $START_YEAR to $END_YEAR... #"
+echo "Running ETL jobs from $START_YEAR to $END_YEAR... "
 echo "#######################################################"
 
 # Loop over the year range and call the single year ETL job for each
 for ((year = START_YEAR; year <= END_YEAR; year++)); do
     echo "############################################"
-    echo "# Starting ETL job for year $year.         #"
+    echo "Starting ETL job for year $year.         "
     echo "############################################"
     
     # Call the single year ETL job script with the current year
     bash /project/scripts/etl/single_year_etl_job.sh "$year"
 
     echo "############################################"
-    echo "# Finished ETL job for year $year          #"
+    echo "Finished ETL job for year $year          "
     echo "############################################"
     echo
 done

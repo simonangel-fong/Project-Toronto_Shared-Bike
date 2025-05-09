@@ -8,8 +8,15 @@
 -- Notes       : Ensure the DW_SCHEMA, fact, and dimension tables are created and populated
 -- ============================================================================
 
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
+
 -- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Create materialized view log on fact_trip for fast refresh support
 CREATE MATERIALIZED VIEW LOG ON DW_SCHEMA.fact_trip
@@ -175,3 +182,19 @@ GROUP BY
     u.dim_user_type_id
     , u.dim_user_type_name
     , t.dim_time_year;
+    
+-- confirm
+SELECT 
+    master
+    , owner
+    , mview_last_refresh_time
+FROM ALL_BASE_TABLE_MVIEWS;
+
+SELECT 
+    mview_name
+    , owner
+    , refresh_method
+    , last_refresh_date
+--    , query
+FROM dba_mviews
+ORDER BY mview_name;

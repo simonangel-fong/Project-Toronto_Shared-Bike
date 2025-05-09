@@ -7,8 +7,15 @@
 -- Notes       : Ensure the DW_SCHEMA and required tablespaces (FACT_TBSP, DIM_TBSP, INDEX_TBSP) are created
 -- ============================================================================
 
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
+
 -- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Create the time dimension table
 CREATE TABLE DW_SCHEMA.dim_time (
@@ -210,3 +217,22 @@ CREATE BITMAP INDEX DW_SCHEMA.index_fact_trip_user_type
   ON DW_SCHEMA.fact_trip (fact_trip_user_type_id)
   LOCAL
   TABLESPACE INDEX_TBSP;
+  
+  
+-- confirm
+SELECT
+    table_name
+    , owner
+    , tablespace_name
+FROM DBA_TABLES
+WHERE owner = 'DW_SCHEMA';
+
+SELECT 
+    index_name
+    , index_type
+    , table_name
+    , uniqueness
+    , constraint_index
+    , owner
+FROM dba_indexes
+WHERE owner = 'DW_SCHEMA';

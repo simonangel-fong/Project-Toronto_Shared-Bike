@@ -8,11 +8,15 @@
 -- Notes       : Ensure the staging table is populated before running this script
 -- ============================================================================
 
--- Enable server output for debugging or messages
+-- Output from the DBMS_OUTPUT to standard output
 SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
 
--- Switch to the application PDB
+-- Switch to the Toronto Shared Bike PDB
 ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Populate the time dimension table with unique timestamps
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_time tgt
@@ -54,7 +58,6 @@ WHEN NOT MATCHED THEN
     TO_NUMBER(TO_CHAR(src.timestamp_value, 'MI'))              -- Extracted minute (0-59)
   );
 
--- Commit the changes to the time dimension
 COMMIT;
 
 -- Populate the station dimension table with unique station information
@@ -98,7 +101,6 @@ WHEN NOT MATCHED THEN
     INSERT (ds.dim_station_id, ds.dim_station_name)
     VALUES (src.dim_station_id, src.dim_station_name);
 
--- Commit the changes to the station dimension
 COMMIT;
 
 -- Populate the bike dimension table with unique bike information
@@ -125,7 +127,6 @@ WHEN NOT MATCHED THEN
   INSERT (dim_bike_id, dim_bike_model)
   VALUES (src.bike_id, src.bike_model);
 
--- Commit the changes to the bike dimension
 COMMIT;
 
 -- Populate the user type dimension table with unique user types

@@ -8,25 +8,20 @@
 -- Notes       : Ensure that the external file is accessible through the directory `dir_target`
 -- ============================================================================
 
--- Enable server output for debugging or messages
+-- Output from the DBMS_OUTPUT to standard output
 SET SERVEROUTPUT ON;
+-- Allow blank lines 
+SET SQLBLANKLINES ON;
 
--- Switch to the application PDB
-ALTER SESSION SET container = toronto_shared_bike;
-
--- Display the path of the directory object used for external table access
-SELECT directory_path 
-FROM all_directories 
-WHERE directory_name = UPPER('dir_target');
-
--- Set the default directory for the external table
-ALTER TABLE dw_schema.external_ridership
-DEFAULT DIRECTORY dir_target;
+-- Switch to the Toronto Shared Bike PDB
+ALTER SESSION SET CONTAINER = toronto_shared_bike;
+SHOW con_name;
+SHOW user;
 
 -- Confirm external table access (show a sample row)
 SELECT *
 FROM dw_schema.external_ridership
-WHERE ROWNUM < 2;
+WHERE ROWNUM < 3;
 
 -- Truncate the staging table before loading new data
 TRUNCATE TABLE dw_schema.staging_trip;
@@ -43,3 +38,7 @@ COMMIT;
 SELECT COUNT(*)
 FROM dw_schema.staging_trip
 ORDER BY start_time;
+
+SELECT *
+FROM dw_schema.staging_trip
+WHERE ROWNUM < 5;
