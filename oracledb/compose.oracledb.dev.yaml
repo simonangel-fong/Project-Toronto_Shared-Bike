@@ -9,11 +9,12 @@ services:
     env_file:
       - ./env/orcl.env
     volumes:
-      # - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
+      - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # dev volumes
       - oracledata:/opt/oracle/oradata # persist data
       - ../project/data:/project/data # source data
+      - ../project/export:/project/export # export data
       - ../project/orabackup:/project/orabackup # local backup
       # - ../project/nfsbackup:/project/nfsbackup # optional: remote backup
     networks:
