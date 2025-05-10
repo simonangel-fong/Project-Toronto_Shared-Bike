@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Optional
 from fastapi import FastAPI, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -32,16 +32,14 @@ logger.info("Application starting up...")
 # get the user segmentation
 def get_user_segmentation(
     db: Session = Depends(get_db),
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000,
-                       description="Maximum number of records to return"),
+    limit: Optional[int] = Query(
+        None, ge=1, le=1000, description="Maximum number of records to return"),
 ) -> List[UserSegmentationResponse]:
     """
     Fetch user segmentation data from the materialized view.
 
     Args:
         db: SQLAlchemy session provided by dependency injection.
-        skip: Number of records to skip for pagination (default: 0).
         limit: Maximum number of records to return (default: 100, max: 1000).
 
     Returns:
@@ -51,10 +49,10 @@ def get_user_segmentation(
         HTTPException: If a database error occurs (status code 503).
     """
     logger.info(
-        f"Fetching user segmentation data with skip={skip}, limit={limit}")
+        f"Fetching user segmentation data with limit={limit}")
     try:
         query = db.query(MVUserSegmentation)
-        result = query.offset(skip).limit(limit).all()
+        result = query.limit(limit).all()
 
         # if success then log
         logger.debug(
@@ -85,16 +83,14 @@ def get_user_segmentation(
 )
 def get_bike_trip_duration(
     db: Session = Depends(get_db),
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000,
-                       description="Maximum number of records to return"),
+    limit: Optional[int] = Query(
+        None, ge=1, le=1000, description="Maximum number of records to return"),
 ) -> List[BikeTripDurationResponse]:
     """
     Fetch bike trip duration data from the materialized view.
 
     Args:
         db: SQLAlchemy session provided by dependency injection.
-        skip: Number of records to skip for pagination (default: 0).
         limit: Maximum number of records to return (default: 100, max: 1000).
 
     Returns:
@@ -104,11 +100,15 @@ def get_bike_trip_duration(
         HTTPException: If a database error occurs (status code 503).
     """
     logger.info(
-        f"Fetching bike trip duration data with skip={skip}, limit={limit}")
+        f"Fetching bike trip duration data with limit={limit}")
     try:
         query = db.query(MVBikeTripDuration).order_by(
             MVBikeTripDuration.trip_count.desc())
-        result = query.offset(skip).limit(limit).all()
+
+        if limit is not None:
+            query = query.limit(limit)
+
+        result = query.all()
 
         # if success then log
         logger.debug(
@@ -139,8 +139,7 @@ def get_bike_trip_duration(
 )
 def get_station_routes(
     db: Session = Depends(get_db),
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000,
+    limit: int = Query(100, ge=1, le=3000,
                        description="Maximum number of records to return"),
 ) -> List[StationRouteResponse]:
     """
@@ -148,7 +147,6 @@ def get_station_routes(
 
     Args:
         db: SQLAlchemy session provided by dependency injection.
-        skip: Records to skip for pagination.
         limit: Maximum records to return.
 
     Returns:
@@ -157,13 +155,20 @@ def get_station_routes(
     Raises:
         HTTPException: On database or unexpected errors.
     """
-    logger.info(f"Fetching station route data with skip={skip}, limit={limit}")
+    logger.info(f"Fetching station route data with limit={limit}")
     try:
         query = db.query(MVStationRoute).order_by(
             MVStationRoute.trip_count.desc())
-        result = query.offset(skip).limit(limit).all()
+
+        if limit is not None:
+            query = query.limit(limit)
+
+        result = query.all()
+
         logger.debug(f"Retrieved {len(result)} records from MV_STATION_ROUTE")
+
         return result
+
     except (SQLAlchemyError, DatabaseError) as e:
         logger.error(f"Database error in get_station_routes: {str(e)}")
         raise HTTPException(
@@ -187,8 +192,7 @@ def get_station_routes(
 )
 def get_station_trip_counts(
     db: Session = Depends(get_db),
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000,
+    limit: int = Query(100, ge=1, le=3000,
                        description="Maximum number of records to return"),
 ) -> List[StationTripResponse]:
     """
@@ -196,7 +200,6 @@ def get_station_trip_counts(
 
     Args:
         db: SQLAlchemy session.
-        skip: Records to skip for pagination.
         limit: Max number of records to return.
 
     Returns:
@@ -205,12 +208,18 @@ def get_station_trip_counts(
     Raises:
         HTTPException: On DB errors or unexpected issues.
     """
-    logger.info(f"Fetching station trip data with skip={skip}, limit={limit}")
+    logger.info(f"Fetching station trip data with limit={limit}")
     try:
         query = db.query(MVStationTrip).order_by(
             MVStationTrip.trip_count_by_start.desc())
-        result = query.offset(skip).limit(limit).all()
+
+        if limit is not None:
+            query = query.limit(limit)
+
+        result = query.all()
+
         logger.debug(f"Retrieved {len(result)} records from MV_STATION_TRIP")
+
         return result
     except (SQLAlchemyError, DatabaseError) as e:
         logger.error(f"Database error in get_station_trip_counts: {str(e)}")
@@ -235,16 +244,14 @@ def get_station_trip_counts(
 )
 def get_time_trip_data(
     db: Session = Depends(get_db),
-    skip: int = Query(0, ge=0, description="Records to skip"),
-    limit: int = Query(100, ge=1, le=10000,
-                       description="Max number of records to return"),
+    limit: Optional[int] = Query(
+        None, ge=1, le=1000, description="Maximum number of records to return"),
 ) -> List[TimeTripResponse]:
     """
     Fetch aggregated trip counts from the time-based materialized view.
 
     Args:
         db: SQLAlchemy session.
-        skip: Number of records to skip for pagination.
         limit: Number of records to return.
 
     Returns:
@@ -253,13 +260,19 @@ def get_time_trip_data(
     Raises:
         HTTPException: On database or unexpected errors.
     """
-    logger.info(f"Fetching time trip data with skip={skip}, limit={limit}")
+    logger.info(f"Fetching time trip data with limit={limit}")
     try:
         query = db.query(MVTimeTrip).order_by(
             MVTimeTrip.dim_year.desc(), MVTimeTrip.dim_month.desc())
-        result = query.offset(skip).limit(limit).all()
+        if limit is not None:
+            query = query.limit(limit)
+
+        result = query.all()
+
         logger.debug(f"Retrieved {len(result)} records from MV_TIME_TRIP")
+
         return result
+
     except (SQLAlchemyError, DatabaseError) as e:
         logger.error(f"Database error in get_time_trip_data: {str(e)}")
         raise HTTPException(

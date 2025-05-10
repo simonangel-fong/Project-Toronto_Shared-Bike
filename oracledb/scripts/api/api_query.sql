@@ -24,6 +24,12 @@ SELECT *
 FROM dw_schema.mv_time_trip
 ORDER BY dim_year DESC, dim_month DESC, dim_day DESC, dim_hour DESC;
 
+spool "/project/export/mv_time_trip.csv";
+select /*csv*/ *
+FROM dw_schema.mv_time_trip
+ORDER BY dim_year DESC, dim_month DESC, dim_day DESC, dim_hour DESC;
+spool off;
+
 -- ============================================================================
 -- Analysis: mv_bike_trip_duration
 -- ============================================================================
