@@ -145,3 +145,26 @@ EOF
 ```sh
 ansible-playbook -i inventory.ini install_docker.yml --ask-become
 ```
+
+---
+
+## Deploy
+
+```sh
+dnf install -y git
+
+# monitor node
+mkdir -pv /project/data # source data
+mkdir -pv /project/export # export data
+mkdir -pv /project/orabackup  # backup 
+mkdir -pv /project/github # github code
+mkdir -pv /project/config # config
+mkdir -pv /project/env # env
+
+# application node
+
+# mount nfs
+
+# download code
+git clone https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
+```

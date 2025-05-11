@@ -1,0 +1,70 @@
+---
+- name: Configure NFS client and autofs on app node
+  hosts: app_node
+  become: yes
+  vars:
+    nfs_server_ip: "192.168.128.10"
+    nfs_export_path: "/project_repo"
+    mount_point: "/project"
+    autofs_master_file: "/etc/auto.master"
+    autofs_map_file: "/etc/auto.master.d/auto.project"
+    mount_owner: "aadmin"
+    mount_group: "aadmin"
+
+  tasks:
+
+    - name: Install NFS and autofs packages
+      dnf:
+        name:
+          - nfs-utils
+          - autofs
+        state: present
+    
+    - name: Enable and start autofs service
+      systemd:
+        name: autofs
+        enabled: yes
+        state: started
+    
+    - name: Create NFS mount point directory
+      file:
+        path: /project
+        state: directory
+        owner: aadmin
+        group: aadmin
+        mode: '0755'
+
+    - name: Add autofs master entry
+      lineinfile:
+        path: /etc/auto.master
+        line: "/-  /etc/auto.master.d/auto.project"
+        create: yes
+        insertafter: EOF
+
+    - name: Create autofs map for NFS mount
+      copy:
+        dest: /etc/auto.master.d/auto.project
+        content: |
+          /project -fstype=nfs,rw,sync 192.168.128.10:/project_repo
+        owner: root
+        group: root
+        mode: '0644'
+    
+    - name: Reload autofs configuration
+      ansible.builtin.systemd_service:
+        name: autofs
+        state: reloaded
+
+    - name: Restart autofs service
+      ansible.builtin.systemd_service:
+        name: autofs
+        state: restarted
+
+    - name: Check if /project is mounted
+      command: ls -l /project
+      register: mount_check
+      ignore_errors: yes
+
+    - name: Print mount result
+      debug:
+        var: mount_check.stdout_lines
