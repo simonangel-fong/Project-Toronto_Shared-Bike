@@ -5,7 +5,7 @@ A repo of data analysis project for Toronto shared bike.
 - [Project: Toronto Shared Bike Data Analysis](#project-toronto-shared-bike-data-analysis)
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
   - [API](#api)
-  - [Devops](#devops)
+  - [Deployment](#deployment)
 
 ---
 
@@ -34,19 +34,19 @@ A repo of data analysis project for Toronto shared bike.
 ## API
 
 - [FastAPI Local Build](./doc/feature-api/fastapi/fastapi.md)
-- [Pipeline: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
+- [Development: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
+- [Deployment: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
 
 ---
 
-## Devops
+## Deployment
 
-- Deployment Environment
+- Setup Environment
 
   - [Proxmox VE](./doc/feature-devops/proxmox/proxmox.md)
   - [Architecture Setup](./doc/feature-devops/architecture/architecture.md)
-
-- Services:
   - [NFS Service](./doc/feature-devops/nfs/nfs.md)
-  - [Application Deployment](./doc/feature-devops/deploy/deploy.md)
-- Devops Pipeline
-  - [Jenkins Service](./doc/feature-devops/jenkins/jenkins.md)
+
+- [Application Deployment(CLI)](./doc/feature-devops/deploy_cli/deploy_cli.md)
+- [Application Deployment(Ansible)](./doc/feature-devops/deploy_ansible/deploy_ansible.md)
+- [Devops Pipeline(Jenkins)](./doc/feature-devops/devops_jenkins/devops_jenkins.md)

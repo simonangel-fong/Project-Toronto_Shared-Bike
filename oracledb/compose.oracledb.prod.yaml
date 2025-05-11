@@ -8,13 +8,13 @@ services:
     image: simonangelfong/oracledb19c:1.0
     env_file:
       - /project/env/oracle19cDB.env
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 8g
-        reservations:
-          memory: 4g
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "2.0"
+    #       memory: 8g
+    #     reservations:
+    #       memory: 4g
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
