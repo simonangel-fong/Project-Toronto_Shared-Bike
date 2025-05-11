@@ -1,12 +1,16 @@
-# NFS Server
+# Deployment: Setup NFS Service
 
 [Back](../../../README.md)
 
-- [NFS Server](#nfs-server)
-    - [Server](#server)
-  - [autofs](#autofs)
+- [Deployment: Setup NFS Service](#deployment-setup-nfs-service)
+  - [Setup NFS Server](#setup-nfs-server)
+  - [Setup NFS Client](#setup-nfs-client)
+    - [CLI Command](#cli-command)
+    - [Using Ansible](#using-ansible)
 
-### Server
+---
+
+## Setup NFS Server
 
 - Monitor node
 
@@ -49,106 +53,9 @@ showmount -e localhost
 
 ---
 
-## autofs
+## Setup NFS Client
 
-```sh
-cd ~/project/ansible
-
-cat > inventory.ini <<EOF
-[application_node]
-192.168.128.100 ansible_ssh_user=aadmin
-EOF
-
-cat > nfs_client_mount.yml <<EOF
----
-- name: Configure autofs to mount NFS share at /project
-  hosts: application_node
-  become: true
-
-  vars:
-    nfs_server: 192.168.128.10
-    export_path: /project
-    mount_point: /project
-    autofs_map_dir: /etc/auto.master.d
-    autofs_map_file: project.nfs
-
-  tasks:
-    - name: Install the latest version of autofs
-      ansible.builtin.dnf:
-        name: autofs
-        state: latest
-
-    - name: Create NFS mount point
-      file:
-        path: "{{ mount_point }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-
-    - name: Ensure entry in /etc/auto.master for direct map
-      lineinfile:
-        path: /etc/auto.master
-        regexp: "^/-"
-        line: "/-  {{ autofs_map_dir }}/{{ autofs_map_file }}"
-        state: present
-
-    - name: Ensure auto.master.d directory exists
-      file:
-        path: "{{ autofs_map_dir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-
-    - name: Create direct map file for /project
-      copy:
-        dest: "{{ autofs_map_dir }}/{{ autofs_map_file }}"
-        content: |
-          {{ mount_point }} {{ nfs_server }}:{{ export_path }}
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Reload autofs service
-      service:
-        name: autofs
-        state: reloaded
-        enabled: true
-
-    - name: Restart autofs service
-      service:
-        name: autofs
-        state: restarted
-        enabled: true
-
-    - name: Verify mount by accessing directory
-      command: ls -l {{ mount_point }}
-      register: mount_output
-      changed_when: false
-
-    - name: Show mounted directory contents
-      debug:
-        var: mount_output.stdout_lines
-EOF
-
-ansible-playbook -i inventory.ini nfs_client_mount.yml -u aadmin --ask-become-pass
-```
-
-- Confirm
-
-```sh
-# on monitor node
-sudo cat > /project/share/test.txt <<EOF
-this is a test
-EOF
-
-# connect to a app node
-ssh aadmin@192.168.128.100
-ll /project/share
-```
-
-
+### CLI Command
 
 ```sh
 # app node
@@ -167,7 +74,7 @@ ll /project -d
 
 # add entry to auto cf
 echo "/-  /etc/auto.master.d/auto.project" | sudo tee -a /etc/auto.master
-echo "/project -fstype=nfs,rw,sync 192.168.128.10:/project_repo" | sudo tee -a /etc/auto.master.d/auto.project 
+echo "/project -fstype=nfs,rw,sync 192.168.128.10:/project_repo" | sudo tee -a /etc/auto.master.d/auto.project
 
 sudo systemctl reload autofs
 sudo systemctl restart autofs
@@ -176,7 +83,10 @@ sudo systemctl restart autofs
 ll /project
 ```
 
+### Using Ansible
+
 ```sh
+# monitor node
 cat > ~/project/ansible/setup_nfs_client.yml <<EOF
 ---
 - name: Configure NFS client and autofs on app node
@@ -199,13 +109,13 @@ cat > ~/project/ansible/setup_nfs_client.yml <<EOF
           - nfs-utils
           - autofs
         state: present
-    
+
     - name: Enable and start autofs service
       systemd:
         name: autofs
         enabled: yes
         state: started
-    
+
     - name: Create NFS mount point directory
       file:
         path: /project
@@ -229,7 +139,7 @@ cat > ~/project/ansible/setup_nfs_client.yml <<EOF
         owner: root
         group: root
         mode: '0644'
-    
+
     - name: Reload autofs configuration
       ansible.builtin.systemd_service:
         name: autofs
@@ -250,6 +160,5 @@ cat > ~/project/ansible/setup_nfs_client.yml <<EOF
         var: mount_check.stdout_lines
 EOF
 
-ansible-playbook setup_nfs_client.yml -i inventory.ini --ask-become
+ansible-playbook ~/project/ansible/setup_nfs_client.yml -i ~/project/ansible/inventory.ini --ask-become
 ```
-

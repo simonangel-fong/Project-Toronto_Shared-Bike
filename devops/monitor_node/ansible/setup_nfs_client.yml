@@ -19,13 +19,13 @@
           - nfs-utils
           - autofs
         state: present
-    
+
     - name: Enable and start autofs service
       systemd:
         name: autofs
         enabled: yes
         state: started
-    
+
     - name: Create NFS mount point directory
       file:
         path: /project
@@ -49,7 +49,7 @@
         owner: root
         group: root
         mode: '0644'
-    
+
     - name: Reload autofs configuration
       ansible.builtin.systemd_service:
         name: autofs

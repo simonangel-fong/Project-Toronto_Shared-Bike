@@ -7,7 +7,7 @@ services:
     # restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
-      - /project/share/env/oracle19cDB.env
+      - /project/env/oracle19cDB.env
     deploy:
       resources:
         limits:
@@ -21,7 +21,7 @@ services:
       # prod
       - /project/data:/project/data # source data
       - /project/oradata:/opt/oracle/oradata # local persist data
-      - /project/orabackup:/project/orabackup # local backup data
+      # - /project/orabackup:/project/orabackup # local backup data
       # - /project/remotebackup:/project/remotebackup # remote backup data
     networks:
       - private-net # Private network for prod
