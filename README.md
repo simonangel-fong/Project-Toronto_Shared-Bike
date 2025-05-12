@@ -44,7 +44,6 @@ A repo of data analysis project for Toronto shared bike.
 - Setup Environment
 
   - [Proxmox VE](./doc/feature-devops/proxmox/proxmox.md)
-  - [Architecture Setup](./doc/feature-devops/architecture/architecture.md)
   - [NFS Service](./doc/feature-devops/nfs/nfs.md)
 
 - [Application Deployment(CLI)](./doc/feature-devops/deploy_cli/deploy_cli.md)

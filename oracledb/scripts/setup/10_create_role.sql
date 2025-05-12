@@ -29,7 +29,7 @@ GRANT SELECT ON dw_schema.mv_time_trip TO apiUserRole;
 GRANT SELECT ON dw_schema.mv_station_trip TO apiUserRole;
 GRANT SELECT ON dw_schema.mv_station_route TO apiUserRole;
 GRANT SELECT ON dw_schema.mv_bike_trip_duration TO apiUserRole;
-GRANT SELECT ON dw_schema.mv_trip_summary TO apiUserRole;
+-- GRANT SELECT ON dw_schema.mv_trip_summary TO apiUserRole;
 
 -- ========================================================
 -- Create a role for data analysis

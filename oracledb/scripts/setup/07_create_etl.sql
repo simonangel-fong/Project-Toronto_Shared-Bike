@@ -85,7 +85,7 @@ CREATE TABLE DW_SCHEMA.staging_trip (
 )
 TABLESPACE STAGING_TBSP
 NOLOGGING
-PCTFREE 1;  -- Optimize for ETL
+;  -- Optimize for ETL
 
 -- Confirm
 SELECT

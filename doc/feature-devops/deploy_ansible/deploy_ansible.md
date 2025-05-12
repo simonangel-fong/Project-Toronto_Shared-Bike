@@ -3,11 +3,57 @@
 [Back](../../../README.md)
 
 - [Deployment: Application Deployment using Ansible](#deployment-application-deployment-using-ansible)
+  - [!Ansible Setup](#ansible-setup)
+    - [Create Ansible SSH](#create-ansible-ssh)
+    - [Configure Inventory](#configure-inventory)
   - [Central Configuration Repo](#central-configuration-repo)
   - [Application Deployment on App Node](#application-deployment-on-app-node)
     - [Install git and Clone codes](#install-git-and-clone-codes)
 
 ---
+
+## !Ansible Setup
+
+### Create Ansible SSH
+
+```sh
+# control node
+ssh-keygen
+
+# copy public key to app node
+ssh-copy-id aadmin@192.168.128.100
+
+# confirm without pwd
+ssh aadmin@192.168.128.100
+```
+
+---
+
+### Configure Inventory
+
+```sh
+# install ansible
+sudo dnf install -y ansible-core
+
+# as admin
+mkdir -pv ~/project/ansible/
+
+# create Inventory
+cat > ~/project/ansible/inventory.ini <<EOF
+[app_node]
+192.168.128.100 ansible_ssh_user=aadmin
+EOF
+
+# Test the connection, ping as root
+ansible app_node -i ~/project/ansible/inventory.ini -m ping --user=aadmin
+# 192.168.128.100 | SUCCESS => {
+#     "ansible_facts": {
+#         "discovered_interpreter_python": "/usr/bin/python3"
+#     },
+#     "changed": false,
+#     "ping": "pong"
+# }
+```
 
 ## Central Configuration Repo
 

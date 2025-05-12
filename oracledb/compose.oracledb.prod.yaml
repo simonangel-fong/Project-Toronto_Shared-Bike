@@ -8,10 +8,10 @@ services:
     image: simonangelfong/oracledb19c:1.0
     env_file:
       - /project/env/oracle19cDB.env
-    # ulimits:
-    #   nofile:
-    #     soft: 65536
-    #     hard: 65536
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     # deploy:
     #   resources:
     #     limits:

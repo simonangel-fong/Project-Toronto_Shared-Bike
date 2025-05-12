@@ -3,44 +3,66 @@
 [Back](../../../README.md)
 
 - [Deployment: Application Deployment using CLI](#deployment-application-deployment-using-cli)
-  - [Central Configuration Repo](#central-configuration-repo)
+  - [App Node Initial Setup](#app-node-initial-setup)
+    - [Network](#network)
+  - [Configuration Repo](#configuration-repo)
   - [Application Deployment on App Node](#application-deployment-on-app-node)
     - [Install git and Clone codes](#install-git-and-clone-codes)
     - [Install Docker](#install-docker)
   - [Run Oracle DB](#run-oracle-db)
-  - [Run](#run)
-    - [Deploy Oracle DB](#deploy-oracle-db)
+    - [Deploy Cloudflare](#deploy-cloudflare)
+    - [ETL](#etl)
 
 ---
 
-## Central Configuration Repo
+## App Node Initial Setup
+
+### Network
+
+```sh
+# setup network
+sudo nmcli c down ens160
+sudo nmcli c modify ens160 ipv4.method manual
+sudo nmcli c modify ens160 ipv4.address 192.168.128.100/24
+sudo nmcli c modify ens160 ipv4.gateway 192.168.128.2
+sudo nmcli c modify ens160 ipv4.dns 192.168.128.2,8.8.8.8
+sudo nmcli c up ens160
+
+# configure hostname
+sudo hostnamectl set-hostname app-node
+sudo cat <<EOF >> /etc/hosts
+192.168.128.100      app-node
+127.0.0.1           app-node
+EOF
+```
+
+---
+
+## Configuration Repo
 
 - Create Dir
 
 ```sh
-# monitor node
-sudo mkdir -pv /project_repo/config # config
-sudo mkdir -pv /project_repo/env # env
-sudo mkdir -pv /project_repo/data # source data
-sudo mkdir -pv /project_repo/export # export data
-sudo mkdir -pv /project_repo/orabackup  # backup
-# sudo mkdir -pv /project_repo/github # github code
+# app node
+# as root
+sudo mkdir -pv /project/github # github code
+sudo mkdir -pv /project/config # config
+sudo mkdir -pv /project/env # env
+sudo mkdir -pv /project/data # source data
+sudo mkdir -pv /project/export # export data
+sudo mkdir -pv /project/orabackup  # backup
+
+chown aadmin:aadmin -R /project
+chmod 0755 -R /project
 ```
 
 - Migrate Files
 
 ```sh
 # migrate config files
-scp ./project/config/* root@192.168.128.10:/project_repo/config
-
-# migrate env files
-scp -r ./project/env/* root@192.168.128.10:/project_repo/env
-
-# # migrate source data
-# scp -r ./project/data/* root@192.168.128.10:/project_repo/data
-
-# # migrate db backup
-# scp -r ./project/orabackup/* root@192.168.128.10:/project_repo/orabackup
+scp -r ./project/config aadmin@192.168.128.100:/project/
+scp -r ./project/env/ aadmin@192.168.128.100:/project/
+scp -r ./project/data/ aadmin@192.168.128.100:/project/
 ```
 
 ---
@@ -54,11 +76,11 @@ scp -r ./project/env/* root@192.168.128.10:/project_repo/env
 ```sh
 sudo dnf install -y git
 
-mkdir -pv ~/github
-git config --global --add safe.directory ~/github
+mkdir -pv /project/github
+git config --global --add safe.directory /project/github
 
 # clone the devops branch
-git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git ~/github
+git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
 ```
 
 ---
@@ -103,19 +125,19 @@ docker run hello-world
 
 ```sh
 
-cd ~/github
+cd /project/github
 # pull the latest version
 git pull
 
 # Create container
-docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml up --build -d
+docker compose -f /project/github/oracledb/compose.oracledb.prod.yaml up --build -d
 
 # test
 docker ps
 docker exec -it oracle19cDB bash
 
-# debut
-docker logs oracle19cDB
+# debug
+docker logs -f oracle19cDB
 
 # clean up
 docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml down
@@ -124,18 +146,18 @@ docker volume rm toronto-shared-bike_oracledata
 
 ---
 
-## Run 
+### Deploy Cloudflare
 
 ```sh
-docker compose -f ~/github/cloudflare/compose.oracledb.prod.yaml down
+docker compose -f ~/github/cloudflare/compose.cloudflare.prod.yaml up --build -d
+
+docker compose -f ~/github/cloudflare/compose.cloudflare.prod.yaml down
 ```
 
 ---
 
-### Deploy Oracle DB
+### ETL
 
 ```sh
-docker compose -f /project/github/oracledb/compose.oracledb.prod.yaml up --build -d
-
-
+docker exec -it oracle19cDB /project/scripts/etl/single_year_etl_job.sh 2019
 ```
