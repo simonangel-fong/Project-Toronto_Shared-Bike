@@ -24,8 +24,9 @@ services:
       - ./scripts:/project/scripts # scripts
       # prod
       - /project/data:/project/data # source data
-      - /project/oradata:/opt/oracle/oradata # local persist data
-      # - /project/orabackup:/project/orabackup # local backup data
+      - oracledata:/opt/oracle/oradata # persist data
+      # - /project/oradata:/opt/oracle/oradata # local persist data
+      - /project/orabackup:/project/orabackup # local backup data
       # - /project/remotebackup:/project/remotebackup # remote backup data
     networks:
       - private-net # Private network for prod

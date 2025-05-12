@@ -108,6 +108,7 @@ git pull
 
 # Create container
 docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml up --build -d
+docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml down
 
 # test
 docker ps
