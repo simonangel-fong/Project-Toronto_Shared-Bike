@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # === Parameters ===
-EXPORT_DIR="/project"
+EXPORT_DIR="/project_repo"
 ALLOWED_SUBNET="192.168.128.0/24"
 EXPORT_OPTIONS="rw,sync,no_root_squash"
 

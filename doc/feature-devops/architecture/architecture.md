@@ -55,10 +55,10 @@ sudo nmcli c modify ens160 ipv4.dns 192.168.128.2,8.8.8.8
 sudo nmcli c up ens160
 
 # configure hostname
-sudo hostnamectl set-hostname monitor-host
+sudo hostnamectl set-hostname monitor-node
 sudo cat <<EOF >> /etc/hosts
-192.168.128.10      monitor-host
-127.0.0.1           monitor-host
+192.168.128.10      monitor-node
+127.0.0.1           monitor-node
 EOF
 ```
 
@@ -78,10 +78,10 @@ sudo nmcli c modify ens160 ipv4.dns 192.168.128.2,8.8.8.8
 sudo nmcli c up ens160
 
 # configure hostname
-sudo hostnamectl set-hostname application-node
+sudo hostnamectl set-hostname app-node
 sudo cat <<EOF >> /etc/hosts
-192.168.128.100      application-node
-127.0.0.1           application-node
+192.168.128.100      app-node
+127.0.0.1           app-node
 EOF
 ```
 
@@ -108,6 +108,9 @@ ssh aadmin@192.168.128.100
 ### Configure Inventory
 
 ```sh
+# install ansible
+sudo dnf install -y ansible-core
+
 # as admin
 mkdir -pv ~/project/ansible/
 

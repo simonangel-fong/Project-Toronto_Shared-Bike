@@ -35,8 +35,8 @@ scp ./project/config/* root@192.168.128.10:/project_repo/config
 # migrate env files
 scp -r ./project/env/* root@192.168.128.10:/project_repo/env
 
-# migrate source data
-scp -r ./project/data/* root@192.168.128.10:/project_repo/data
+# # migrate source data
+# scp -r ./project/data/* root@192.168.128.10:/project_repo/data
 
 # # migrate db backup
 # scp -r ./project/orabackup/* root@192.168.128.10:/project_repo/orabackup

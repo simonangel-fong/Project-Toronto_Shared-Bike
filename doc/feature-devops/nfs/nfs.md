@@ -78,6 +78,7 @@ echo "/project -fstype=nfs,rw,sync 192.168.128.10:/project_repo" | sudo tee -a /
 
 sudo systemctl reload autofs
 sudo systemctl restart autofs
+sudo systemctl status autofs -l --no-page
 
 # confirm
 ll /project
