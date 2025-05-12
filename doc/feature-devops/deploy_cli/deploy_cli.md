@@ -8,6 +8,7 @@
     - [Install git and Clone codes](#install-git-and-clone-codes)
     - [Install Docker](#install-docker)
   - [Run Oracle DB](#run-oracle-db)
+  - [Run](#run)
     - [Deploy Oracle DB](#deploy-oracle-db)
 
 ---
@@ -108,7 +109,6 @@ git pull
 
 # Create container
 docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml up --build -d
-docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml down
 
 # test
 docker ps
@@ -116,14 +116,18 @@ docker exec -it oracle19cDB bash
 
 # debut
 docker logs oracle19cDB
+
+# clean up
+docker compose -f ~/github/oracledb/compose.oracledb.prod.yaml down
+docker volume rm toronto-shared-bike_oracledata
 ```
 
 ---
 
-- Command
+## Run 
 
 ```sh
-ansible-playbook -i inventory.ini install_docker.yml --ask-become
+docker compose -f ~/github/cloudflare/compose.oracledb.prod.yaml down
 ```
 
 ---
