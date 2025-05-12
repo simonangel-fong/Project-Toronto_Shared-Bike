@@ -49,7 +49,7 @@ GRANT SELECT ON dw_schema.mv_time_trip TO dataAnalysis;
 GRANT SELECT ON dw_schema.mv_station_trip TO dataAnalysis;
 GRANT SELECT ON dw_schema.mv_station_route TO dataAnalysis;
 GRANT SELECT ON dw_schema.mv_bike_trip_duration TO dataAnalysis;
-GRANT SELECT ON dw_schema.mv_trip_summary TO dataAnalysis;
+-- GRANT SELECT ON dw_schema.mv_trip_summary TO dataAnalysis;
 
 -- ========================================================
 -- Confirm

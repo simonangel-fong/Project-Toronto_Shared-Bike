@@ -84,8 +84,7 @@ CREATE TABLE DW_SCHEMA.staging_trip (
   , model               VARCHAR2(50)    -- Bike model
 )
 TABLESPACE STAGING_TBSP
-NOLOGGING
-;  -- Optimize for ETL
+NOLOGGING;
 
 -- Confirm
 SELECT
