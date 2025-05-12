@@ -1,0 +1,29 @@
+name: toronto-shared-bike
+
+include:
+  - ../oracledb/compose.oracledb.prod.yaml
+
+services:
+  fastapi-app:
+    container_name: fastapi-app
+    restart: unless-stopped
+    # image: simonangelfong/toronto-shared-bike-fastapi-prebuilt:v1.0 # using prebuild image
+    build:
+      context: ./app/
+      dockerfile: Dockerfile
+    env_file:
+      - /project/env/fastapi.env
+    ports:
+      - "8080:8000"  # dev: expose localhost:8080
+    networks:
+      - public-net
+      - private-net
+    depends_on:
+      - "oracle19cDB"
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true
