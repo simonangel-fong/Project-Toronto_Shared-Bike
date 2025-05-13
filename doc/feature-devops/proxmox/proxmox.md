@@ -4,6 +4,7 @@
 
 - [Deployment: Proxmox Installation](#deployment-proxmox-installation)
   - [](#)
+  - [NAT](#nat)
 
 ---
 
@@ -14,3 +15,44 @@ adduser padmin
 usermod -aG sudo padmin
 passwd padmin
 ``` -->
+
+---
+
+## NAT
+
+```sh
+# List Filter Table
+iptables -L -v -n
+# NAT Table (includes MASQUERADE, DNAT, SNAT):
+iptables -t nat -L -v -n
+
+iptables-save
+
+# Flush All Chains
+iptables -F         # Flush filter table
+iptables -t nat -F  # Flush NAT table
+iptables -t mangle -F
+iptables -t raw -F
+
+# Delete All User-defined Chains:
+iptables -X
+iptables -t nat -X
+
+# Zero All Counters
+iptables -Z
+
+netfilter-persistent save
+```
+
+- Map gateway to the wifi
+
+```sh
+# Map outgoing traffic from 192.168.10.0/24 to the Proxmox host’s Wi-Fi interface (wlp7s0).
+iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o wlp7s0 -j MASQUERADE
+# Allows traffic from virtual bridge (vmbr0) out to the Wi-Fi (wlp7s0).
+iptables -A FORWARD -i vmbr0 -o wlp7s0 -j ACCEPT
+# Allows return traffic from the internet (wlp7s0) to reach virtual bridge (vmbr0)
+iptables -A FORWARD -i wlp7s0 -o vmbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+netfilter-persistent save
+```
