@@ -12,6 +12,7 @@
   - [Run Oracle DB](#run-oracle-db)
     - [Deploy Cloudflare](#deploy-cloudflare)
     - [ETL](#etl)
+  - [Deploy via Script](#deploy-via-script)
 
 ---
 
@@ -176,4 +177,22 @@ docker compose -f ~/github/cloudflare/compose.cloudflare.prod.yaml down
 
 ```sh
 docker exec -it oracle19cDB /project/scripts/etl/single_year_etl_job.sh 2019
+```
+
+---
+
+## Deploy via Script
+
+```sh
+# migrate init script
+scp ./devops/shell/00_init_git.sh aadmin@192.168.128.100:~
+
+# app-node init
+su - -c "bash /home/aadmin/00_init_git.sh"
+
+# migrate conf, env files
+scp -r ./project/config ./project/env/ ./project/data/ aadmin@192.168.128.100:/project/
+
+# install docker
+su - -c "bash /project/github/devops/shell/01_install_docker.sh"
 ```

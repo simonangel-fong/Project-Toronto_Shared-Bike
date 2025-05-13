@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo
+echo "########################################################"
+echo "Installing Docker packages"
+echo "########################################################"
+
 sudo dnf remove -y docker \
     docker-client \
     docker-client-latest \
@@ -24,6 +29,10 @@ sudo usermod -aG docker $USER
 sudo chown root:docker /var/run/docker.sock
 sudo chmod 666 /var/run/docker.sock
 
+echo
+echo "########################################################"
+echo "Verify installation..."
+echo "########################################################"
 # as common user
 # confirm as current user
 su - $USER -c "docker run hello-world"
