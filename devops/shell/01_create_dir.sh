@@ -2,7 +2,7 @@
 
 # === Parameters ===
 BASE_DIR="/project"
-SUBDIRS=("github" "config" "env" "data" "export" "oradata" "orabackup")
+SUBDIRS=("config" "env" "data" "export" "oradata" "orabackup")
 OWNER="aadmin"
 GROUP="aadmin"
 
@@ -16,10 +16,11 @@ chown -R ${OWNER}:${GROUP} "$BASE_DIR"
 
 # === Set Permissions ===
 # Directories: readable and accessible
-find "$BASE_DIR" -type d -exec chmod 755 {} +
+find "$BASE_DIR" -type f -name "*.sh" -exec chmod 755 {} \;
 
 # Files: read-only
-find "$BASE_DIR" -type f -exec chmod 444 {} +
+find "$BASE_DIR" -type f -name "*.env" -exec chmod 444 {} +
+find "$BASE_DIR" -type f -name "*.conf" -exec chmod 444 {} +
 
 # === Special Permissions for backup and export ===
 chmod 0777 "${BASE_DIR}/orabackup"

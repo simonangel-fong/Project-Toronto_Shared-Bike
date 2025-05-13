@@ -15,7 +15,6 @@
 
 ---
 
-
 ### Network
 
 ```sh
@@ -42,17 +41,22 @@ echo '127.0.0.1           app-node' | sudo tee -a /etc/hosts
 ```sh
 sudo dnf install -y git
 
-sudo mkdir -pv /project/github # github code
-mkdir -pv /project/github
+sudo mkdir -pv /project/github
+
+# change owner
+sudo chown aadmin:aadmin -R /project/github
 git config --global --add safe.directory /project/github
 
 # clone the devops branch
 git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
+
+# change permission
+find /project/github -type f -name "*.sh" -exec chmod 755 {} \;
+
+sudo bash /project/github/
 ```
 
-
 ## App Node Initial Setup
-
 
 ## Configuration Repo
 
@@ -76,7 +80,7 @@ find /project -type f -exec chmod 444 {} +
 
 # enable backup dir to be written for bakcup and export data
 chmod 0777 /project/orabackup
-chmod 0777 /project/export 
+chmod 0777 /project/export
 ```
 
 - Migrate Files
@@ -86,13 +90,13 @@ chmod 0777 /project/export
 scp -r ./project/config aadmin@192.168.128.100:/project/
 scp -r ./project/env/ aadmin@192.168.128.100:/project/
 scp -r ./project/data/ aadmin@192.168.128.100:/project/
+
+scp -r ./project/config ./project/env/ ./project/data/ aadmin@192.168.128.100:/project/
 ```
 
 ---
 
 ## Application Deployment
-
-
 
 ---
 
