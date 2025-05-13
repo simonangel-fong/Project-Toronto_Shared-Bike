@@ -26,4 +26,4 @@ sudo chmod 666 /var/run/docker.sock
 
 # as common user
 # confirm as current user
-docker run hello-world
+su - $USER -c "docker run hello-world"

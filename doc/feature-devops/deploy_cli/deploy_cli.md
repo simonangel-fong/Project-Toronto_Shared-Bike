@@ -53,7 +53,12 @@ git clone --branch feature-devops https://github.com/simonangel-fong/Project-Tor
 # change permission
 find /project/github -type f -name "*.sh" -exec chmod 755 {} \;
 
-sudo bash /project/github/
+# create dir
+sudo bash /project/github/devops/shell/00_init.git.sh
+sudo bash /project/github/devops/shell/01_install_docker.sh
+
+# as aadmin
+bash 
 ```
 
 ## App Node Initial Setup
@@ -87,10 +92,6 @@ chmod 0777 /project/export
 
 ```sh
 # migrate config files
-scp -r ./project/config aadmin@192.168.128.100:/project/
-scp -r ./project/env/ aadmin@192.168.128.100:/project/
-scp -r ./project/data/ aadmin@192.168.128.100:/project/
-
 scp -r ./project/config ./project/env/ ./project/data/ aadmin@192.168.128.100:/project/
 ```
 
