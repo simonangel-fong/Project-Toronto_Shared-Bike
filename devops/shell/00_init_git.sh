@@ -61,8 +61,9 @@ chown -Rv ${GIT_USER}:${GIT_GROUP} "$BASE_DIR"
 
 # === Set Permissions ===
 # Directories: readable and accessible
-find "$BASE_DIR" -type f -name "*.sh" -exec chmod -v 755 {} \;
+find "$BASE_DIR" -type d -exec chmod 755 {} \;
 
+find "$BASE_DIR" -type f -name "*.sh" -exec chmod -v 755 {} \;
 # Files: read-only
 find "$BASE_DIR" -type f -name "*.env" -exec chmod -v 444 {} +
 find "$BASE_DIR" -type f -name "*.conf" -exec chmod -v 444 {} +
