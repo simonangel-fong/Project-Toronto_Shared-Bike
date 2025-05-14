@@ -5,18 +5,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                pwd
-                ls
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                // Give execute permission and run the script
+                sh 'chmod +x devops/shell/01_install_docker.sh'
+                sh './devops/shell/01_install_docker.sh'
             }
         }
     }
