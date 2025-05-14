@@ -4,7 +4,8 @@ A repo of data analysis project for Toronto shared bike.
 
 - [Project: Toronto Shared Bike Data Analysis](#project-toronto-shared-bike-data-analysis)
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
-  - [Devops](#devops)
+  - [API](#api)
+  - [Deployment](#deployment)
 
 ---
 
@@ -30,10 +31,21 @@ A repo of data analysis project for Toronto shared bike.
 
 ---
 
-## Devops
+## API
 
-- Deployment Environment
+- [FastAPI Local Build](./doc/feature-api/fastapi/fastapi.md)
+- [Development: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
+- [Deployment: Oracle+FastAPI+Nginx+Cloudflare](./doc/feature-api/cloudflare/cloudflare.md)
+
+---
+
+## Deployment
+
+- Setup Environment
 
   - [Proxmox VE](./doc/feature-devops/proxmox/proxmox.md)
+  - [NFS Service](./doc/feature-devops/nfs/nfs.md)
 
-- [Monitor Node](./doc/feature-devops/monitor_node/monitor_node.md)
+- [Application Deployment(CLI)](./doc/feature-devops/deploy_cli/deploy_cli.md)
+- [Application Deployment(Ansible)](./doc/feature-devops/deploy_ansible/deploy_ansible.md)
+- [Devops Pipeline(Jenkins)](./doc/feature-devops/devops_jenkins/devops_jenkins.md)

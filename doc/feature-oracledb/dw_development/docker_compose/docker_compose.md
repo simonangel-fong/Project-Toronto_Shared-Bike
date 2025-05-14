@@ -106,7 +106,7 @@
 docker compose -f compose.oracledb.dev.yaml up --build -d && docker exec -it -u root:root oracle19cDB bash /project/scripts/init/init.sh
 
 # Stop
-docker compose -f compose.oracledb.dev.yaml down
+docker compose -f ./oracledb/compose.oracledb.dev.yaml down
 ```
 
 ---
