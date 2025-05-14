@@ -7,20 +7,24 @@ services:
     # restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
-      - /project/share/env/oracle19cDB.env
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 8g
-        reservations:
-          memory: 4g
+      - /project/env/oracle19cDB.env
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "2.0"
+    #       memory: 8g
+    #     reservations:
+    #       memory: 4g
     volumes:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # prod
       - /project/data:/project/data # source data
-      - /project/export:/project/export # export data
+      # - oracledata:/opt/oracle/oradata # persist data
       - /project/oradata:/opt/oracle/oradata # local persist data
       - /project/orabackup:/project/orabackup # local backup data
       # - /project/remotebackup:/project/remotebackup # remote backup data
@@ -39,7 +43,12 @@ services:
       retries: 5
       start_period: 5m
 
+volumes:
+  oracledata:
+
 networks:
+  public-net:
+    driver: bridge
   private-net:
     driver: bridge
     internal: true

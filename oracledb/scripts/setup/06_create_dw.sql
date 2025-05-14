@@ -4,7 +4,7 @@
 -- Author      : Wenhao Fang
 -- Date        : 2025-05-07
 -- User        : Execute as a user with appropriate privileges in the toronto_shared_bike PDB
--- Notes       : Ensure the DW_SCHEMA and required tablespaces (FACT_TBSP, DIM_TBSP, INDEX_TBSP) are created
+-- Notes       : Ensure the dw_schema and required tablespaces (FACT_TBSP, DIM_TBSP, INDEX_TBSP) are created
 -- ============================================================================
 
 -- Output from the DBMS_OUTPUT to standard output
@@ -18,7 +18,7 @@ SHOW con_name;
 SHOW user;
 
 -- Create the time dimension table
-CREATE TABLE DW_SCHEMA.dim_time (
+CREATE TABLE dw_schema.dim_time (
   dim_time_id           NUMBER(12)  NOT NULL  -- Unique time identifier (YYYYMMDDHHMI)
   , dim_time_timestamp  DATE        NOT NULL  -- Canonical date representation
   , dim_time_year       NUMBER(4)   NOT NULL  -- Year (e.g., 2024)
@@ -41,17 +41,17 @@ CREATE TABLE DW_SCHEMA.dim_time (
 TABLESPACE DIM_TBSP;
 
 -- Create B-tree index on timestamp for efficient queries
-CREATE INDEX DW_SCHEMA.index_dim_time_date
-  ON DW_SCHEMA.dim_time (dim_time_timestamp)
+CREATE INDEX dw_schema.index_dim_time_date
+  ON dw_schema.dim_time (dim_time_timestamp)
   TABLESPACE INDEX_TBSP;
 
 -- Create composite B-tree index on year and month for time-based aggregations
-CREATE INDEX DW_SCHEMA.index_dim_time_year_month
-  ON DW_SCHEMA.dim_time (dim_time_year, dim_time_month)
+CREATE INDEX dw_schema.index_dim_time_year_month
+  ON dw_schema.dim_time (dim_time_year, dim_time_month)
   TABLESPACE INDEX_TBSP;
 
 -- Create the station dimension table
-CREATE TABLE DW_SCHEMA.dim_station (
+CREATE TABLE dw_schema.dim_station (
   dim_station_id      NUMBER(6)       NOT NULL  -- Unique station identifier
   , dim_station_name  VARCHAR2(100)   NOT NULL  -- Station name
   , CONSTRAINT pk_dim_station PRIMARY KEY (dim_station_id) USING INDEX TABLESPACE INDEX_TBSP  -- Primary key with B-tree index
@@ -59,12 +59,12 @@ CREATE TABLE DW_SCHEMA.dim_station (
 TABLESPACE DIM_TBSP;
 
 -- Create B-tree index on station name for efficient lookups
-CREATE INDEX DW_SCHEMA.index_dim_station_station_name
-ON DW_SCHEMA.dim_station (dim_station_name)
+CREATE INDEX dw_schema.index_dim_station_station_name
+ON dw_schema.dim_station (dim_station_name)
 TABLESPACE INDEX_TBSP;
 
 -- Create the bike dimension table
-CREATE TABLE DW_SCHEMA.dim_bike (
+CREATE TABLE dw_schema.dim_bike (
   dim_bike_id       NUMBER(6)     NOT NULL  -- Unique bike identifier
   , dim_bike_model  VARCHAR2(50)  NOT NULL  -- Bike model
   , CONSTRAINT pk_dim_bike PRIMARY KEY (dim_bike_id) USING INDEX TABLESPACE INDEX_TBSP  -- Primary key with B-tree index
@@ -72,7 +72,7 @@ CREATE TABLE DW_SCHEMA.dim_bike (
 TABLESPACE DIM_TBSP;
 
 -- Create the user type dimension table
-CREATE TABLE DW_SCHEMA.dim_user_type (
+CREATE TABLE dw_schema.dim_user_type (
   dim_user_type_id        NUMBER(3)     GENERATED ALWAYS AS IDENTITY  -- Auto-incremented unique identifier
   , dim_user_type_name    VARCHAR2(50)  NOT NULL                      -- User type name
   , CONSTRAINT pk_dim_user_type PRIMARY KEY (dim_user_type_id) USING INDEX TABLESPACE INDEX_TBSP    -- Primary key with B-tree index
@@ -81,7 +81,7 @@ CREATE TABLE DW_SCHEMA.dim_user_type (
 TABLESPACE DIM_TBSP;
 
 -- Create the trip fact table with range-range partitioning
-CREATE TABLE DW_SCHEMA.fact_trip (
+CREATE TABLE dw_schema.fact_trip (
     fact_trip_id                  NUMBER(10)  GENERATED ALWAYS AS IDENTITY  -- Auto-incremented unique identifier
     , fact_trip_source_id         NUMBER(10)  NOT NULL                      -- Source trip identifier
     , fact_trip_duration          NUMBER(8)   NOT NULL                      -- Trip duration in seconds
@@ -92,12 +92,12 @@ CREATE TABLE DW_SCHEMA.fact_trip (
     , fact_trip_bike_id           NUMBER(6)   NOT NULL                      -- Reference to bike dimension
     , fact_trip_user_type_id      NUMBER(3)   NOT NULL                      -- Reference to user type dimension
     , CONSTRAINT pk_fact_trip                 PRIMARY KEY (fact_trip_id)                USING INDEX TABLESPACE INDEX_TBSP
-    , CONSTRAINT fk_fact_trip_start_time      FOREIGN KEY (fact_trip_start_time_id)     REFERENCES DW_SCHEMA.dim_time (dim_time_id)
-    , CONSTRAINT fk_fact_trip_end_time        FOREIGN KEY (fact_trip_end_time_id)       REFERENCES DW_SCHEMA.dim_time (dim_time_id)
-    , CONSTRAINT fk_fact_trip_start_station   FOREIGN KEY (fact_trip_start_station_id)  REFERENCES DW_SCHEMA.dim_station (dim_station_id)
-    , CONSTRAINT fk_fact_trip_end_station     FOREIGN KEY (fact_trip_end_station_id)    REFERENCES DW_SCHEMA.dim_station (dim_station_id)
-    , CONSTRAINT fk_fact_trip_bike            FOREIGN KEY (fact_trip_bike_id)           REFERENCES DW_SCHEMA.dim_bike (dim_bike_id)
-    , CONSTRAINT fk_fact_trip_user_type       FOREIGN KEY (fact_trip_user_type_id)      REFERENCES DW_SCHEMA.dim_user_type (dim_user_type_id)
+    , CONSTRAINT fk_fact_trip_start_time      FOREIGN KEY (fact_trip_start_time_id)     REFERENCES dw_schema.dim_time (dim_time_id)
+    , CONSTRAINT fk_fact_trip_end_time        FOREIGN KEY (fact_trip_end_time_id)       REFERENCES dw_schema.dim_time (dim_time_id)
+    , CONSTRAINT fk_fact_trip_start_station   FOREIGN KEY (fact_trip_start_station_id)  REFERENCES dw_schema.dim_station (dim_station_id)
+    , CONSTRAINT fk_fact_trip_end_station     FOREIGN KEY (fact_trip_end_station_id)    REFERENCES dw_schema.dim_station (dim_station_id)
+    , CONSTRAINT fk_fact_trip_bike            FOREIGN KEY (fact_trip_bike_id)           REFERENCES dw_schema.dim_bike (dim_bike_id)
+    , CONSTRAINT fk_fact_trip_user_type       FOREIGN KEY (fact_trip_user_type_id)      REFERENCES dw_schema.dim_user_type (dim_user_type_id)
 )
 TABLESPACE FACT_TBSP
 ROW STORE COMPRESS ADVANCED
@@ -202,19 +202,19 @@ SUBPARTITION BY RANGE (fact_trip_start_time_id)
 );
 
 -- Create local B-tree index on start time ID for efficient partitioning queries
-CREATE INDEX DW_SCHEMA.index_fact_trip_start_time
-  ON DW_SCHEMA.fact_trip (fact_trip_start_time_id)
+CREATE INDEX dw_schema.index_fact_trip_start_time
+  ON dw_schema.fact_trip (fact_trip_start_time_id)
   LOCAL
   TABLESPACE INDEX_TBSP;
 
 -- Create composite B-tree index on start and end station IDs for route-based queries
-CREATE INDEX DW_SCHEMA.index_fact_trip_station_pair
-  ON DW_SCHEMA.fact_trip (fact_trip_start_station_id, fact_trip_end_station_id)
+CREATE INDEX dw_schema.index_fact_trip_station_pair
+  ON dw_schema.fact_trip (fact_trip_start_station_id, fact_trip_end_station_id)
   TABLESPACE INDEX_TBSP;
 
 -- Create local bitmap index on user type ID for efficient filtering
-CREATE BITMAP INDEX DW_SCHEMA.index_fact_trip_user_type
-  ON DW_SCHEMA.fact_trip (fact_trip_user_type_id)
+CREATE BITMAP INDEX dw_schema.index_fact_trip_user_type
+  ON dw_schema.fact_trip (fact_trip_user_type_id)
   LOCAL
   TABLESPACE INDEX_TBSP;
   
@@ -225,7 +225,7 @@ SELECT
     , owner
     , tablespace_name
 FROM DBA_TABLES
-WHERE owner = 'DW_SCHEMA';
+WHERE owner = 'dw_schema';
 
 SELECT 
     index_name
@@ -235,4 +235,4 @@ SELECT
     , constraint_index
     , owner
 FROM dba_indexes
-WHERE owner = 'DW_SCHEMA';
+WHERE owner = 'dw_schema';
