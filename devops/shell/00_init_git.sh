@@ -38,7 +38,7 @@ mkdir -pv $ORBACKUP_DIR
 
 echo
 echo "########################################################"
-echo "Installing git"
+echo "Installing Jenkins"
 echo "########################################################"
 
 sudo dnf install -y git

@@ -29,6 +29,8 @@ sudo firewall-cmd --add-port=8080/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
+- http://192.168.128.100:8080/
+
 ---
 
 ## `oracledb` Branch Pipeline
