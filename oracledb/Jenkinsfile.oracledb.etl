@@ -3,6 +3,8 @@ pipeline {
     agent any
 
     environment {
+        DATA_DIR="/project/data"
+
         ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
         ORACLE_CON="oracle19cDB"
 
@@ -16,6 +18,9 @@ pipeline {
         stage('Execute ETL job') {
             steps {
                 echo 'Building Oracle database...'
+
+                sh 'sudo chown jenkins:jenkins -Rv ${BASE_DIR}'
+                sh 'find ${BASE_DIR} -type d -exec chmod -v 755 {} + ;'
 
                 sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
                 sh 'docker exec -it ${ORACLE_CON} bash ${ETL_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
