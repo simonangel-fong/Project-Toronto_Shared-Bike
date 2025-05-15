@@ -1,0 +1,26 @@
+// Jenkinsfile to build oracledb
+pipeline {
+    agent any
+
+    environment {
+        ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
+        ORACLE_CON="oracle19cDB"
+
+        ETL_SCRIPT="/project/scripts/etl/multiple_year_etl_job.sh"
+        ETL_START_YEAR="2019"
+        ETL_END_YEAR="2023"
+    }
+
+    stages {
+   
+        stage('Execute ETL job') {
+            steps {
+                echo 'Building Oracle database...'
+
+                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
+                sh 'docker exec -it ${ORACLE_CON} bash ${ETL_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
+
+            }
+        }
+    }
+}

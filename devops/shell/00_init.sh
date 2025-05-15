@@ -75,3 +75,12 @@ sudo chmod 666 /var/run/docker.sock
 # confirm as current user
 echo "Current user as: $USER"
 su - $USER -c "docker run hello-world"
+
+echo
+echo "========================================================"
+echo "Creating dir for project"
+echo "========================================================"
+echo
+
+sudo mkdir -pv /project
+sudo chown jenkins:jenkins -Rv /project

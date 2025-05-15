@@ -296,11 +296,11 @@ docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml down
 
 ```sh
 mkdir -pv /home/aadmin/project
-# set gid
-sudo chown :jenkins -R /home/aadmin/project
+# # set gid
+# sudo chown :jenkins -R /home/aadmin/project
 
 
-scp ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.128.100:~/project
+scp -r ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.128.100:~/project
 
 
 sudo cp /home/aadmin/project/config/* /project/config
@@ -311,4 +311,7 @@ docker inspect -f {{.State.Health.Status}} oracle19cDB
 
 # check health
 echo 'SELECT 1 FROM dual;' | sqlplus -s sys/$ORACLE_PWD@localhost:1521/toronto_shared_bike as sysdba
+
+
+sqlplus -s sys/'SecurePassword!234'@localhost:1521/toronto_shared_bike as sysdba
 ```

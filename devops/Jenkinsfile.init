@@ -1,4 +1,4 @@
-// Jenkinsfile for oracledb
+// Jenkinsfile to init the project
 pipeline {
     agent any
 
@@ -86,18 +86,6 @@ pipeline {
                 // set permission for specific dirs
                 sh 'sudo chmod 0777 -v ${ORADATA_DIR}'
                 sh 'sudo chmod 0777 -v ${ORBACKUP_DIR}'
-            }
-        }
-
-        stage('Build Oracle Database') {
-            steps {
-                echo 'Building Oracle database...'
-
-                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
-
-                // // Wait until health status is "healthy"
-                // timeout 600 bash -c 'while [ "$(docker inspect -f {{.State.Health.Status}} oracle19cDB" != "healthy" ]; do sleep 10; done'
-                // echo "Oracle is healthy!"
             }
         }
     }
