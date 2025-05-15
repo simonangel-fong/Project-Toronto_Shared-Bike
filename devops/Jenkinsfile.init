@@ -66,8 +66,8 @@ pipeline {
                 echo 'Copy env fiel...'
         
                 // clone code
-                sh 'sudo cp -rv /home/aadmin/project/config/ ${BASE_DIR}'
-                sh 'sudo cp -rv /home/aadmin/project/env/ ${BASE_DIR}'
+                sh 'sudo cp -rv /home/aadmin/config/ ${BASE_DIR}'
+                sh 'sudo cp -rv /home/aadmin/env/ ${BASE_DIR}'
 
                 // set ownership
                 sh 'sudo chown jenkins:jenkins -Rv ${BASE_DIR}'
