@@ -33,7 +33,7 @@ services:
     ports:
       - 1521:1521
     healthcheck:
-      test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s SYSTEM/yourpassword@ORCLCDB"]
+      test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s sys/$ORACLE_PWD@localhost:1521/toronto_shared_bike as sysdba"]
       interval: 30s
       timeout: 10s
       retries: 5
