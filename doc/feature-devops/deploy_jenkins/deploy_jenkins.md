@@ -5,7 +5,6 @@
 - [Deployment using Jenkins](#deployment-using-jenkins)
   - [Initialize](#initialize)
   - [Configure Jenkins](#configure-jenkins)
-    - [Create Oracle DB pipeline](#create-oracle-db-pipeline)
 
 ---
 
@@ -34,8 +33,11 @@ sudo bash /home/aadmin/00_init.sh
 
 ---
 
-### Create Oracle DB pipeline
-
-```sh
-
-```
+| Pipeline           | File                                      | Desc                    |
+| ------------------ | ----------------------------------------- | ----------------------- |
+| `devops-init`      | `devops/Jenkinsfile.devops.init`          | Initialized the project |
+| `oracledb-start`   | `oracledb/Jenkinsfile.oracledb.start`     | Start oracledb          |
+| `oracledb-stop`    | `oracledb/Jenkinsfile.oracledb.stop`      | Stop oracledb           |
+| `oracledb-etl`     | `oracledb/Jenkinsfile.oracledb.etl`       | ETL oracledb            |
+| `cloudflare-start` | `cloudflare/Jenkinsfile.cloudflare.start` | Start Cloudflare        |
+| `cloudflare-stop`  | `cloudflare/Jenkinsfile.cloudflare.stop`  | Stop Cloudflare         |

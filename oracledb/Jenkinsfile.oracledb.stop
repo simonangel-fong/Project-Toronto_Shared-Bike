@@ -1,0 +1,20 @@
+// Jenkinsfile to build oracledb
+pipeline {
+    agent any
+
+    environment {
+        ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
+        ORACLE_CON="oracle19cDB"
+    }
+
+    stages {
+   
+        stage('Build Oracle Database') {
+            steps {
+                echo 'Building Oracle database...'
+
+                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} down'
+            }
+        }
+    }
+}
