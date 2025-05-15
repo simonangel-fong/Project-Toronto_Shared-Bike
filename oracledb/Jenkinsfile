@@ -1,0 +1,97 @@
+// Jenkinsfile for oracledb
+pipeline {
+    agent any
+
+    environment {
+        BASE_DIR="/project"
+        GITHUB_DIR="/project/github"
+        CONFIG_DIR="/project/config"
+        ENV_DIR="/project/env"
+        DATA_DIR="/project/data"
+        EXPORT_DIR="/project/export"
+        ORADATA_DIR="/project/oradata"
+        ORBACKUP_DIR="/project/orabackup"
+
+        GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"
+        GIT_BRANCH="feature-devops"
+
+        ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
+        ORACLE_CON="oracle19cDB"
+    }
+
+    stages {
+        stage('Remove existing project') {
+            steps {
+                echo 'Removing existing project...'
+                // Give execute permission and run the script
+                sh 'sudo rm -rf ${BASE_DIR}'
+            }
+        }
+        
+        stage('Create directories'){
+            steps{
+                echo 'Creating directories for project ...'
+                
+                // create dir
+                sh 'sudo mkdir -pv ${BASE_DIR}'
+                sh 'sudo mkdir -pv ${GITHUB_DIR}'
+                sh 'sudo mkdir -pv ${CONFIG_DIR}'
+                sh 'sudo mkdir -pv ${ENV_DIR}'
+                sh 'sudo mkdir -pv ${DATA_DIR}'
+                sh 'sudo mkdir -pv ${EXPORT_DIR}'
+                sh 'sudo mkdir -pv ${ORADATA_DIR}'
+                sh 'sudo mkdir -pv ${ORBACKUP_DIR}'
+          }
+        }
+
+        stage('Clone github') {
+            steps {
+                echo 'Clone code from github...'
+
+                // set ownership
+                sh 'sudo chown jenkins:jenkins -Rv ${GITHUB_DIR}'
+
+                // set git
+                sh 'git config --global --add safe.directory ${GITHUB_DIR}'
+                // clone code
+                sh 'git clone --branch ${GIT_BRANCH} ${GIT_REPO_URL} ${GITHUB_DIR}'
+
+
+            }
+        }
+
+        stage('Copy env file') {
+            steps {
+                echo 'Copy env fiel...'
+        
+                // clone code
+                sh 'sudo cp -rv /home/aadmin/project/config/ ${BASE_DIR}'
+                sh 'sudo cp -rv /home/aadmin/project/env/ ${BASE_DIR}'
+
+                // set ownership
+                sh 'sudo chown jenkins:jenkins -Rv ${BASE_DIR}'
+               
+                // change permission
+                sh 'find ${BASE_DIR} -type d -exec chmod -v 755 {} + ;'
+                sh 'find ${BASE_DIR} -type f -name *.conf -exec chmod -v 666 {} + ;'
+                sh 'find ${BASE_DIR} -type f -name *.env -exec chmod -v 666 {} + ;'
+                
+                // set permission for specific dirs
+                sh 'sudo chmod 0777 -v ${ORADATA_DIR}'
+                sh 'sudo chmod 0777 -v ${ORBACKUP_DIR}'
+            }
+        }
+
+        stage('Build Oracle Database') {
+            steps {
+                echo 'Building Oracle database...'
+
+                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
+
+                // // Wait until health status is "healthy"
+                // timeout 600 bash -c 'while [ "$(docker inspect -f {{.State.Health.Status}} oracle19cDB" != "healthy" ]; do sleep 10; done'
+                // echo "Oracle is healthy!"
+            }
+        }
+    }
+}
