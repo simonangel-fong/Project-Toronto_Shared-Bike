@@ -36,7 +36,7 @@ services:
       test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s sys/$ORACLE_PWD@localhost:1521/toronto_shared_bike as sysdba"]
       interval: 30s
       timeout: 10s
-      retries: 5
+      retries: 20
       start_period: 5m
 
 volumes:
