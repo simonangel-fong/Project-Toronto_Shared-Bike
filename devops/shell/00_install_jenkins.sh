@@ -16,3 +16,5 @@ sudo systemctl enable --now jenkins
 
 sudo firewall-cmd --add-port=8080/tcp --permanent
 sudo firewall-cmd --reload
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword

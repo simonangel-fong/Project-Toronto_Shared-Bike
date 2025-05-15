@@ -31,6 +31,22 @@ sudo firewall-cmd --reload
 
 - http://192.168.128.100:8080/
 
+
+```sh
+sudo visudo
+
+jenkins ALL=(ALL) NOPASSWD: ALL
+
+```
+
+
+
+```sh
+scp ./devops/shell/00_init.sh aadmin@192.168.128.100:~
+
+bash ~/00_init.sh
+```
+
 ---
 
 ## `oracledb` Branch Pipeline

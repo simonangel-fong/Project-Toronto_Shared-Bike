@@ -22,6 +22,7 @@
       - [ETL](#etl-1)
       - [Backup](#backup-1)
     - [6. Startup All](#6-startup-all)
+  - [Init \& migrate](#init--migrate)
 
 ---
 
@@ -287,4 +288,20 @@ docker exec -it oracle19cDB /project/scripts/backup/rman_create_backup_with_tag.
 ```sh
 docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml up --build -d
 docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml down
+```
+
+---
+
+## Init & migrate
+
+```sh
+mkdir -pv /home/aadmin/project
+# set gid
+sudo chown :jenkins -R /home/aadmin/project
+
+
+scp ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.128.100:~/project
+
+
+sudo cp /home/aadmin/project/config/* /project/config
 ```
