@@ -30,6 +30,7 @@ sudo bash /home/aadmin/00_init.sh
 
 - Login
 - Install plugins
+- Add jenkins to sudo
 
 ---
 

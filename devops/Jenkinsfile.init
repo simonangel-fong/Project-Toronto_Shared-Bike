@@ -20,13 +20,7 @@ pipeline {
     }
 
     stages {
-        stage('Remove existing docker') {
-            steps {
-                echo 'Removing existing project...'
-                // Give execute permission and run the script
-                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} down'
-            }
-        }
+
         stage('Remove existing project') {
             steps {
                 echo 'Removing existing project...'
