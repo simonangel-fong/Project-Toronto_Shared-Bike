@@ -35,4 +35,4 @@ echo "Verify installation..."
 echo "########################################################"
 # as common user
 # confirm as current user
-su - $USER -c "docker run hello-world"
+docker run hello-world
