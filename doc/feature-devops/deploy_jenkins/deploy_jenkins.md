@@ -48,6 +48,7 @@ jenkins ALL=(ALL) NOPASSWD: ALL
 | Pipeline              | File                                      | Desc                    |
 | --------------------- | ----------------------------------------- | ----------------------- |
 | `00-devops-init`      | `devops/Jenkinsfile.devops.init`          | Initialized the project |
+| `00-devops-cleanup`   | `devops/Jenkinsfile.devops.cleanup`       | Clean up the project    |
 | `01-oracledb-start`   | `oracledb/Jenkinsfile.oracledb.start`     | Start oracledb          |
 | `01-oracledb-stop`    | `oracledb/Jenkinsfile.oracledb.stop`      | Stop oracledb           |
 | `01-oracledb-etl-mv`  | `oracledb/Jenkinsfile.oracledb.etl`       | ETL oracledb            |
