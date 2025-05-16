@@ -19,7 +19,7 @@ echo "###########################################"
 echo "Update directory for year $YEAR.        "
 echo "###########################################"
 
-sqlplus / as sysdba <<EOF
+sqlplus -s / as sysdba <<EOF
 ALTER SESSION SET container=toronto_shared_bike;
 
 BEGIN

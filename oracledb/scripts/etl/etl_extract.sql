@@ -18,6 +18,12 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
+-- Confirm
+SELECT
+    directory_name
+    , directory_path
+FROM dba_directories
+WHERE directory_name = 'DATA_DIR';
 
 -- ============================================================================
 -- Confirm external table access by showing a sample row)

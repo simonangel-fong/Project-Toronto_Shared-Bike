@@ -17,7 +17,16 @@ pipeline {
     }
 
     stages {
-   
+        
+        stage ('Pull github'){
+            steps {
+                echo 'Pulling github...'
+
+                sh 'git fetch --all'
+                sh 'git reset --hard origin/feature-devops'
+            }
+        }
+        
         stage('Execute ETL job') {
             steps {
                 echo 'Building Oracle database...'
