@@ -3,12 +3,15 @@ pipeline {
     agent any
 
     environment {
+        BASE_DIR="/project"
         DATA_DIR="/project/data"
+        ORADATA_DIR="/project/data"
 
         ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
         ORACLE_CON="oracle19cDB"
 
-        ETL_SCRIPT="/project/scripts/etl/multiple_year_etl_job.sh"
+        ETL_SINGLE_YEAR_SCRIPT="/project/scripts/etl/single_year_etl_job.sh"
+        ETL_MULTIPLE_YEAR_SCRIPT="/project/scripts/etl/multiple_year_etl_job.sh"
         ETL_START_YEAR="2019"
         ETL_END_YEAR="2023"
     }
@@ -18,12 +21,18 @@ pipeline {
         stage('Execute ETL job') {
             steps {
                 echo 'Building Oracle database...'
+                // confirm the owner
+                sh 'sudo chown jenkins:jenkins -R ${BASE_DIR}'
 
-                sh 'sudo chown jenkins:jenkins -Rv ${BASE_DIR}'
-                sh 'find ${BASE_DIR} -type d -exec chmod -v 755 {} + ;'
+                // confirm permission
+                sh 'sudo chmod 0777 -R ${ORADATA_DIR}'
+                sh 'sudo chmod 0777 -R ${DATA_DIR}'
+                sh 'sudo find ${BASE_DIR} -type d -exec chmod 755 {} + ;'
+                sh 'sudo find ${BASE_DIR} -type f -name *.sh -exec chmod -v 755 {} + ;'
 
                 sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
-                sh 'docker exec -it ${ORACLE_CON} bash ${ETL_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
+                sh 'docker exec ${ORACLE_CON} bash ${ETL_SINGLE_YEAR_SCRIPT} ${ETL_START_YEAR}'
+                // sh 'docker exec -it ${ORACLE_CON} bash ${ETL_MULTIPLE_YEAR_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
             }
         }
     }

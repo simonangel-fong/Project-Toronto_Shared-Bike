@@ -71,15 +71,15 @@ EOF
 # -----------------------------------------------------------------------------
 # Step 5: Confirm that the data load was successful and log results
 # -----------------------------------------------------------------------------
-echo
-echo "###########################################"
-echo "Confirm ETL for year $YEAR.             "
-echo "###########################################"
+# echo
+# echo "###########################################"
+# echo "Confirm ETL for year $YEAR.             "
+# echo "###########################################"
 
-sqlplus / as sysdba <<EOF
-@/project/scripts/etl/etl_confirm.sql
-exit
-EOF
+# sqlplus / as sysdba <<EOF
+# @/project/scripts/etl/etl_confirm.sql
+# exit
+# EOF
 
 # -----------------------------------------------------------------------------
 # Completion message
