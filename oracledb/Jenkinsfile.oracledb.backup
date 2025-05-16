@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo 'Stopping Oracle database...'
 
-                sh'docker exec -it oracle19cDB ${ORACLE_BACKUP_SCRIPT} ${ORACLE_BACKUP_TAG}'
+                sh'docker exec oracle19cDB ${ORACLE_BACKUP_SCRIPT} ${ORACLE_BACKUP_TAG}'
             }
         }
     }

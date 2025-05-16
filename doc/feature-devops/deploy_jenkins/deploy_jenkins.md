@@ -52,6 +52,7 @@ jenkins ALL=(ALL) NOPASSWD: ALL
 | `01-oracledb-start`   | `oracledb/Jenkinsfile.oracledb.start`     | Start oracledb          |
 | `01-oracledb-stop`    | `oracledb/Jenkinsfile.oracledb.stop`      | Stop oracledb           |
 | `01-oracledb-etl-mv`  | `oracledb/Jenkinsfile.oracledb.etl`       | ETL oracledb            |
+| `01-oracledb-backup`  | `oracledb/Jenkinsfile.oracledb.backup`             | Backup oracledb         |
 | `02-cloudflare-start` | `cloudflare/Jenkinsfile.cloudflare.start` | Start Cloudflare        |
 | `02-cloudflare-stop`  | `cloudflare/Jenkinsfile.cloudflare.stop`  | Stop Cloudflare         |
 
