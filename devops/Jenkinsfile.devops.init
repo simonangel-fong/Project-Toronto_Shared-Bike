@@ -4,9 +4,11 @@ pipeline {
 
     environment {
         BASE_DIR="/project"
+        
         GITHUB_DIR="/project/github"
         CONFIG_DIR="/project/config"
         ENV_DIR="/project/env"
+
         DATA_DIR="/project/data"
         EXPORT_DIR="/project/export"
         ORADATA_DIR="/project/oradata"
@@ -24,8 +26,10 @@ pipeline {
         stage('Remove existing project') {
             steps {
                 echo 'Removing existing project...'
-                // Give execute permission and run the script
-                sh 'sudo rm -rf ${BASE_DIR}'
+
+                sh 'sudo rm -rf ${GITHUB_DIR}'
+                sh 'sudo rm -rf ${CONFIG_DIR}'
+                sh 'sudo rm -rf ${ENV_DIR}'
             }
         }
         
@@ -34,10 +38,10 @@ pipeline {
                 echo 'Creating directories for project ...'
                 
                 // create dir
-                sh 'sudo mkdir -pv ${BASE_DIR}'
                 sh 'sudo mkdir -pv ${GITHUB_DIR}'
                 sh 'sudo mkdir -pv ${CONFIG_DIR}'
                 sh 'sudo mkdir -pv ${ENV_DIR}'
+ 
                 sh 'sudo mkdir -pv ${DATA_DIR}'
                 sh 'sudo mkdir -pv ${EXPORT_DIR}'
                 sh 'sudo mkdir -pv ${ORADATA_DIR}'
@@ -56,8 +60,6 @@ pipeline {
                 sh 'git config --global --add safe.directory ${GITHUB_DIR}'
                 // clone code
                 sh 'git clone --branch ${GIT_BRANCH} ${GIT_REPO_URL} ${GITHUB_DIR}'
-
-
             }
         }
 
