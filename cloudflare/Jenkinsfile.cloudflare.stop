@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Building Cloudflare...'
 
-                sh 'docker compose -f ${CLOUDFLARE_COMPOSE_FILE} '
+                sh 'docker compose -f ${CLOUDFLARE_COMPOSE_FILE} down'
             }
         }
     }

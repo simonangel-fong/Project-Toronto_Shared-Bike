@@ -84,3 +84,11 @@ echo
 
 sudo mkdir -pv /project
 sudo chown jenkins:jenkins -Rv /project
+
+echo
+echo "========================================================"
+echo "Jenkins credential"
+echo "========================================================"
+echo
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword

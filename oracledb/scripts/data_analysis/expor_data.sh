@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sqlplus / as sysdba <<EOF
+sqlplus -s / as sysdba <<EOF
 
 set colsep ,
 set headsep off

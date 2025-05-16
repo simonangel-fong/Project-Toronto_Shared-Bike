@@ -30,7 +30,7 @@ WHERE directory_name = 'DATA_DIR';
 -- ============================================================================
 SELECT *
 FROM dw_schema.external_ridership
-WHERE ROWNUM < 3;
+FETCH FIRST 5 ROWS ONLY;
 
 
 -- ============================================================================
@@ -58,4 +58,4 @@ ORDER BY start_time;
 
 SELECT *
 FROM dw_schema.staging_trip
-WHERE ROWNUM < 5;
+FETCH FIRST 5 ROWS ONLY;

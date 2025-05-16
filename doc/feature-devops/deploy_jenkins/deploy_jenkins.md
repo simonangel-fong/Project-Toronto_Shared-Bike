@@ -32,6 +32,12 @@ sudo bash /home/aadmin/00_init.sh
 - Install plugins
 - Add jenkins to sudo
 
+```sh
+sudo visudo
+
+jenkins ALL=(ALL) NOPASSWD: ALL
+```
+
 ---
 
 - Github:
@@ -39,13 +45,14 @@ sudo bash /home/aadmin/00_init.sh
 - branch
   - feature-devops
 
-| Pipeline           | File                                      | Desc                    |
-| ------------------ | ----------------------------------------- | ----------------------- |
-| `devops-init`      | `devops/Jenkinsfile.devops.init`          | Initialized the project |
-| `oracledb-start`   | `oracledb/Jenkinsfile.oracledb.start`     | Start oracledb          |
-| `oracledb-stop`    | `oracledb/Jenkinsfile.oracledb.stop`      | Stop oracledb           |
-| `cloudflare-start` | `cloudflare/Jenkinsfile.cloudflare.start` | Start Cloudflare        |
-| `cloudflare-stop`  | `cloudflare/Jenkinsfile.cloudflare.stop`  | Stop Cloudflare         |
+| Pipeline              | File                                      | Desc                    |
+| --------------------- | ----------------------------------------- | ----------------------- |
+| `00-devops-init`      | `devops/Jenkinsfile.devops.init`          | Initialized the project |
+| `01-oracledb-start`   | `oracledb/Jenkinsfile.oracledb.start`     | Start oracledb          |
+| `01-oracledb-stop`    | `oracledb/Jenkinsfile.oracledb.stop`      | Stop oracledb           |
+| `01-oracledb-etl-mv`  | `oracledb/Jenkinsfile.oracledb.etl`       | ETL oracledb            |
+| `02-cloudflare-start` | `cloudflare/Jenkinsfile.cloudflare.start` | Start Cloudflare        |
+| `02-cloudflare-stop`  | `cloudflare/Jenkinsfile.cloudflare.stop`  | Stop Cloudflare         |
 
 ---
 

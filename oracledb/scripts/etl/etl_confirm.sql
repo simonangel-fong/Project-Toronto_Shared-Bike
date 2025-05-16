@@ -23,21 +23,24 @@ SELECT
 --    *
     COUNT(*)
 FROM DW_SCHEMA.dim_time
-ORDER BY dim_time_year DESC;
+ORDER BY dim_time_year DESC
+FETCH FIRST 10 ROWS ONLY;
 
 -- Count the number of records in the station dimension table
 SELECT 
 --    *
     COUNT(*)
 FROM DW_SCHEMA.dim_station
-ORDER BY dim_station_id;
+ORDER BY dim_station_id
+FETCH FIRST 10 ROWS ONLY;
 
 -- Count the number of records in the bike dimension table
 SELECT 
 --    *
     COUNT(*)
 FROM DW_SCHEMA.dim_bike
-ORDER BY dim_bike_id DESC;
+ORDER BY dim_bike_id DESC
+FETCH FIRST 10 ROWS ONLY;
 
 -- Count the number of records in the user type dimension table
 SELECT 
@@ -64,4 +67,5 @@ ON f.fact_trip_bike_id = bk.dim_bike_id
 JOIN dw_schema.dim_user_type ustp
 ON f.fact_trip_user_type_id = ustp.dim_user_type_id
 --WHERE ROWNUM < 5
-ORDER BY fact_trip_start_time_id DESC;
+ORDER BY fact_trip_start_time_id DESC
+FETCH FIRST 10 ROWS ONLY;

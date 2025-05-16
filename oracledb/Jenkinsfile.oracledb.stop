@@ -9,9 +9,9 @@ pipeline {
 
     stages {
    
-        stage('Build Oracle Database') {
+        stage('Stop Oracle Database') {
             steps {
-                echo 'Building Oracle database...'
+                echo 'Stopping Oracle database...'
 
                 sh 'docker compose -f ${ORACLE_COMPOSE_FILE} down'
             }
