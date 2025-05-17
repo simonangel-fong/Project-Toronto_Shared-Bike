@@ -5,6 +5,7 @@ pipeline {
     environment {
 
         GITHUB_DIR="/project/github"
+        DATA_DIR="/project/data"
 
         GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"
         GIT_BRANCH="feature-devops"
