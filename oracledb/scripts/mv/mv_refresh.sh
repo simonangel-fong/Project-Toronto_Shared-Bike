@@ -13,7 +13,7 @@ sqlplus -s / as sysdba <<EOF
 -- Refresh materialized views
 @/project/scripts/mv/mv_refresh.sql
 -- Confirm materialized view refresh status
-@/project/scripts/mv/mv_confirm.sql
+-- @/project/scripts/mv/mv_confirm.sql
 
 exit
 EOF

@@ -20,6 +20,7 @@ SHOW user;
 -- Call the procedure to update the directory object for the given year
 BEGIN
     update_directory_for_year(2023);
+    DBMS_OUTPUT.PUT_LINE("Updated the directory object.");
 END;
 /
 

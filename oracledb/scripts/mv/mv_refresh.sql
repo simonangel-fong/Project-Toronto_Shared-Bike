@@ -18,15 +18,47 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
--- Refresh the time-based trip materialized view using fast refresh
-EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_TIME_TRIP', 'F');
--- Refresh the station-based trip materialized view using complete refresh
-EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_STATION_TRIP', 'C');
--- Refresh the station route materialized view using fast refresh
-EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_STATION_ROUTE', 'F');
--- Refresh the bike trip duration materialized view using complete refresh
-EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_BIKE_TRIP_DURATION', 'C');
--- Refresh the user segmentation materialized view using complete refresh
-EXEC DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_USER_SEGMENTATION', 'C');
+-- ============================================================================
+-- Refreshing the time-based trip materialized view using fast refresh
+-- ============================================================================
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Refreshing the time-based trip materialized view using fast refresh.');
+    DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_TIME_TRIP', 'F');
+END;
+/
+
+-- ============================================================================
+-- Refreshing the station-based trip materialized view using complete refresh
+-- ============================================================================
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Refreshing the station-based trip materialized view using complete refresh.');
+    DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_STATION_TRIP', 'C');
+END;
+/
+
+-- ============================================================================
+-- Refreshing the station route materialized view using fast refresh
+-- ============================================================================
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Refreshing the station route materialized view using fast refresh.');
+    DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_STATION_ROUTE', 'F');
+END;
+/
+-- ============================================================================
+-- Refreshing the bike trip duration materialized view using complete refresh
+-- ============================================================================
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Refreshing the bike trip duration materialized view using complete refresh.');
+    DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_BIKE_TRIP_DURATION', 'C');
+END;
+/
+-- ============================================================================
+-- Refreshing the user segmentation materialized view using complete refresh
+-- ============================================================================
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Refreshing the user segmentation materialized view using complete refresh.');
+    DBMS_MVIEW.REFRESH('DW_SCHEMA.MV_USER_SEGMENTATION', 'C');
+END;
+/
 
 COMMIT;

@@ -22,28 +22,28 @@ SHOW user;
 SELECT *
 FROM dw_schema.mv_time_trip
 ORDER BY dim_year DESC, dim_month DESC, dim_day DESC, dim_hour DESC
-FETCH FIRST 10 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY;
 
 -- Query the station-based trip materialized view
 SELECT *
 FROM dw_schema.mv_station_trip
 ORDER BY trip_count_by_start DESC, trip_count_by_end DESC
-FETCH FIRST 10 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY;
 
 -- Query the station route materialized view
 SELECT * 
 FROM dw_schema.mv_station_route
 ORDER BY trip_count DESC
-FETCH FIRST 10 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY;
 
 -- Query the bike trip duration materialized view
 SELECT *
 FROM dw_schema.mv_bike_trip_duration
 ORDER BY trip_count DESC, avg_trip_duration DESC
-FETCH FIRST 10 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY;
 
 -- Query the user segmentation materialized view
 SELECT *
 FROM DW_SCHEMA.MV_USER_SEGMENTATION
 ORDER BY user_type_name ASC, dim_year ASC
-FETCH FIRST 10 ROWS ONLY;
+FETCH FIRST 3 ROWS ONLY;

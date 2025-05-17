@@ -30,7 +30,7 @@ WHERE directory_name = 'DATA_DIR';
 -- ============================================================================
 SELECT *
 FROM dw_schema.external_ridership
-FETCH FIRST 5 ROWS ONLY;
+FETCH FIRST 2 ROWS ONLY;
 
 
 -- ============================================================================
@@ -38,10 +38,15 @@ FETCH FIRST 5 ROWS ONLY;
 -- ============================================================================
 TRUNCATE TABLE dw_schema.staging_trip;
 
-
 -- ============================================================================
 -- Extract data from the external table to the staging table
 -- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start extracting data from the external table to the staging table.");
+END;
+/
+
 INSERT /*+ APPEND */ INTO dw_schema.staging_trip
 SELECT *
 FROM dw_schema.external_ridership;
@@ -58,4 +63,4 @@ ORDER BY start_time;
 
 SELECT *
 FROM dw_schema.staging_trip
-FETCH FIRST 5 ROWS ONLY;
+FETCH FIRST 2 ROWS ONLY;

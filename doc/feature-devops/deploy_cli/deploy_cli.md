@@ -3,6 +3,7 @@
 [Back](../../../README.md)
 
 - [Deployment: Application Deployment (Manual Command)](#deployment-application-deployment-manual-command)
+  - [Add Admin](#add-admin)
   - [Network](#network)
   - [Upload ini Shell Script and env files](#upload-ini-shell-script-and-env-files)
   - [Deploy Application](#deploy-application)
@@ -25,16 +26,29 @@
 
 ---
 
+## Add Admin
+
+```sh
+sudo useradd -m aadmin
+sudo passwd aadmin
+sudo usermod -aG wheel aadmin
+
+# test
+su - aadmin
+sudo whoami
+```
+
+
 ## Network
 
 ```sh
 # setup network
 sudo nmcli c down ens160
-sudo nmcli c modify ens160 ipv4.method manual
-sudo nmcli c modify ens160 ipv4.address 192.168.128.100/24
-sudo nmcli c modify ens160 ipv4.gateway 192.168.128.2
-sudo nmcli c modify ens160 ipv4.dns 192.168.128.2,8.8.8.8
-sudo nmcli c up ens160
+sudo nmcli c modify ens18 ipv4.address 192.168.100.100/24
+sudo nmcli c modify ens18 ipv4.gateway 192.168.100.254
+sudo nmcli c modify ens18 ipv4.dns 192.168.100.254,8.8.8.8
+sudo nmcli c modify ens18 ipv4.method manual
+sudo nmcli c up ens18
 
 # configure hostname
 sudo hostnamectl set-hostname app-node
@@ -53,7 +67,7 @@ scp ./devops/shell/00_init_git.sh aadmin@192.168.128.100:~
 - Execute init shell script
 
 ```sh
-sudo bash 00_init_git.sh
+bash 00_init.sh
 ```
 
 ---

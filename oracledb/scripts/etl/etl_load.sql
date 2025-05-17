@@ -18,7 +18,16 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
--- Populate the time dimension table with unique timestamps
+-- ============================================================================
+-- Load time dimension
+-- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start loading time dimension.");
+END;
+/
+
+-- Load the time dimension table with unique timestamps
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_time tgt
 USING (
   -- Union start_time and end_time to capture all timestamps
@@ -60,7 +69,16 @@ WHEN NOT MATCHED THEN
 
 COMMIT;
 
--- Populate the station dimension table with unique station information
+-- ============================================================================
+-- Load station dimension
+-- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start loading station dimension.");
+END;
+/
+
+-- Load the station dimension table with unique station information
 MERGE INTO DW_SCHEMA.dim_station ds
 USING (
     WITH station_times AS (
@@ -105,7 +123,16 @@ WHEN NOT MATCHED THEN
 
 COMMIT;
 
--- Populate the bike dimension table with unique bike information
+-- ============================================================================
+-- Load bike dimension
+-- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start loading bike dimension.");
+END;
+/
+
+-- Load the bike dimension table with unique bike information
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
 USING (
   -- Aggregate bike data, handling unknown models
@@ -131,6 +158,15 @@ WHEN NOT MATCHED THEN
 
 COMMIT;
 
+-- ============================================================================
+-- Load user dimension
+-- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start loading user dimension.");
+END;
+/
+
 -- Populate the user type dimension table with unique user types
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_user_type tgt
 USING (
@@ -152,7 +188,16 @@ WHEN NOT MATCHED THEN
 -- Commit the changes to the user type dimension
 COMMIT;
 
--- Populate the fact table with trip data
+-- ============================================================================
+-- Load fact table
+-- ============================================================================
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE("Start loading fact table.");
+END;
+/
+
+-- Load the fact table with trip data
 MERGE /*+ APPEND */ INTO DW_SCHEMA.fact_trip tgt
 USING (
   -- Transform staging data into fact table format

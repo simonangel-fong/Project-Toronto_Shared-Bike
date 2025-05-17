@@ -6,6 +6,7 @@
   - [](#)
   - [NAT](#nat)
   - [Deploy](#deploy)
+    - [LVM](#lvm)
 
 ---
 
@@ -73,7 +74,7 @@ ssh root@192.168.1.80 root@192.168.100.50
 ```sh
 scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.100.100:~
 
-scp -r -o ProxyJump=root@192.168.1.80 ./project/data aadmin@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./project/data root@192.168.100.100:/project
 
 ```
 
@@ -93,8 +94,32 @@ iptables -t nat -A PREROUTING -d 192.168.1.80 -p tcp --dport 8080 -j DNAT --to-d
 iptables -A FORWARD -p tcp -d 192.168.10.254 --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 
 netfilter-persistent save
+```
 
+---
 
+### LVM
 
+```sh
+lsblk
+
+fdisk -l
+fdisk /dev/sdb
+# n: new partition
+# p: primary
+# 1: partition number
+# Press Enter to accept default first/last sector
+# w: write and exit
+
+# Create a Physical Volume on the New Disk
+sudo pvcreate /dev/sdb1
+# Extend the Existing Volume Group
+sudo vgextend vg /dev/sdb1
+# Extend the Logical Volume to Use All Free Space
+sudo lvextend -l +100%FREE /dev/vg/root
+# Resize the ext4 File System
+sudo resize2fs /dev/vg/root
+
+df -Th 
 
 ```
