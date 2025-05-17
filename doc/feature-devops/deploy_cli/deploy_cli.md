@@ -1,15 +1,14 @@
-# Deployment: Application Deployment using CLI
+# Deployment: Application Deployment (Manual Command)
 
 [Back](../../../README.md)
 
-- [Deployment: Application Deployment using CLI](#deployment-application-deployment-using-cli)
-  - [Node Configuration](#node-configuration)
-    - [Network](#network)
-  - [Deployment - Manual way](#deployment---manual-way)
-    - [Install git and Clone codes](#install-git-and-clone-codes)
-    - [Create dir and Migrate config files](#create-dir-and-migrate-config-files)
-    - [Install Docker](#install-docker)
-    - [Run Oracle DB](#run-oracle-db)
+- [Deployment: Application Deployment (Manual Command)](#deployment-application-deployment-manual-command)
+  - [Network](#network)
+  - [Upload ini Shell Script and env files](#upload-ini-shell-script-and-env-files)
+  - [Deploy Application](#deploy-application)
+    - [Creating Directories](#creating-directories)
+    - [Git Clone](#git-clone)
+    - [Build Oracle DB](#build-oracle-db)
     - [ETL](#etl)
     - [Backup](#backup)
     - [Deploy Cloudflare](#deploy-cloudflare)
@@ -26,9 +25,7 @@
 
 ---
 
-## Node Configuration
-
-### Network
+## Network
 
 ```sh
 # setup network
@@ -47,119 +44,78 @@ echo '127.0.0.1           app-node' | sudo tee -a /etc/hosts
 
 ---
 
-## Deployment - Manual way
-
-### Install git and Clone codes
-
-- CLI Command
+## Upload ini Shell Script and env files
 
 ```sh
-# install git
-sudo dnf install -y git
+scp ./devops/shell/00_init_git.sh aadmin@192.168.128.100:~
+```
 
-# create dir for github
-sudo mkdir -pv /project/github
+- Execute init shell script
+
+```sh
+sudo bash 00_init_git.sh
+```
+
+---
+
+## Deploy Application
+
+### Creating Directories
+
+```sh
+# Removing existing project directories...
+sudo rm -rf "/project/github" "/project/config" "/project/env"
+
+# Creating project directories...
+sudo mkdir -pv "/project/github" "/project/config" "/project/env" "/project/data" "/project/export" "/project/oradata" "/project/orabackup"
 
 # change owner
-sudo chown aadmin:aadmin -R /project/github
+sudo chown jenkins:jenkins -Rv /project/
+```
 
-git config --global --add safe.directory /project/github
+### Git Clone
+
+```sh
+sudo rm -rf /project/github
+sudo mkdir -pv /project/github
+
 # clone the devops branch
-git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
-
-# change permission
-find /project/github -type f -name "*.sh" -exec chmod 755 {} \;
-```
-
----
-
-### Create dir and Migrate config files
-
-- Create Dir
-
-```sh
-# app node
-# as root
-sudo mkdir -pv /project/config # config
-sudo mkdir -pv /project/env # env
-sudo mkdir -pv /project/data # source data
-sudo mkdir -pv /project/export # export data
-sudo mkdir -pv /project/oradata # persist data
-sudo mkdir -pv /project/orabackup  # backup
-
-sudo chown aadmin:aadmin -R /project
-# ensure sub dir can be access
-find /project -type d -exec chmod 755 {} \;
-# ensure files within the subdir to be read-only
-find /project -type f --exec chmod 444 {} \;
-
-
-
-# enable
-chmod 0777 /project/orabackup
-chmod 0777 /project/export
-chmod 0777 /project/oradata
-chmod 0777 -r /project/data
-```
-
-- Migrate Files
-
-```sh
-# migrate config and env files
-scp -r ./project/config ./project/env/ ./project/data/ aadmin@192.168.128.100:/project/
-
-# migrate source data
-scp -r ./project/data/ aadmin@192.168.128.100:/project/
-```
-
----
-
-### Install Docker
-
-- Install Docker
-
-```sh
-sudo dnf remove -y docker \
-                  docker-client \
-                  docker-client-latest \
-                  docker-common \
-                  docker-latest \
-                  docker-latest-logrotate \
-                  docker-logrotate \
-                  docker-engine \
-                  podman \
-                  runc
-
-sudo dnf -y install dnf-plugins-core
-sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-
-sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo systemctl enable --now docker
-
-# as common user
-# enable current user to run docker
-sudo usermod -aG docker $USER
-sudo chown root:docker /var/run/docker.sock
-sudo chmod 666 /var/run/docker.sock
-
-# as common user
-# confirm as current user
-docker run hello-world --user $USER
-```
-
----
-
-### Run Oracle DB
-
-```sh
-
 cd /project/github
-# pull the latest version
-git pull
+git config --global --add safe.directory /project/github
+sudo git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
 
-# Create container
-docker compose -f /project/github/oracledb/compose.oracledb.prod.yaml up --build -d && docker exec -it -u root:root oracle19cDB bash /project/scripts/init/init.sh
+# change owner
+sudo chown jenkins:jenkins -Rv /project/github
+# change permission
+sudo find /project/github -type f -name "*.sh" -exec chmod 755 {} +
+
+
+sudo chmod 0777 -v /project/orabackup
+sudo chmod 0777 -v /project/export
+sudo chmod 0777 -v /project/oradata
+sudo chmod 0777 -Rv /project/data
+```
+
+---
+
+### Build Oracle DB
+
+```sh
+# Remove and clone the latest github
+sudo rm -rf /project/github
+sudo mkdir -pv /project/github
+
+# set git
+sudo git config --global --add safe.directory /project/github
+# clone code
+sudo git clone --branch feature-devops https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git /project/github
+
+
+sudo chown jenkins:jenkins -Rv /project/github
+# set sh file permission
+sudo find /project/github -type f -name "*.sh" -exec chmod 755 -v {} +
+
+sudo docker compose -f /project/github/oracledb/compose.oracledb.prod.yaml up --build -d
 
 # test
 docker ps
@@ -177,8 +133,20 @@ docker volume rm toronto-shared-bike_oracledata
 
 ### ETL
 
+- Migrate
+
 ```sh
+scp -r -o ProxyJump=root@192.168.1.80 ./project/data aadmin@192.168.100.100:/project
+```
+
+```sh
+sudo chown jenkins:jenkins -Rv /project/data
+sudo chmod 0777 -Rv /project/data
+sudo find /project/data -type f -name *.log -exec rm -v {} +;
+sudo find /project/data -type f -name *.bad -exec rm -v {} +;
 docker exec -it oracle19cDB /project/scripts/etl/single_year_etl_job.sh 2019
+# refresh mv
+docker exec -it oracle19cDB /project/scripts/mv/mv_refresh.sh
 ```
 
 ---
@@ -194,9 +162,9 @@ docker exec -it oracle19cDB /project/scripts/backup/rman_create_backup_with_tag.
 ### Deploy Cloudflare
 
 ```sh
-docker compose -f ~/github/cloudflare/compose.cloudflare.prod.yaml up --build -d
+docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml up --build -d
 
-docker compose -f ~/github/cloudflare/compose.cloudflare.prod.yaml down
+docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml down
 ```
 
 ---

@@ -5,6 +5,7 @@
 - [Deployment: Proxmox Installation](#deployment-proxmox-installation)
   - [](#)
   - [NAT](#nat)
+  - [Deploy](#deploy)
 
 ---
 
@@ -55,4 +56,45 @@ iptables -A FORWARD -i vmbr0 -o wlp7s0 -j ACCEPT
 iptables -A FORWARD -i wlp7s0 -o vmbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
 netfilter-persistent save
+```
+
+- SSH
+
+```sh
+ssh root@192.168.1.80 root@192.168.100.50
+```
+
+---
+
+## Deploy
+
+- migrate
+
+```sh
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.100.100:~
+
+scp -r -o ProxyJump=root@192.168.1.80 ./project/data aadmin@192.168.100.100:~
+
+```
+
+- ssh
+
+```sh
+ssh -J root@192.168.1.80 aadmin@192.168.100.100
+```
+
+- Map Jenkins GUI
+
+```sh
+# Forward incoming traffic on WIFI aadress 192.168.1.80:8080 to pfSense WAN addresss 192.168.10.100:8080
+iptables -t nat -A PREROUTING -d 192.168.1.80 -p tcp --dport 8080 -j DNAT --to-destination 192.168.10.254:8080
+
+# Allow forwarding from the source network to the target machine
+iptables -A FORWARD -p tcp -d 192.168.10.254 --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+
+netfilter-persistent save
+
+
+
+
 ```

@@ -25,7 +25,8 @@ pipeline {
                 // enable permission
                 sh 'sudo chmod 0777 -R ${DATA_DIR}'
 
-                sh 'docker exec ${ORACLE_CON} bash ${ETL_SINGLE_YEAR_SCRIPT} ${ETL_START_YEAR}'
+                // sh 'docker exec ${ORACLE_CON} bash ${ETL_SINGLE_YEAR_SCRIPT} ${ETL_START_YEAR}'
+                sh 'docker exec ${ORACLE_CON} bash ${ETL_MULTIPLE_YEAR_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
             }
         }
 
