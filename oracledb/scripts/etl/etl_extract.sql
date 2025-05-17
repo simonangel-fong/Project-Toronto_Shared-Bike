@@ -8,9 +8,9 @@
 -- Notes       : Ensure that the external file is accessible through the directory `dir_target`
 -- ============================================================================
 
--- Output from the DBMS_OUTPUT to standard output
-SET SERVEROUTPUT ON;
--- Allow blank lines 
+SET SERVEROUTPUT ON SIZE 1000000;
+SET FEEDBACK ON;
+SET VERIFY OFF;
 SET SQLBLANKLINES ON;
 
 -- Switch to the Toronto Shared Bike PDB

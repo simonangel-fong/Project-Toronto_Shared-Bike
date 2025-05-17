@@ -55,9 +55,36 @@ pipeline {
                 echo 'Building Oracle database...'
 
                 sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
-
             }
         }
+
+    stage('Check Oracle Container Health') {
+        steps {
+            script {
+                def maxRetries = 5
+                def sleepDuration = 60 // seconds
+
+                for (int i = 1; i <= maxRetries; i++) {
+                    def status = sh(
+                        script: "docker inspect --format='{{.State.Health.Status}}' ${ORACLE_CON}",
+                        returnStdout: true
+                    ).trim()
+
+                    if (status == "healthy") {
+                        echo "Oracle container is healthy."
+                        break
+                    } else {
+                        echo "Oracle container health check failed (attempt ${i}/${maxRetries}). Sleeping for ${sleepDuration} seconds..."
+                        sleep time: sleepDuration, unit: 'SECONDS'
+                    }
+
+                    if (i == maxRetries) {
+                        error "Oracle container did not become healthy after ${maxRetries} attempts."
+                    }
+                }
+            }
+        }
+    }
 
         stage('Execute ETL job') {
             steps {
