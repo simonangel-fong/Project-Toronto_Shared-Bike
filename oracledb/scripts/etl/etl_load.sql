@@ -23,7 +23,7 @@ SHOW user;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start loading time dimension.");
+  DBMS_OUTPUT.PUT_LINE('Start loading time dimension.');
 END;
 /
 
@@ -74,7 +74,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start loading station dimension.");
+  DBMS_OUTPUT.PUT_LINE('Start loading station dimension.');
 END;
 /
 
@@ -128,7 +128,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start loading bike dimension.");
+  DBMS_OUTPUT.PUT_LINE('Start loading bike dimension.');
 END;
 /
 
@@ -163,7 +163,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start loading user dimension.");
+  DBMS_OUTPUT.PUT_LINE('Start loading user dimension.');
 END;
 /
 
@@ -193,7 +193,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start loading fact table.");
+  DBMS_OUTPUT.PUT_LINE('Start loading fact table.');
 END;
 /
 

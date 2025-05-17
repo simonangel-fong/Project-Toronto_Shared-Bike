@@ -48,7 +48,7 @@ WHERE trip_id IS NULL
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start removing rows with string 'NULL' in Key columns");
+  DBMS_OUTPUT.PUT_LINE('Start removing rows with string "NULL" in Key columns');
 END;
 /
 
@@ -78,7 +78,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start deleting invalid data types in key columns");
+  DBMS_OUTPUT.PUT_LINE('Start deleting invalid data types in key columns');
 END;
 /
 
@@ -122,7 +122,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start deleting non positive duration in key columns");
+  DBMS_OUTPUT.PUT_LINE('Start deleting non positive duration in key columns');
 END;
 /
 
@@ -144,7 +144,7 @@ COMMIT;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start calculating end_time value in Non-critical columns");
+  DBMS_OUTPUT.PUT_LINE('Start calculating end_time value in Non-critical columns');
 END;
 /
 
@@ -184,7 +184,7 @@ WHERE
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start substituting start_station_name/end_station_name with 'UNKNOWN' value");
+  DBMS_OUTPUT.PUT_LINE('Start substituting start_station_name/end_station_name with "UNKNOWN" value');
 END;
 /
 
@@ -217,7 +217,7 @@ WHERE
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start substituting missing user_type with 'UNKNOWN'.");
+  DBMS_OUTPUT.PUT_LINE('Start substituting missing user_type with "UNKNOWN".');
 END;
 /
 
@@ -239,7 +239,7 @@ WHERE user_type IS NULL;
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start substituting invalid or missing bike_id with '-1'.");
+  DBMS_OUTPUT.PUT_LINE('Start substituting invalid or missing bike_id with "-1".');
 END;
 /
 
@@ -264,7 +264,7 @@ WHERE bike_id IS NULL
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start substituting missing model with 'UNKNOWN'.");
+  DBMS_OUTPUT.PUT_LINE('Start substituting missing model with "UNKNOWN".');
 END;
 /
 
@@ -286,7 +286,7 @@ WHERE model IS NULL;
 COMMIT;
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start substituting '\r' in user type.");
+  DBMS_OUTPUT.PUT_LINE('Start substituting "\r" in user type.');
 END;
 /
 

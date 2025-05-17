@@ -43,7 +43,7 @@ TRUNCATE TABLE dw_schema.staging_trip;
 -- ============================================================================
 
 BEGIN
-  DBMS_OUTPUT.PUT_LINE("Start extracting data from the external table to the staging table.");
+  DBMS_OUTPUT.PUT_LINE('Start extracting data from the external table to the staging table.');
 END;
 /
 
