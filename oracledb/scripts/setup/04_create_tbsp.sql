@@ -21,8 +21,8 @@ SHOW user;
 -- Create FACT_TBSP tablespace for storing fact tables with a 32K block size
 CREATE TABLESPACE FACT_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/fact_tbsp01.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
-    , '/opt/oracle/oradata/ORCLCDB/fact_tbsp02.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
+    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/fact_tbsp01.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
+    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/fact_tbsp02.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
 BLOCKSIZE 32K
 EXTENT MANAGEMENT LOCAL AUTOALLOCATE
 SEGMENT SPACE MANAGEMENT AUTO

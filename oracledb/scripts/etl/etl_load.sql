@@ -22,11 +22,6 @@ SHOW user;
 -- Load time dimension
 -- ============================================================================
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start loading time dimension.');
-END;
-/
-
 -- Load the time dimension table with unique timestamps
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_time tgt
 USING (
@@ -72,11 +67,6 @@ COMMIT;
 -- ============================================================================
 -- Load station dimension
 -- ============================================================================
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start loading station dimension.');
-END;
-/
 
 -- Load the station dimension table with unique station information
 MERGE INTO DW_SCHEMA.dim_station ds
@@ -127,11 +117,6 @@ COMMIT;
 -- Load bike dimension
 -- ============================================================================
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start loading bike dimension.');
-END;
-/
-
 -- Load the bike dimension table with unique bike information
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
 USING (
@@ -162,11 +147,6 @@ COMMIT;
 -- Load user dimension
 -- ============================================================================
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start loading user dimension.');
-END;
-/
-
 -- Populate the user type dimension table with unique user types
 MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_user_type tgt
 USING (
@@ -191,11 +171,6 @@ COMMIT;
 -- ============================================================================
 -- Load fact table
 -- ============================================================================
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start loading fact table.');
-END;
-/
 
 -- Load the fact table with trip data
 MERGE /*+ APPEND */ INTO DW_SCHEMA.fact_trip tgt

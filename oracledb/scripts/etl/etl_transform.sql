@@ -21,11 +21,6 @@ SHOW user;
 -- Data processing: Remove rows with NULLs in Key columns
 -- ============================================================================
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start removing rows with NULLs in Key columns');
-END;
-/
-
 -- Query no NULL value in key columns
 SELECT 
 --    *
@@ -46,11 +41,6 @@ WHERE trip_id IS NULL
   OR end_station_id IS NULL;
   
 COMMIT;
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start removing rows with string "NULL" in Key columns');
-END;
-/
 
 -- Query string "NULL" value in key columns
 SELECT 
@@ -76,11 +66,6 @@ COMMIT;
 -- ============================================================================
 -- Key columns processing: Remove rows with invalid data types or formats
 -- ============================================================================
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start deleting invalid data types in key columns');
-END;
-/
 
 -- Query invalid data type
 SELECT 
@@ -121,11 +106,6 @@ COMMIT;
 -- Key column processing (trip durations): Remove rows with non-positive value
 -- ============================================================================
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start deleting non positive duration in key columns');
-END;
-/
-
 -- Query non posistive duration
 SELECT
 --    *
@@ -142,11 +122,6 @@ COMMIT;
 -- ============================================================================
 -- Non-critical columns processing
 -- ============================================================================
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start calculating end_time value in Non-critical columns');
-END;
-/
 
 -- Validate: 
 SELECT 
@@ -183,11 +158,6 @@ WHERE
 
 COMMIT;
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start substituting start_station_name/end_station_name with "UNKNOWN" value');
-END;
-/
-
 -- Substitute start_station_name/end_station_name with 'UNKNOWN' value
 -- confirm
 SELECT 
@@ -216,11 +186,6 @@ WHERE
 
 COMMIT;
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start substituting missing user_type with "UNKNOWN".');
-END;
-/
-
 -- query for user_type is null value
 SELECT
 --   *
@@ -237,11 +202,6 @@ SET user_type = 'UNKNOWN'
 WHERE user_type IS NULL;
 
 COMMIT;
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start substituting invalid or missing bike_id with "-1".');
-END;
-/
 
 -- query bike_id has no 
 SELECT
@@ -263,11 +223,6 @@ WHERE bike_id IS NULL
 
 COMMIT;
 
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start substituting missing model with "UNKNOWN".');
-END;
-/
-
 -- query for model is null value
 SELECT
 --    *
@@ -284,11 +239,6 @@ SET model = 'UNKNOWN'
 WHERE model IS NULL;
 
 COMMIT;
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start substituting "\r" in user type.');
-END;
-/
 
 -- query
 SELECT

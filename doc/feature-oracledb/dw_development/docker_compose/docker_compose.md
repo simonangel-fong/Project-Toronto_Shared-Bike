@@ -174,7 +174,7 @@ docker exec -it oracle19cDB bash /project/scripts/mv/mv_refresh.sh
 
 ```sh
 # build up container
-docker compose -f compose.oracledb.dev.yaml up --build -d
+docker compose -f ./oracledb/compose.oracledb.dev.yaml up --build -d
 
 # configure RMAN
 docker exec -it oracle19cDB bash /project/scripts/backup/rman_configure.sh

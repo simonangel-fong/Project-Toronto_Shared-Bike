@@ -22,21 +22,11 @@ services:
     ports:
       - 1521:1521
     healthcheck:
-      test:
-        [
-          "CMD",
-          "sqlplus",
-          "-S",
-          "sys/${ORACLE_PWD}@${ORACLE_SID}",
-          "as",
-          "sysdba",
-          "<<<",
-          "exit",
-        ]
+      test: CMD-SHELL /project/scripts/healthcheck.sh
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 5m
+      retries: 30
+      start_period: 2m
 
 volumes:
   oracledata:

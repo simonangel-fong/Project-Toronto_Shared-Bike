@@ -8,9 +8,9 @@
 -- Notes       : Ensure that the external file is accessible through the directory `dir_target`
 -- ============================================================================
 
-SET SERVEROUTPUT ON SIZE 1000000;
-SET FEEDBACK ON;
-SET VERIFY OFF;
+-- Output from the DBMS_OUTPUT to standard output
+SET SERVEROUTPUT ON;
+-- Allow blank lines 
 SET SQLBLANKLINES ON;
 
 -- Switch to the Toronto Shared Bike PDB
@@ -32,7 +32,6 @@ SELECT *
 FROM dw_schema.external_ridership
 FETCH FIRST 2 ROWS ONLY;
 
-
 -- ============================================================================
 -- Truncate the staging table before loading new data
 -- ============================================================================
@@ -41,11 +40,6 @@ TRUNCATE TABLE dw_schema.staging_trip;
 -- ============================================================================
 -- Extract data from the external table to the staging table
 -- ============================================================================
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Start extracting data from the external table to the staging table.');
-END;
-/
 
 INSERT /*+ APPEND */ INTO dw_schema.staging_trip
 SELECT *

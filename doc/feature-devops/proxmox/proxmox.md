@@ -94,6 +94,15 @@ iptables -t nat -A PREROUTING -d 192.168.1.80 -p tcp --dport 8080 -j DNAT --to-d
 iptables -A FORWARD -p tcp -d 192.168.10.254 --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 
 netfilter-persistent save
+
+# pfSense??try
+# Forward incoming traffic on WIFI aadress 192.168.1.80:8080 to pfSense WAN addresss 192.168.10.100:8080
+iptables -t nat -A PREROUTING -d 192.168.1.80 -p tcp --dport 1194 -j DNAT --to-destination 192.168.10.254:1194
+
+# Allow forwarding from the source network to the target machine
+iptables -A FORWARD -p tcp -d 192.168.10.254 --dport 1194 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+
+netfilter-persistent save
 ```
 
 ---
