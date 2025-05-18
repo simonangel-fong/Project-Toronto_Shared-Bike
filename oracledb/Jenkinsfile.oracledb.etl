@@ -61,10 +61,11 @@ pipeline {
     stage('Check Oracle Container Health') {
         steps {
             script {
-                def maxRetries = 5
-                def sleepDuration = 60 // seconds
+                def maxTry = 10
+                def sleepInterval = 60 // 60s
 
-                for (int i = 1; i <= maxRetries; i++) {
+                // loop for 10 * 60 = 10 min
+                for (int i = 1; i <= maxTry; i++) {
                     def status = sh(
                         script: "docker inspect --format='{{.State.Health.Status}}' ${ORACLE_CON}",
                         returnStdout: true
@@ -74,8 +75,8 @@ pipeline {
                         echo "Oracle container is healthy."
                         break
                     } else {
-                        echo "Oracle container health check failed (attempt ${i}/${maxRetries}). Sleeping for ${sleepDuration} seconds..."
-                        sleep time: sleepDuration, unit: 'SECONDS'
+                        echo "Oracle container health check failed (attempt ${i}/${maxRetries}). Sleeping for ${sleepInterval} seconds..."
+                        sleep time: sleepInterval, unit: 'SECONDS'
                     }
 
                     if (i == maxRetries) {
