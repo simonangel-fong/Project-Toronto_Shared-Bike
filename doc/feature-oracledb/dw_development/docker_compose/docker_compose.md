@@ -227,3 +227,15 @@ RESTORE DATABASE;
 RECOVER DATABASE NOREDO;
 ALTER DATABASE OPEN RESETLOGS;
 ```
+
+
+---
+
+health check
+
+```sh
+sqlplus -s / as sysdba <<EOF
+SELECT open_mode FROM v\$pdbs WHERE name = 'TORONTO_SHARED_BIKE';
+EXIT
+EOF
+```
