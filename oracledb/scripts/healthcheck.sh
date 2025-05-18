@@ -14,7 +14,7 @@ EOF
 
 echo $RETVAL
 
-if [ "${RETVAL}" = "READ WRITE" ]; then; then
+if [ "${RETVAL}" = "READ WRITE" ]; then;
   echo "Toronto_shared_bike pdb is opened."
   exit 0
 else
