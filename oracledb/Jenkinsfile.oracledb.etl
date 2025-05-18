@@ -75,12 +75,12 @@ pipeline {
                             echo "Oracle container is healthy."
                             break
                         } else {
-                            echo "Oracle container health check failed (attempt ${i}/${maxRetries}). Sleeping for ${sleepInterval} seconds..."
+                            echo "Oracle container health check failed (attempt ${i}/${maxTry}). Sleeping for ${sleepInterval} seconds..."
                             sleep time: sleepInterval, unit: 'SECONDS'
                         }
 
-                        if (i == maxRetries) {
-                            error "Oracle container did not become healthy after ${maxRetries} attempts."
+                        if (i == maxTry) {
+                            error "Oracle container did not become healthy after ${maxTry} attempts."
                         }
                     }
                 }
