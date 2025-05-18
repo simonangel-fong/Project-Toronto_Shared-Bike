@@ -37,7 +37,7 @@ echo "###########################################"
 echo "Extract data for year $YEAR.            "
 echo "###########################################"
 
-sqlplus -s / as sysdba <<EOF
+sqlplus / as sysdba <<EOF
 @/project/scripts/etl/etl_extract.sql
 exit
 EOF
@@ -50,7 +50,7 @@ echo "###########################################"
 echo "Transform data for year $YEAR.          "
 echo "###########################################"
 
-sqlplus -s / as sysdba <<EOF
+sqlplus / as sysdba <<EOF
 @/project/scripts/etl/etl_transform.sql
 exit
 EOF
@@ -63,7 +63,7 @@ echo "###########################################"
 echo "Load data for year $YEAR.               "
 echo "###########################################"
 
-sqlplus -s / as sysdba <<EOF
+sqlplus / as sysdba <<EOF
 @/project/scripts/etl/etl_load.sql
 exit
 EOF
