@@ -3,7 +3,13 @@ pipeline {
     agent any
 
     environment {
+        GITHUB_DIR="/project/github"
+
+        GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"
+        GIT_BRANCH="feature-devops"
+
         CLOUDFLARE_COMPOSE_FILE="/project/github/cloudflare/compose.cloudflare.prod.yaml"
+        ORACLE_CON="oracle19cDB"
     }
 
     stages {

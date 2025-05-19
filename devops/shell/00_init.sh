@@ -1,6 +1,6 @@
-#!/bin/bansh
+#!/bin/bash
 
-# run as root
+# run as aadmin
 
 echo
 echo "========================================================"
@@ -63,14 +63,22 @@ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 
 sudo systemctl enable --now docker
 
-# as common user
-# enable current user to run docker
-sudo usermod -aG docker $USER
-sudo chown root:docker /var/run/docker.sock
-sudo chmod 666 /var/run/docker.sock
+echo
+echo "========================================================"
+echo "Granting docker permission"
+echo "========================================================"
+echo
 
-# as common user
-# confirm as current user
+# set permission to run docker
+sudo chown root:docker /var/run/docker.sock
+sudo chmod 660 /var/run/docker.sock
+
+# add jenkins and aadmin to docker group
+sudo usermod -aG docker jenkins
+sudo usermod -aG docker $USER
+
+# as aadmin
+# confirm as aadmin
 echo "Current user as: $USER"
 su - $USER -c "docker run hello-world"
 

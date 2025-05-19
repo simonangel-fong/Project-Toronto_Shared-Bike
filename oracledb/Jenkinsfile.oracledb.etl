@@ -15,7 +15,7 @@ pipeline {
 
         ETL_SINGLE_YEAR_SCRIPT="/project/scripts/etl/single_year_etl_job.sh"
         ETL_MULTIPLE_YEAR_SCRIPT="/project/scripts/etl/multiple_year_etl_job.sh"
-        ETL_START_YEAR="2019"
+        ETL_START_YEAR="2019"  // update for single year etl
         ETL_END_YEAR="2023"
 
         MV_REFRESH_SCRIPT='/project/scripts/mv/mv_refresh.sh'
@@ -93,8 +93,8 @@ pipeline {
                 // enable permission
                 sh 'sudo chmod 0777 -R ${DATA_DIR}'
 
-                // sh 'docker exec ${ORACLE_CON} bash ${ETL_SINGLE_YEAR_SCRIPT} ${ETL_START_YEAR}'
-                sh 'docker exec ${ORACLE_CON} bash ${ETL_MULTIPLE_YEAR_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
+                sh 'docker exec ${ORACLE_CON} bash ${ETL_SINGLE_YEAR_SCRIPT} ${ETL_START_YEAR}'
+                // sh 'docker exec ${ORACLE_CON} bash ${ETL_MULTIPLE_YEAR_SCRIPT} ${ETL_START_YEAR} ${ETL_END_YEAR}'
             }
         }
 
