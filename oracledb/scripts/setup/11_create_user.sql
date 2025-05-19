@@ -33,7 +33,7 @@ GRANT create session, apiUserRole TO apiApp;
 -- Create the API user with a secure password
 CREATE USER dataAnalyst IDENTIFIED BY "SecurePassword!23";
 -- Grant session creation and the API role to the user
-GRANT create session, apiUserRole TO dataAnalyst;
+GRANT create session, apiUserRole, dataAnalysis TO dataAnalyst;
 
 -- ========================================================
 -- Confirm
