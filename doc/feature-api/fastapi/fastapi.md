@@ -50,9 +50,9 @@ docker compose -f compose.fastapi.dev.yaml down
 ## Test
 
 ```sh
-https://trip-dev.arguswatcher.net/user-segmentation/
-https://trip-dev.arguswatcher.net/time-trip/
-https://trip-dev.arguswatcher.net/station-trip/
-https://trip-dev.arguswatcher.net/station-route/
-https://trip-dev.arguswatcher.net/bike-trip-duration/
+https://trip-dev.arguswatcher.net/user/
+https://trip-dev.arguswatcher.net/trip-time/
+https://trip-dev.arguswatcher.net/trip-station/
+https://trip-dev.arguswatcher.net/route/
+https://trip-dev.arguswatcher.net/duration/
 ```
