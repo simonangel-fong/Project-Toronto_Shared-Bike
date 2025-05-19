@@ -33,7 +33,7 @@ services:
     ports:
       - 1521:1521
     healthcheck:
-      test: CMD-SHELL /project/scripts/healthcheck.sh
+      test: ["CMD-SHELL", "/project/scripts/healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 30
@@ -48,4 +48,3 @@ networks:
   private-net:
     driver: bridge
     internal: true
-
