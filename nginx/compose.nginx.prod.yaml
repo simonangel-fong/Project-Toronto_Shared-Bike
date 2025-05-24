@@ -20,6 +20,3 @@ services:
 networks:
   public-net:
     driver: bridge
-  # private-net:
-  #   driver: bridge
-  #   internal: true

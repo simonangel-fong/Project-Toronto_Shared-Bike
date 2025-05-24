@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     image: cloudflare/cloudflared:latest
     env_file:
-      - /project/env/cloudflare.env
+      - /project/config/cloudflare.env
     command: tunnel run
     networks:
       - public-net
@@ -19,6 +19,3 @@ services:
 networks:
   public-net:
     driver: bridge
-  # private-net:
-  #   driver: bridge
-  #   internal: true

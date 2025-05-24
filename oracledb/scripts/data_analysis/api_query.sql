@@ -58,4 +58,6 @@ TRUNCATE TABLE dw_schema.dim_station;
 TRUNCATE TABLE dw_schema.dim_bike;
 TRUNCATE TABLE dw_schema.dim_user_type;
 
+commit;
+
 

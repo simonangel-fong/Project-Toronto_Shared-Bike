@@ -5,12 +5,10 @@
 - [Toronto Shared Bike Data Analysis: Data Warehouse - Materialized Design](#toronto-shared-bike-data-analysis-data-warehouse---materialized-design)
   - [Materialized Design](#materialized-design)
     - [General](#general)
-  - [KPI: Trip Volume Trends](#kpi-trip-volume-trends)
-    - [KPI: Trip Duration Metrics](#kpi-trip-duration-metrics)
-    - [KPI: Station Usage](#kpi-station-usage)
-    - [KPI: Route Popularity](#kpi-route-popularity)
-    - [KPI: Bike Utilization Rate](#kpi-bike-utilization-rate)
-    - [KPI: User Segmentation](#kpi-user-segmentation)
+  - [KPI: Trip Trends](#kpi-trip-trends)
+    - [KPI: Duration Trends](#kpi-duration-trends)
+    - [KPI: Station Usage Trend](#kpi-station-usage-trend)
+    - [KPI: User Type Trend](#kpi-user-type-trend)
 
 ---
 
@@ -25,54 +23,47 @@
 
 - **Schema**:
 
-  - `DW_SCHEMA`
+  - `dw_schema`
 
 - KPIs in the design require materialized views to improve query performance.
 
 ---
 
-## KPI: Trip Volume Trends
+## KPI: Trip Trends
 
 - **Goal**:
 
   - Precompute the total number of trips to analyze temporal usage patterns across the bike-sharing system.
 
-- **View Structure**: `MV_TIME_TRIP`
+- **View Structure**: `MV_TRIP_TIME`
 
-| Column        | Granularity | Description               |
-| ------------- | ----------- | ------------------------- |
-| `trip_count`  | -           | Total trip volume         |
-| `dim_year`    | Year        | Long-term annual trends   |
-| `dim_quarter` | Quarter     | Seasonal quarterly trends |
-| `dim_month`   | Month       | Monthly usage patterns    |
-| `dim_day`     | Day         | Daily trip fluctuations   |
-| `dim_week`    | Week        | Weekly cycle trends       |
-| `dim_weekday` | Weekday     | Weekday-specific trends   |
-| `dim_hour`    | Hour        | Hourly peak trends        |
+| Column       | Granularity | Description             |
+| ------------ | ----------- | ----------------------- |
+| `trip_count` | -           | Total trip volume       |
+| `dim_year`   | Year        | Long-term annual trends |
+| `dim_month`  | Month       | Monthly usage patterns  |
+| `dim_hour`   | Hour        | Hourly peak trends      |
 
 - Source query:
 
 ```sql
 SELECT
-    COUNT(*) AS trip_count,              -- Total trip volume
-    t.dim_time_year AS dim_year,         -- Year (e.g., 2025)
-    t.dim_time_quarter AS dim_quarter,   -- Quarter (1-4)
-    t.dim_time_month AS dim_month,       -- Month (1-12)
-    t.dim_time_day AS dim_day,           -- Day (1-31)
-    t.dim_time_week AS dim_week,         -- Week (1-53, ISO)
-    t.dim_time_weekday AS dim_weekday,   -- Weekday (1-7)
-    t.dim_time_hour AS dim_hour          -- Hour (0-23)
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_time t
-    ON f.fact_trip_start_time_id = t.dim_time_id
+  COUNT(*)            AS  trip_count    -- Measure： Total trip volume
+  , t.dim_time_year   AS  dim_year      -- Dimension: Year (e.g., 2025)
+  , t.dim_time_month  AS  dim_month     -- Dimension: Month (1-12)
+  , t.dim_time_hour   AS  dim_hour      -- Dimension: Hour (0-23)
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_time t
+  ON f.fact_trip_start_time_id = t.dim_time_id
 GROUP BY
-    t.dim_time_year,
-    t.dim_time_quarter,
-    t.dim_time_month,
-    t.dim_time_day,
-    t.dim_time_week,
-    t.dim_time_weekday,
-    t.dim_time_hour;
+  t.dim_time_year
+  , t.dim_time_month
+  , t.dim_time_hour
+ORDER BY
+  t.dim_time_year
+  , t.dim_time_month
+  , t.dim_time_hour;
+
 ```
 
 - **Refresh Strategy**:
@@ -83,7 +74,7 @@ GROUP BY
 - **Tablespace**
   - `MV_TBSP`
 - **Schema**
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**
   - `dim_year`
   - for Yearly query optimization.
@@ -98,46 +89,38 @@ GROUP BY
 
 ---
 
-### KPI: Trip Duration Metrics
+### KPI: Duration Trends
 
 - **Goal**:
   - Precompute the mean trip duration to analyze temporal usage patterns across the bike-sharing system.
-- **View Structure**: `MV_TIME_DURATION`
+- **View Structure**: `MV_DURATION_TIME`
 
-| Column              | Granularity | Description                  |
-| ------------------- | ----------- | ---------------------------- |
-| `avg_trip_duration` | -           | Mean trip duration (seconds) |
-| `dim_year`          | Year        | Long-term annual trends      |
-| `dim_quarter`       | Quarter     | Seasonal quarterly trends    |
-| `dim_month`         | Month       | Monthly usage patterns       |
-| `dim_day`           | Day         | Daily duration fluctuations  |
-| `dim_week`          | Week        | Weekly cycle trends          |
-| `dim_weekday`       | Weekday     | Weekday-specific trends      |
-| `dim_hour`          | Hour        | Hourly duration trends       |
+| Column         | Granularity | Description                  |
+| -------------- | ----------- | ---------------------------- |
+| `duration_avg` | -           | Mean trip duration (seconds) |
+| `dim_year`     | Year        | Long-term annual trends      |
+| `dim_month`    | Month       | Monthly usage patterns       |
+| `dim_hour`     | Hour        | Hourly duration trends       |
 
 - Source Query:
 
 ```sql
 SELECT
-    ROUND(AVG(f.fact_trip_duration),2) AS avg_trip_duration,  -- Mean trip duration (seconds)
-    t.dim_time_year AS dim_year,                     -- Year (e.g., 2025)
-    t.dim_time_quarter AS dim_quarter,               -- Quarter (1-4)
-    t.dim_time_month AS dim_month,                   -- Month (1-12)
-    t.dim_time_day AS dim_day,                       -- Day (1-31)
-    t.dim_time_week AS dim_week,                     -- Week (1-53, ISO)
-    t.dim_time_weekday AS dim_weekday,               -- Weekday (1-7)
-    t.dim_time_hour AS dim_hour                      -- Hour (0-23)
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_time t
-    ON f.fact_trip_start_time_id = t.dim_time_id
+  ROUND(AVG(f.fact_trip_duration),2)  AS  avg_trip_duration   -- Measure：Mean trip duration (seconds)
+  , t.dim_time_year                   AS  dim_year            -- Dimension: Year (e.g., 2025)
+  , t.dim_time_month                  AS  dim_month           -- Dimension: Month (1-12)
+  , t.dim_time_hour                   AS  dim_hour            -- Dimension: Hour (0-23)
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_time t
+  ON f.fact_trip_start_time_id = t.dim_time_id
 GROUP BY
-    t.dim_time_year,
-    t.dim_time_quarter,
-    t.dim_time_month,
-    t.dim_time_day,
-    t.dim_time_week,
-    t.dim_time_weekday,
-    t.dim_time_hour;
+  t.dim_time_year
+  , t.dim_time_month
+  , t.dim_time_hour
+ORDER BY
+  t.dim_time_year
+  , t.dim_time_month
+  , t.dim_time_hour;
 ```
 
 - **Refresh Strategy**:
@@ -148,7 +131,7 @@ GROUP BY
 - **Tablespace**:
   - `MV_TBSP`
 - **Schema**:
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**:
   - `dim_year`
   - optimizes yearly query performance and scalability.
@@ -163,35 +146,42 @@ GROUP BY
 
 ---
 
-### KPI: Station Usage
+### KPI: Station Usage Trend
 
 - **Goal**:
 
   - Precompute trip counts per station to identify the most and least busy stations in the bike-sharing system.
 
-- **View Structure**: `MV_STATION_TRIP`
+- **View Structure**: `MV_TRIP_STATION`
 
-| Column              | Description                |
-| ------------------- | -------------------------- |
-| station_id          | Unique station identifier  |
-| station_name        | Station name for reporting |
-| trip_count_by_start | Trips starting at station  |
-| trip_count_by_end   | Trips ending at station    |
+| Column       | Description                |
+| ------------ | -------------------------- |
+| trip_count   | Trips starting at station  |
+| dim_year     | Annual trends              |
+| station_id   | Unique station identifier  |
+| station_name | Station name for reporting |
 
 - **Source Query**:
 
 ```sql
 SELECT
-    s.dim_station_id AS station_id,                  -- Unique station identifier
-    s.dim_station_name AS station_name,              -- Station name for reporting
-    COUNT(CASE WHEN f.fact_trip_start_station_id = s.dim_station_id THEN 1 END) AS trip_count_by_start,  -- Trips starting at station
-    COUNT(CASE WHEN f.fact_trip_end_station_id = s.dim_station_id THEN 1 END) AS trip_count_by_end       -- Trips ending at station
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_station s
-    ON s.dim_station_id IN (f.fact_trip_start_station_id, f.fact_trip_end_station_id)
+  COUNT(*)              AS  trip_count_by_start   -- Measure: Trips count
+  , s.dim_station_id    AS  station_id            -- Dimension: station id
+  , s.dim_station_name  AS  station_name          -- Dimension: station name
+  , t.dim_time_year     AS  dim_year              -- Dimension: Year (e.g., 2025)
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_station s
+  ON f.fact_trip_start_station_id = s.dim_station_id
+JOIN dw_schema.dim_time t
+  ON f.fact_trip_start_time_id = t.dim_time_id
 GROUP BY
-    s.dim_station_id,
-    s.dim_station_name;
+  s.dim_station_id
+  , s.dim_station_name
+  , t.dim_time_year
+ORDER BY
+  t.dim_time_year ASC
+  , COUNT(*) DESC
+  , s.dim_station_name;
 ```
 
 - **Refresh Strategy**:
@@ -200,7 +190,7 @@ GROUP BY
 - **Tablespace**:
   - `MV_TBSP`
 - **Schema**:
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**:
   - None
 - **Indexing**:
@@ -208,6 +198,7 @@ GROUP BY
 
 ---
 
+<!--
 ### KPI: Route Popularity
 
 - **Goal**:
@@ -231,10 +222,10 @@ SELECT
     s_end.dim_station_id AS end_station_id,             -- Ending station identifier
     s_end.dim_station_name AS end_station_name,         -- Ending station name
     COUNT(*) AS trip_count                              -- Number of trips on route
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_station s_start
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_station s_start
     ON f.fact_trip_start_station_id = s_start.dim_station_id
-JOIN DW_SCHEMA.dim_station s_end
+JOIN dw_schema.dim_station s_end
     ON f.fact_trip_end_station_id = s_end.dim_station_id
 GROUP BY
     s_start.dim_station_id,
@@ -249,7 +240,7 @@ GROUP BY
 - **Tablespace**:
   - `MV_TBSP`
 - **Schema**:
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**:
   - None
 - **Indexing**:
@@ -278,8 +269,8 @@ SELECT
     b.dim_bike_id AS bike_id,                    -- Unique bike identifier
     COUNT(*) AS trip_count,                      -- Total trips per bike
     ROUND(AVG(f.fact_trip_duration),2) AS avg_trip_duration  -- Mean trip duration (seconds)
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_bike b
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_bike b
     ON f.fact_trip_bike_id = b.dim_bike_id
 GROUP BY
     b.dim_bike_id;
@@ -291,48 +282,52 @@ GROUP BY
 - **Tablespace**:
   - `MV_TBSP`
 - **Schema**:
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**:
   - None
 - **Indexing**:
-  - None
+  - None -->
 
 ---
 
-### KPI: User Segmentation
+### KPI: User Type Trend
 
 - **Goal**:
 
   - Precompute total trips and mean duration by user type to evaluate user segmentation in the bike-sharing system.
 
-- **View Structure**: `MV_USER_SEGMENTATION`
+- **View Structure**: `MV_USER_TYPE`
 
-| Column              | Description                           |
-| ------------------- | ------------------------------------- |
-| `user_type_id`      | Unique user type identifier           |
-| `user_type_name`    | User type name (e.g., Casual, Member) |
-| `year`              | Year of trips (e.g., 2025)            |
-| `trip_count`        | Total trips per user type             |
-| `avg_trip_duration` | Mean trip duration (seconds)          |
+| Column           | Description                           |
+| ---------------- | ------------------------------------- |
+| `trip_count`     | Total trips per user type             |
+| `duration_avg`   | Mean trip duration (seconds)          |
+| `dim_year`       | Year of trips (e.g., 2025)            |
+| `user_type_id`   | Unique user type identifier           |
+| `user_type_name` | User type name (e.g., Casual, Member) |
 
 - **Source Query**:
 
 ```sql
 SELECT
-    u.dim_user_type_id AS user_type_id,           -- Unique user type identifier
-    u.dim_user_type_name AS user_type_name,       -- User type name (e.g., Casual, Member)
-    t.dim_time_year AS year,                      -- Year of trips (e.g., 2025)
-    COUNT(*) AS trip_count,                       -- Total trips per user type and year
-    AVG(f.fact_trip_duration) AS avg_trip_duration  -- Mean trip duration (seconds)
-FROM DW_SCHEMA.fact_trip f
-JOIN DW_SCHEMA.dim_user_type u
-    ON f.fact_trip_user_type_id = u.dim_user_type_id
-JOIN DW_SCHEMA.dim_time t
-    ON f.fact_trip_start_time_id = t.dim_time_id
+  COUNT(*)                              AS  trip_count      -- Measure: Total trips per user type and year
+  , ROUNG(AVG(f.fact_trip_duration),2)  AS  duration_avg    -- Measure: Mean trip duration (seconds)
+  , t.dim_time_year                     AS  dim_year        -- Dimension: Year of trips (e.g., 2025)
+  , u.dim_user_type_id                  AS  user_type_id    -- Dimension: Unique user type identifier
+  , u.dim_user_type_name                AS  user_type_name  -- Dimension: User type name (e.g., Casual, Member)
+FROM dw_schema.fact_trip f
+JOIN dw_schema.dim_user_type u
+  ON f.fact_trip_user_type_id = u.dim_user_type_id
+JOIN dw_schema.dim_time t
+  ON f.fact_trip_start_time_id = t.dim_time_id
 GROUP BY
-    u.dim_user_type_id,
-    u.dim_user_type_name,
-    t.dim_time_year;
+  t.dim_time_year
+  , u.dim_user_type_id
+  , u.dim_user_type_name
+ORDER BY
+  t.dim_time_year
+  , u.dim_user_type_id
+  , u.dim_user_type_name;
 ```
 
 - **Refresh Strategy**:
@@ -343,7 +338,7 @@ GROUP BY
 - **Tablespace**:
   - `MV_TBSP`
 - **Schema**:
-  - `DW_SCHEMA`
+  - `dw_schema`
 - **Partitioning**:
   - None
 - **Indexing**:

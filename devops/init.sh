@@ -162,6 +162,9 @@ echo "Cloning GitHub repository..."
 echo "========================================================"
 echo
 
+sudo rm -rf $GITHUB_DIR
+sudo mkdir -pv $GITHUB_DIR
+
 sudo git config --global --add safe.directory "${GITHUB_DIR}"
 sudo git clone --branch "${GIT_BRANCH}" "${GIT_REPO_URL}" "${GITHUB_DIR}"
 
@@ -185,7 +188,7 @@ echo "Starting up oracle container..."
 echo "========================================================"
 echo
 
-su - $APP_ADMIN -c 'docker compose -f /project/github/oracledb/compose.oracledb.prod.yaml up --build -d'
+su - $APP_ADMIN -c "docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d"
 
 echo
 echo "========================================================"

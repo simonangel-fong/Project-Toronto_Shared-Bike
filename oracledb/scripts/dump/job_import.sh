@@ -4,15 +4,19 @@ ORCL_PDB="toronto_shared_bike"
 ORCL_USER="dataEngineer"
 ORCL_DPUMP_PATH="/project/dpump"
 ORCL_DPUMP_DIR="dpump_dir"
-ORCL_DPUMP_FILE="dw_export.dmp"
-ORCL_DPUMP_LOGFILE="dw_import.log"
-ORCL_DPUMP_TABLES="
+
+ORCL_DPUMP_DIM_FILE="dw_export_dim.dmp"
+ORCL_DPUMP_DIM_LOGFILE="dw_import_dim.log"
+ORCL_DPUMP_DIM_TABLES="
     dw_schema.dim_time          \
     , dw_schema.dim_station     \
     , dw_schema.dim_bike        \
-    , dw_schema.dim_user_type   \
+    , dw_schema.dim_user_type
 "
-# , dw_schema.fact_trip
+
+ORCL_DPUMP_FACT_FILE="dw_export_fact.dmp"
+ORCL_DPUMP_FACT_LOGFILE="dw_import_fact.log"
+ORCL_DPUMP_FACT_TABLES="dw_schema.fact_trip"
 
 set -e # Exit on any error
 
@@ -37,12 +41,21 @@ EOF
     # Clean up old exports
     rm -f ${ORCL_DPUMP_PATH}/dw_import*.log
 
-    # Run data pump export
+    # Run data pump import for dim
     impdp ${ORCL_USER}/'SecurePassword!23'@${ORCL_PDB} \
-        tables=${ORCL_DPUMP_TABLES} \
-        directory=${ORCL_DPUMP_DIR} \
-        dumpfile=${ORCL_DPUMP_FILE} \
-        logfile=${ORCL_DPUMP_LOGFILE} \
+        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y \
+        tables=${ORCL_DPUMP_DIM_TABLES}     \
+        directory=${ORCL_DPUMP_DIR}         \
+        dumpfile=${ORCL_DPUMP_DIM_FILE}     \
+        logfile=${ORCL_DPUMP_DIM_LOGFILE}   \
         content=data_only
 
+    # Run data pump import for fact
+    impdp ${ORCL_USER}/'SecurePassword!23'@${ORCL_PDB} \
+        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y     \
+        tables=${ORCL_DPUMP_FACT_TABLES}        \
+        directory=${ORCL_DPUMP_DIR}             \
+        dumpfile=${ORCL_DPUMP_FACT_FILE}        \
+        logfile=${ORCL_DPUMP_FACT_LOGFILE}      \
+        content=data_only
 fi
