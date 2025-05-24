@@ -14,12 +14,17 @@
 - Migrate init shell script and config files
 
 ```sh
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/00_init.sh ./project/config ./project/env rheladmin@192.168.100.108:~
 ```
 
 - Execute init shell script
 
 ```sh
+ssh -J root@192.168.1.80 rheladmin@192.168.100.100
+
+useradd aadmin
+password aadmin
+
 # run as aadmin
 bash /home/aadmin/00_init.sh
 ```

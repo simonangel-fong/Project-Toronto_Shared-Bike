@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 # Set the backup path
-BACKUP_PATH="/project/orabackup"
+BACKUP_PATH="/opt/oracle/fast_recovery_area"
 
 # Check if the backup directory exists
 if [ ! -d "$BACKUP_PATH" ]; then

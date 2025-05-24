@@ -19,18 +19,20 @@
 
 ## SQL Script Catalog
 
-| Script Name                   | Description                                                                |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `01_enable_archivelog.sql`    | Enable archivelog.                                                         |
-| `02_enable_32k_blocksize.sql` | Enable 32K block size for fact table tablespace (requires SPFILE restart). |
-| `03_create_pdb.sql`           | Create a pluggable database (PDB) for the project.                         |
-| `04_create_tbsp.sql`          | Create tablespaces including a 32K tablespace for fact tables.             |
-| `05_create_schema.sql`        | Create application schemas and grant necessary privileges.                 |
-| `06_create_dw.sql`            | Create dimension and fact tables for the data warehouse (star schema).     |
-| `07_create_etl.sql`           | Create staging tables and control tables for ELT process.                  |
-| `08_create_etl_procedure.sql` | Create a procedure for ELT process.                                        |
-| `09_create_mv.sql`            | Create materialized views for aggregated and pre-computed data.            |
-| `10_create_user.sql`          | Create users (e.g., developer, analyst) and assign roles.                  |
+| Step                                       | Script Name                   |
+| ------------------------------------------ | ----------------------------- |
+| Enable Archivelog                          | `01_enable_archivelog.sql`    |
+| Enable 32K block size for large fact table | `02_enable_32k_blocksize.sql` |
+| Create Tablespace                          | `03_create_tbsp.sql`          |
+| Create Data Warehouse Schema               | `04_create_schema.sql`        |
+| Create Data Warehouse Tables               | `05_create_dw.sql`            |
+| Create ETL Pipeline                        | `06_create_etl.sql`           |
+| Create Procedure to update dir path        | `07_create_etl_procedure.sql` |
+| Create Materialized View                   | `08_create_mv.sql`            |
+| Create Roles                               | `09_create_role.sql`          |
+| Create User                                | `10_create_user.sql`          |
+| Configure RMAN for backup                  | `11_configure_rman.sh`        |
+| Backup the new database                    | `12_init_backup.sh`           |
 
 ---
 

@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 # Check if backup directory exists
-BACKUP_PATH="/project/orabackup"
+BACKUP_PATH="/opt/oracle/fast_recovery_area"
 
 if [ ! -d "$BACKUP_PATH" ]; then
   echo "########################################################"

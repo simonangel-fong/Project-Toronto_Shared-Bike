@@ -38,6 +38,7 @@ def get_settings():
         settings = Settings()
         print(settings.ORCLDB_HOST)
         logger.info("Settings loaded successfully.")
+        print("Settings loaded successfully.")
         return settings
     except Exception as e:  # Broad exception catch for simplicity; refine as needed
         logger.error(f"Failed to load settings: {str(e)}")

@@ -110,6 +110,8 @@ netfilter-persistent save
 ### LVM
 
 ```sh
+ssh -J root@192.168.1.80 aadmin@192.168.100.100
+
 lsblk
 
 fdisk -l
@@ -119,6 +121,11 @@ fdisk /dev/sdb
 # 1: partition number
 # Press Enter to accept default first/last sector
 # w: write and exit
+
+# mount swap
+mkswap /dev/sdb1
+echo "UUID=uuid_number swap    swap    pri=1   0   0" >> /etc/fstab
+
 
 # Create a Physical Volume on the New Disk
 sudo pvcreate /dev/sdb1

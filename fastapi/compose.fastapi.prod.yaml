@@ -12,7 +12,7 @@ services:
       context: ./app/
       dockerfile: Dockerfile
     env_file:
-      - /project/env/fastapi.env
+      - /project/config/fastapi.env
     # ports:
     #   - "8080:8000"  # dev: expose localhost:8080
     networks:

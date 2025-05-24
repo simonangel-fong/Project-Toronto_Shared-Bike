@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 06_create_dw.sql
+-- Script Name : create_dw.sql
 -- Purpose     : Create dimension and fact tables for the Toronto Shared Bike Data Warehouse
 -- Author      : Wenhao Fang
 -- Date        : 2025-05-07
@@ -225,7 +225,7 @@ SELECT
     , owner
     , tablespace_name
 FROM DBA_TABLES
-WHERE owner = 'dw_schema';
+WHERE owner = 'DW_SCHEMA';
 
 SELECT 
     index_name
@@ -235,4 +235,4 @@ SELECT
     , constraint_index
     , owner
 FROM dba_indexes
-WHERE owner = 'dw_schema';
+WHERE owner = 'DW_SCHEMA';

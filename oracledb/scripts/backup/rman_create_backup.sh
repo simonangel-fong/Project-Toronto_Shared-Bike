@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 # Set the backup path
-BACKUP_PATH="/project/orabackup"
+BACKUP_PATH="/opt/oracle/fast_recovery_area"
 
 # Check if the backup directory exists
 if [ ! -d "$BACKUP_PATH" ]; then
@@ -42,15 +42,15 @@ RUN {
 
   # Perform full database backup with control file
   BACKUP AS BACKUPSET DATABASE
-    FORMAT '$BACKUP_PATH/db_%U.bkp'
+    FORMAT '$BACKUP_PATH/data_%T_D-%d_id-%I_FNO-%f_%u.bkp'
     INCLUDE CURRENT CONTROLFILE
-    TAG 'FULL_DB_BACKUP';
+    TAG 'FULL_BACKUP_$TAG_NAME';
 
   # Backup archivelogs and delete them after backup
   BACKUP ARCHIVELOG ALL
-    FORMAT '$BACKUP_PATH/arch_%U.bkp'
+    FORMAT '$BACKUP_PATH/arch_%T_D_%d_id-%I_S-%e_T-%h_A-%a_%u.bkp'
     DELETE INPUT
-    TAG 'ARCHIVELOG_BACKUP';
+    TAG 'ARCHIVELOG_BACKUP_$TAG_NAME';
 
   # Release channels
   RELEASE CHANNEL ch1;

@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 05_create_schema.sql
+-- Script Name : create_schema.sql
 -- Purpose     : Create a dedicated schema (DW_SCHEMA) in the Toronto Shared Bike PDB
 --               and assign necessary privileges and quotas
 -- Author      : Wenhao Fang
@@ -30,6 +30,7 @@ QUOTA UNLIMITED ON STAGING_TBSP
 QUOTA UNLIMITED ON MV_TBSP;
 
 -- Grant necessary privileges to DW_SCHEMA
+GRANT CONNECT TO DW_SCHEMA;
 GRANT CREATE TABLE TO DW_SCHEMA;
 GRANT CREATE MATERIALIZED VIEW TO DW_SCHEMA;
 
@@ -43,7 +44,3 @@ SELECT
 FROM DBA_USERS
 WHERE default_tablespace = UPPER('fact_tbsp');
 
--- privileges
-SELECT GRANTEE, OWNER, GRANTOR, PRIVILEGE, GRANTABLE
-FROM DBA_TAB_PRIVS 
-WHERE TABLE_NAME = 'EMPLOYEES' and OWNER = 'HR';

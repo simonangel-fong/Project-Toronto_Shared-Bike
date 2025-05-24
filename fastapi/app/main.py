@@ -1,288 +1,193 @@
-import logging
-from typing import List, Optional
-from fastapi import FastAPI, Depends, Query, HTTPException
+from datetime import datetime
+from typing import Annotated, Optional
+from fastapi import FastAPI, HTTPException, Depends, Query,  Request, status
+from fastapi.responses import JSONResponse
+from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+import database, database_models
 
-# from .config.logging_file import configure_logging_from_env
-from config.database import get_db
-from config.exceptions import DatabaseError
-from models.MVUserSegmentation import MVUserSegmentation, UserSegmentationResponse
-from models.MVBikeTripDuration import MVBikeTripDuration, BikeTripDurationResponse
-from models.MVStationRoute import MVStationRoute, StationRouteResponse
-from models.MVStationTrip import MVStationTrip, StationTripResponse
-from models.MVTimeTrip import MVTimeTrip, TimeTripResponse
+CREATOR = "Wenhao Fang"
 
-# Configure logging at startup
-# configure_logging_from_env()
-
-app = FastAPI(title="Toronto_Shared_Bike")
-
-logger = logging.getLogger(__name__)
-
-logger.info("Application starting up...")
-
-
-@app.get(
-    "/user-segmentation/",
-    response_model=List[UserSegmentationResponse],
-    tags=["User Segmentation"],
-    summary="Retrieve user segmentation data",
+app = FastAPI(
+    title="Toronto Shared Bike Data Analysis Project",
+    description="",
+    version="0.1.0"
 )
-# get the user segmentation
-def get_user_segmentation(
-    db: Session = Depends(get_db),
-    limit: Optional[int] = Query(
-        None, ge=1, le=1000, description="Maximum number of records to return"),
-) -> List[UserSegmentationResponse]:
-    """
-    Fetch user segmentation data from the materialized view.
 
-    Args:
-        db: SQLAlchemy session provided by dependency injection.
-        limit: Maximum number of records to return (default: 100, max: 1000).
 
-    Returns:
-        List of user segmentation records.
+@app.get("/")
+async def get_root_with_db():
+    return {
+        "title": "Toronto Shared Bike Data Analysis Project",
+        "creater": CREATOR,
+        "datetime": datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    Raises:
-        HTTPException: If a database error occurs (status code 503).
-    """
-    logger.info(
-        f"Fetching user segmentation data with limit={limit}")
+    }
+
+
+@app.get("/user")
+async def get_user(
+    db: Annotated[Session, Depends(database.get_db)],
+    user: Optional[int] = Query(None, description="Filter by user type ID"),
+    year: Optional[int] = Query(None, description="Filter by year")
+):
     try:
-        query = db.query(MVUserSegmentation)
-        result = query.limit(limit).all()
+        query = db.query(database_models.User)
 
-        # if success then log
-        logger.debug(
-            f"Retrieved {len(result)} records from MV_USER_SEGMENTATION")
-        return result
-    # if db error
-    except (SQLAlchemyError, DatabaseError) as e:
-        logger.error(f"Database error in get_user_segmentation: {str(e)}")
-        raise HTTPException(
-            status_code=503,
-            detail="Service unavailable due to a database error. Please try again later."
-        )
-    # if other error
-    except Exception as e:
-        logger.error(f"Unexpected error in get_user_segmentation: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            # detail={str(e)}   # for dev
-            detail="An unexpected error occurred."  # for prod
-        )
+        # when query for user
+        if user is not None:
+            query = query.filter(database_models.User.user_type_id == user)
 
-
-@app.get(
-    "/bike-trip-duration/",
-    response_model=List[BikeTripDurationResponse],
-    tags=["Bike Trip Duration"],
-    summary="Retrieve bike trip duration data",
-)
-def get_bike_trip_duration(
-    db: Session = Depends(get_db),
-    limit: Optional[int] = Query(
-        None, ge=1, le=1000, description="Maximum number of records to return"),
-) -> List[BikeTripDurationResponse]:
-    """
-    Fetch bike trip duration data from the materialized view.
-
-    Args:
-        db: SQLAlchemy session provided by dependency injection.
-        limit: Maximum number of records to return (default: 100, max: 1000).
-
-    Returns:
-        List of bike trip duration records.
-
-    Raises:
-        HTTPException: If a database error occurs (status code 503).
-    """
-    logger.info(
-        f"Fetching bike trip duration data with limit={limit}")
-    try:
-        query = db.query(MVBikeTripDuration).order_by(
-            MVBikeTripDuration.trip_count.desc())
-
-        if limit is not None:
-            query = query.limit(limit)
+        # when query for year
+        if year is not None:
+            query = query.filter(database_models.User.dim_year == year)
 
         result = query.all()
+        count = len(result)
 
-        # if success then log
-        logger.debug(
-            f"Retrieved {len(result)} records from MV_BIKE_TRIP_DURATION")
-        return result
-    # if db error
-    except (SQLAlchemyError, DatabaseError) as e:
-        logger.error(f"Database error in get_bike_trip_duration: {str(e)}")
-        raise HTTPException(
-            status_code=503,
-            detail="Service unavailable due to a database error. Please try again later."
-        )
-    # if other error
+        return {
+            "title": "User Type Query",
+            "creater": CREATOR,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
     except Exception as e:
-        logger.error(f"Unexpected error in get_bike_trip_duration: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            # detail={str(e)}  # for development
-            detail="An unexpected error occurred."  # for prod
-        )
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get(
-    "/station-route/",
-    response_model=List[StationRouteResponse],
-    tags=["Station Route"],
-    summary="Retrieve most popular station-to-station routes",
-)
-def get_station_routes(
-    db: Session = Depends(get_db),
-    limit: int = Query(100, ge=1, le=3000,
-                       description="Maximum number of records to return"),
-) -> List[StationRouteResponse]:
-    """
-    Fetch station-to-station route data from the materialized view.
-
-    Args:
-        db: SQLAlchemy session provided by dependency injection.
-        limit: Maximum records to return.
-
-    Returns:
-        List of most frequent station routes.
-
-    Raises:
-        HTTPException: On database or unexpected errors.
-    """
-    logger.info(f"Fetching station route data with limit={limit}")
+@app.get("/trip-time")
+async def get_trip_time(
+    db: Annotated[Session, Depends(database.get_db)],
+    year: Optional[int] = Query(None, description="Filter by year"),
+    quarter: Optional[int] = Query(None, description="Filter by quarter"),
+    month: Optional[int] = Query(None, description="Filter by month"),
+    day: Optional[int] = Query(None, description="Filter by day"),
+    weekday: Optional[int] = Query(None, description="Filter by weekday"),
+    hour: Optional[int] = Query(None, description="Filter by hour")
+):
     try:
-        query = db.query(MVStationRoute).order_by(
-            MVStationRoute.trip_count.desc())
+        query = db.query(database_models.TripTime)
 
-        if limit is not None:
-            query = query.limit(limit)
+        # when filtering by year
+        if year is not None:
+            query = query.filter(database_models.TripTime.dim_year == year)
+
+        # when filtering by quarter
+        if quarter is not None:
+            query = query.filter(
+                database_models.TripTime.dim_quarter == quarter)
+
+        # when filtering by month
+        if month is not None:
+            query = query.filter(database_models.TripTime.dim_month == month)
+
+        # when filtering by day
+        if day is not None:
+            query = query.filter(database_models.TripTime.dim_day == day)
+
+        # when filtering by weekday
+        if weekday is not None:
+            query = query.filter(
+                database_models.TripTime.dim_weekday == weekday)
+
+        # when filtering by hour
+        if hour is not None:
+            query = query.filter(database_models.TripTime.dim_hour == hour)
 
         result = query.all()
+        count = len(result)
 
-        logger.debug(f"Retrieved {len(result)} records from MV_STATION_ROUTE")
-
-        return result
-
-    except (SQLAlchemyError, DatabaseError) as e:
-        logger.error(f"Database error in get_station_routes: {str(e)}")
-        raise HTTPException(
-            status_code=503,
-            detail="Service unavailable due to a database error. Please try again later."
-        )
+        return {
+            "title": "Time-based Query on Trip",
+            "creater": CREATOR,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
     except Exception as e:
-        logger.error(f"Unexpected error in get_station_routes: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            # detail={str(e)}   # for dev
-            detail="An unexpected error occurred."  # for prod
-        )
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get(
-    "/station-trip/",
-    response_model=List[StationTripResponse],
-    tags=["Station Trip"],
-    summary="Retrieve station trip counts (start/end)",
-)
-def get_station_trip_counts(
-    db: Session = Depends(get_db),
-    limit: int = Query(100, ge=1, le=3000,
-                       description="Maximum number of records to return"),
-) -> List[StationTripResponse]:
-    """
-    Fetch station trip data from the materialized view.
-
-    Args:
-        db: SQLAlchemy session.
-        limit: Max number of records to return.
-
-    Returns:
-        List of stations with trip counts by start and end.
-
-    Raises:
-        HTTPException: On DB errors or unexpected issues.
-    """
-    logger.info(f"Fetching station trip data with limit={limit}")
+@app.get("/trip-station")
+async def get_trip_station(
+    db: Annotated[Session, Depends(database.get_db)],
+    sort: Optional[str] = Query(
+        "desc", description="Sort by trip_count_by_start ('asc' or 'desc')")
+):
     try:
-        query = db.query(MVStationTrip).order_by(
-            MVStationTrip.trip_count_by_start.desc())
+        query = db.query(database_models.TripStation)
 
-        if limit is not None:
-            query = query.limit(limit)
+        # when ascend sort
+        if sort == "asc":
+            query = query.order_by(
+                asc(database_models.TripStation.trip_count_by_start))
+        # when descend sort
+        else:
+            query = query.order_by(
+                desc(database_models.TripStation.trip_count_by_start))
 
         result = query.all()
+        count = len(result)
 
-        logger.debug(f"Retrieved {len(result)} records from MV_STATION_TRIP")
-
-        return result
-    except (SQLAlchemyError, DatabaseError) as e:
-        logger.error(f"Database error in get_station_trip_counts: {str(e)}")
-        raise HTTPException(
-            status_code=503,
-            detail="Service unavailable due to a database error. Please try again later."
-        )
+        return {
+            "title": "Station-based Query on Trip",
+            "creater": CREATOR,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
     except Exception as e:
-        logger.error(f"Unexpected error in get_station_trip_counts: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            # detail={str(e)}   # for dev
-            detail="An unexpected error occurred."  # for prod
-        )
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get(
-    "/time-trip/",
-    response_model=List[TimeTripResponse],
-    tags=["Time Trip"],
-    summary="Retrieve trip counts aggregated by time",
-)
-def get_time_trip_data(
-    db: Session = Depends(get_db),
-    limit: Optional[int] = Query(
-        None, ge=1, le=1000, description="Maximum number of records to return"),
-) -> List[TimeTripResponse]:
-    """
-    Fetch aggregated trip counts from the time-based materialized view.
-
-    Args:
-        db: SQLAlchemy session.
-        limit: Number of records to return.
-
-    Returns:
-        List of trip counts grouped by year/month/day/hour/etc.
-
-    Raises:
-        HTTPException: On database or unexpected errors.
-    """
-    logger.info(f"Fetching time trip data with limit={limit}")
+@app.get("/trip-top-route")
+async def get_trip_top_route(
+    db: Annotated[Session, Depends(database.get_db)],
+):
     try:
-        query = db.query(MVTimeTrip).order_by(
-            MVTimeTrip.dim_year.desc(), MVTimeTrip.dim_month.desc())
-        if limit is not None:
-            query = query.limit(limit)
+        query = db.query(database_models.TripRoute)
 
-        result = query.all()
+        # top 10 route
+        result = query.limit(10).all()
+        count = len(result)
 
-        logger.debug(f"Retrieved {len(result)} records from MV_TIME_TRIP")
-
-        return result
-
-    except (SQLAlchemyError, DatabaseError) as e:
-        logger.error(f"Database error in get_time_trip_data: {str(e)}")
-        raise HTTPException(
-            status_code=503,
-            detail="Service unavailable due to a database error. Please try again later."
-        )
+        return {
+            "title": "Top 10 Route by Trip",
+            "creater": CREATOR,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
     except Exception as e:
-        logger.error(f"Unexpected error in get_time_trip_data: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            # detail={str(e)}   # for dev
-            detail="An unexpected error occurred."  # for prod
-        )
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")

@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 07_create_etl.sql
+-- Script Name : create_etl.sql
 -- Purpose     : Create directory, external table, and staging table for the Extraction phase
 --               of the ELT process in the Toronto Shared Bike Data Warehouse
 -- Author      : Wenhao Fang

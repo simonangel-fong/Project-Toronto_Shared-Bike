@@ -7,7 +7,7 @@ services:
     # restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
-      - /project/env/oracle19cDB.env
+      - /project/config/oracle19cDB.env
     ulimits:
       nofile:
         soft: 65536
@@ -23,11 +23,10 @@ services:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # prod
-      - /project/data:/project/data # source data
-      # - oracledata:/opt/oracle/oradata # persist data
-      - /project/oradata:/opt/oracle/oradata # local persist data
-      - /project/orabackup:/project/orabackup # local backup data
-      # - /project/remotebackup:/project/remotebackup # remote backup data
+      - /project/oradata:/opt/oracle/oradata # persist data
+      - /project/orabackup:/opt/oracle/fast_recovery_area # backup data
+      - /project/source:/project/source # source data
+      - /project/dpump:/project/dpump # export and import data
     networks:
       - private-net # Private network for prod
     ports:

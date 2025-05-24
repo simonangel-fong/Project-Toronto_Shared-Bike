@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 04_create_tbsp.sql
+-- Script Name : create_tbsp.sql
 -- Purpose     : Create tablespaces for fact, dimension, index, staging, and materialized view storage
 --               in the Toronto Shared Bike Data Warehouse
 -- Author      : Wenhao Fang
@@ -21,8 +21,8 @@ SHOW user;
 -- Create FACT_TBSP tablespace for storing fact tables with a 32K block size
 CREATE TABLESPACE FACT_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/fact_tbsp01.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
-    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/fact_tbsp02.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
+    '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/fact_tbsp01.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
+    , '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/fact_tbsp02.dbf' SIZE 100M AUTOEXTEND ON NEXT 1G MAXSIZE 50G
 BLOCKSIZE 32K
 EXTENT MANAGEMENT LOCAL AUTOALLOCATE
 SEGMENT SPACE MANAGEMENT AUTO
@@ -32,8 +32,8 @@ ONLINE;
 -- Create DIM_TBSP tablespace for storing dimension tables with an 8K block size
 CREATE TABLESPACE DIM_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/dim_tbsp01.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
-    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/dim_tbsp02.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
+    '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/dim_tbsp01.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
+    , '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/dim_tbsp02.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
 BLOCKSIZE 8K     
 EXTENT MANAGEMENT LOCAL AUTOALLOCATE
 SEGMENT SPACE MANAGEMENT AUTO
@@ -43,8 +43,8 @@ ONLINE;
 -- Create INDEX_TBSP tablespace for storing indexes with an 8K block size
 CREATE TABLESPACE INDEX_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/index_tbsp01.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
-    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/index_tbsp02.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
+    '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/index_tbsp01.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
+    , '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/index_tbsp02.dbf' SIZE 50M AUTOEXTEND ON NEXT 25M MAXSIZE 5G
 BLOCKSIZE 8K 
 EXTENT MANAGEMENT LOCAL AUTOALLOCATE 
 SEGMENT SPACE MANAGEMENT AUTO 
@@ -54,8 +54,8 @@ ONLINE;
 -- Create STAGING_TBSP tablespace for storing staging tables with an 8K block size
 CREATE TABLESPACE STAGING_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/stage01.dbf' SIZE 1G AUTOEXTEND ON NEXT 500M MAXSIZE 10G
-    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/stage02.dbf' SIZE 1G AUTOEXTEND ON NEXT 500M MAXSIZE 10G
+    '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/stage01.dbf' SIZE 1G AUTOEXTEND ON NEXT 500M MAXSIZE 10G
+    , '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/stage02.dbf' SIZE 1G AUTOEXTEND ON NEXT 500M MAXSIZE 10G
 BLOCKSIZE 8K 
 EXTENT MANAGEMENT LOCAL AUTOALLOCATE 
 SEGMENT SPACE MANAGEMENT AUTO 
@@ -65,8 +65,8 @@ ONLINE;
 -- Create MV_TBSP tablespace for storing materialized views
 CREATE TABLESPACE MV_TBSP
 DATAFILE 
-    '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/MV_TBSP01.dbf' SIZE 100M AUTOEXTEND ON NEXT 50M MAXSIZE 2G
-    , '/opt/oracle/oradata/ORCLCDB/toronto_shared_bike/MV_TBSP02.dbf' SIZE 100M AUTOEXTEND ON NEXT 50M MAXSIZE 2G
+    '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/MV_TBSP01.dbf' SIZE 100M AUTOEXTEND ON NEXT 50M MAXSIZE 2G
+    , '/opt/oracle/oradata/ORCLCDB/TORONTO_SHARED_BIKE/MV_TBSP02.dbf' SIZE 100M AUTOEXTEND ON NEXT 50M MAXSIZE 2G
 EXTENT MANAGEMENT LOCAL
 SEGMENT SPACE MANAGEMENT AUTO;
 

@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 02confirm.sql
+-- Script Name : mv_confirm.sql
 -- Purpose     : Query materialized views to retrieve top records for analysis
 --               and reporting purposes
 -- Author      : Wenhao Fang

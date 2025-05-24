@@ -51,3 +51,11 @@ ORDER BY trip_count_by_start DESC, trip_count_by_end DESC;
 SELECT *
 FROM dw_schema.mv_user_segmentation
 ORDER BY user_type_name ASC, dim_year ASC;
+
+TRUNCATE TABLE dw_schema.fact_trip;
+TRUNCATE TABLE dw_schema.dim_time;
+TRUNCATE TABLE dw_schema.dim_station;
+TRUNCATE TABLE dw_schema.dim_bike;
+TRUNCATE TABLE dw_schema.dim_user_type;
+
+

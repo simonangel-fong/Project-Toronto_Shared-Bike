@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 02_enable_32k_blocksize.sql
+-- Script Name : enable_32k_blocksize.sql
 -- Purpose     : Enable 32KB block size support at the Container Database (CDB) level
 -- Author      : Wenhao Fang
 -- Date        : 2025-05-03

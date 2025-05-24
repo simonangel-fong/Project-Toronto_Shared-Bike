@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-   
+        
         stage('Stop Oracle Database') {
             steps {
                 echo 'Stopping Oracle database...'

@@ -3,9 +3,11 @@
 [Back](../../../README.md)
 
 - [Deployment: Application Deployment (Manual Command)](#deployment-application-deployment-manual-command)
-  - [Add Admin](#add-admin)
-  - [Network](#network)
-  - [Upload ini Shell Script and env files](#upload-ini-shell-script-and-env-files)
+  - [Configure App Node](#configure-app-node)
+    - [Add Admin](#add-admin)
+    - [Network](#network)
+    - [Install Package](#install-package)
+    - [Setup Jenkins](#setup-jenkins)
   - [Deploy Application](#deploy-application)
     - [Creating Directories](#creating-directories)
     - [Git Clone](#git-clone)
@@ -25,8 +27,9 @@
   - [Init \& migrate](#init--migrate)
 
 ---
+## Configure App Node
 
-## Add Admin
+### Add Admin
 
 ```sh
 sudo useradd -m aadmin
@@ -37,13 +40,13 @@ sudo usermod -aG wheel aadmin
 su - aadmin
 sudo whoami
 ```
+---
 
-
-## Network
+### Network
 
 ```sh
 # setup network
-sudo nmcli c down ens160
+sudo nmcli c down ens18
 sudo nmcli c modify ens18 ipv4.address 192.168.100.100/24
 sudo nmcli c modify ens18 ipv4.gateway 192.168.100.254
 sudo nmcli c modify ens18 ipv4.dns 192.168.100.254,8.8.8.8
@@ -58,16 +61,71 @@ echo '127.0.0.1           app-node' | sudo tee -a /etc/hosts
 
 ---
 
-## Upload ini Shell Script and env files
+### Install Package
 
 ```sh
-scp ./devops/shell/00_init_git.sh aadmin@192.168.128.100:~
+sudo dnf upgrade -y
+
+# install git
+sudo dnf install -y git
+
+# Install Jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y
+# Add required dependencies for the jenkins package
+sudo yum install -y fontconfig java-17-openjdk
+sudo yum install -y jenkins
+
+# sudo update-alternatives --config java
+sudo systemctl daemon-reload
+
+sudo systemctl enable --now jenkins
+
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+
+# Install Docker
+sudo dnf remove -y docker \
+    docker-client \
+    docker-client-latest \
+    docker-common \
+    docker-latest \
+    docker-latest-logrotate \
+    docker-logrotate \
+    docker-engine \
+    podman \
+    runc
+
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo systemctl enable --now docker
+
+# set permission to run docker
+sudo chown root:docker /var/run/docker.sock
+sudo chmod 660 /var/run/docker.sock
+
+sudo usermod -aG docker jenkins
+sudo usermod -aG docker aadmin
+
+# test
+su - aadmin
+docker run hello-world
+
+# create dir
+sudo mkdir -pv /project
+sudo chown jenkins:jenkins -Rv /project
 ```
 
-- Execute init shell script
+---
+
+### Setup Jenkins
 
 ```sh
-bash 00_init.sh
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
 ---
@@ -77,6 +135,28 @@ bash 00_init.sh
 ### Creating Directories
 
 ```sh
+
+
+
+sudo mkdir -pv /project/github
+sudo mkdir -pv /project/config
+sudo mkdir -pv ${ENV_DIR}
+
+sudo mkdir -pv ${DATA_DIR}
+sudo mkdir -pv ${EXPORT_DIR}
+sudo mkdir -pv ${ORADATA_DIR}
+sudo mkdir -pv ${ORBACKUP_DIR}
+
+
+GITHUB_DIR="${BASE_DIR}/github"
+CONFIG_DIR="${BASE_DIR}/config"
+ENV_DIR="${BASE_DIR}/env"
+
+DATA_DIR="${BASE_DIR}/data"
+EXPORT_DIR="${BASE_DIR}/export"
+ORADATA_DIR="${BASE_DIR}/oradata"
+ORBACKUP_DIR="${BASE_DIR}/orabackup"
+
 # Removing existing project directories...
 sudo rm -rf "/project/github" "/project/config" "/project/env"
 
@@ -150,7 +230,7 @@ docker volume rm toronto-shared-bike_oracledata
 - Migrate
 
 ```sh
-scp -r -o ProxyJump=root@192.168.1.80 ./project/data aadmin@192.168.100.100:/project
+scp -r -o ProxyJump=root@192.168.1.80 ./project/config root@192.168.100.100:~
 ```
 
 ```sh

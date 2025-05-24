@@ -31,21 +31,34 @@ def init_db() -> sessionmaker:
 
     try:
         # Use keyword arguments to avoid embedding credentials in the URL
-        engine = create_engine(
-            "oracle+oracledb://",
-            connect_args={
-                "user": settings.ORCLDB_USER,
-                "password": settings.ORCLDB_PWD,
-                "host": settings.ORCLDB_HOST,
-                "port": settings.ORCLDB_PORT,
-                "service_name": settings.ORCLDB_SERVICE,
-            },
-            echo=False  # Set to True for debugging SQL queries
+        oracle_url = (
+            f"oracle+oracledb://{settings.ORCLDB_USER}:{settings.ORCLDB_PWD}"
+            f"@{settings.ORCLDB_HOST}:{settings.ORCLDB_PORT}/{settings.ORCLDB_SERVICE}"
         )
+
+        # engine = create_engine(
+        #     "oracle+oracledb://",
+        #     connect_args={
+        #         "user": settings.ORCLDB_USER,
+        #         "password": settings.ORCLDB_PWD,
+        #         "host": settings.ORCLDB_HOST,
+        #         "port": settings.ORCLDB_PORT,
+        #         "service_name": settings.ORCLDB_SERVICE,
+        #     },
+        #     # echo=False  # Set to True for debugging SQL queries
+        #     echo=True  # Set to True for debugging SQL queries
+        # )
+
+        engine = create_engine(
+            f'oracle+oracledb://{settings.ORCLDB_USER}:{settings.ORCLDB_PWD}@{settings.ORCLDB_HOST}:{settings.ORCLDB_PORT}/?service_name={settings.ORCLDB_SERVICE}',
+        thick_mode=None)
+
         logger.info("Database engine created successfully.")
+        print("Database engine created successfully.")
         return sessionmaker(autocommit=False, autoflush=False, bind=engine)
     except Exception as e:
         logger.error(f"Failed to create database engine: {str(e)}")
+        print(f"Failed to create database engine: {str(e)}")
         raise DatabaseError(f"Database initialization failed: {str(e)}")
 
 
@@ -72,8 +85,10 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     except OperationalError as e:
         logger.error(f"Database operation failed: {str(e)}")
+        print(f"Database operation failed: {str(e)}")
         raise DatabaseError(f"Database connection error: {str(e)}")
     finally:
         db.close()
         logger.debug("Database session closed.")
+        print("Database session closed.")
 

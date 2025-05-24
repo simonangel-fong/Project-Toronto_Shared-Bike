@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 08_create_etl_procedure.sql
+-- Script Name : create_etl_procedure.sql
 -- Purpose     : Create a stored procedure to dynamically update the directory
 --               for ELT data extraction based on a specified year
 -- Author      : Wenhao Fang
@@ -25,7 +25,7 @@ CREATE OR REPLACE PROCEDURE UPDATE_DIRECTORY_FOR_YEAR(p_year IN VARCHAR2) IS
     sql_stmt VARCHAR2(1000);    -- Variable to store dynamic SQL statements
 BEGIN
     -- Construct the directory path based on the input year
-    v_path := '/project/data/' || p_year;
+    v_path := '/project/source/' || p_year;
 
     -- Create or replace the directory object
     sql_stmt := 'CREATE OR REPLACE DIRECTORY data_dir AS ''' || v_path || '''';

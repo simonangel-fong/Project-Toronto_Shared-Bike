@@ -1,5 +1,5 @@
 -- ============================================================================
--- Script Name : 01refresh.sql
+-- Script Name : mv_refresh.sql
 -- Purpose     : Refresh materialized views in the Data Warehouse to update 
 --               aggregated data for reporting and analysis
 -- Author      : Wenhao Fang

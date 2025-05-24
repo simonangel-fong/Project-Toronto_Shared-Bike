@@ -9,27 +9,29 @@ services:
     env_file:
       - ./env/orcl.env
     volumes:
-      # - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
+      - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
-      # dev volumes
-      - oracledata:/opt/oracle/oradata # persist data
-      - ../project/data:/project/data # source data
-      - ../project/orabackup:/project/orabackup # local backup
-      # - ../project/nfsbackup:/project/nfsbackup # optional: remote backup
+      # dev
+      # - oracledata:/opt/oracle/oradata # persist data
+      - testdata:/opt/oracle/oradata # test data
+      - ../project/orabackup:/opt/oracle/fast_recovery_area # backup
+      - ../project/source:/project/source # source data
+      - ../project/dpump:/project/dpump # export and import data
     networks:
       - private-net # Private network for prod
       - public-net # public for dev
     ports:
       - 1521:1521
     healthcheck:
-      test: CMD-SHELL /project/scripts/healthcheck.sh
+      test: ["CMD-SHELL", "/project/scripts/healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 30
       start_period: 2m
 
 volumes:
-  oracledata:
+  # oracledata:
+  testdata:
 
 networks:
   public-net:

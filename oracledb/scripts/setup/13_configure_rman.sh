@@ -9,8 +9,8 @@
 # Requirements:    Oracle RMAN must be available in the environment.
 # -----------------------------------------------------------------------------
 
-# Set the backup path
-BACKUP_PATH="/project/orabackup"
+# Set the backup path using fra
+BACKUP_PATH="/opt/oracle/fast_recovery_area"
 
 # Check if the backup directory exists
 if [ ! -d "$BACKUP_PATH" ]; then
@@ -30,8 +30,8 @@ else
 # Enable control file autobackup
 CONFIGURE CONTROLFILE AUTOBACKUP ON;
 
-# Set control file backup location
-CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '$BACKUP_PATH/controlfile_%F.bkp';
+# Set control file backup location: FRA
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO 'controlfile_%F.bkp';
 
 # Keep 7 days of backup history
 CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
@@ -47,7 +47,12 @@ CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
 
 # Compress backups to save space
 CONFIGURE COMPRESSION ALGORITHM 'BASIC' AS OF RELEASE 'DEFAULT';
+
+# Backup optimization
 CONFIGURE BACKUP OPTIMIZATION ON;
+
+# Archive log deletion policy
+CONFIGURE ARCHIVELOG DELETION POLICY TO BACKED UP 1 TIMES TO DISK;
 
 # Show current RMAN configuration
 SHOW ALL;
