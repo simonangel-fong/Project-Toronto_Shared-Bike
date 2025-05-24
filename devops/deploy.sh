@@ -6,13 +6,6 @@ set -o pipefail
 set -u # Treat unset variables as error
 
 # ========== Environment Variables ==========
-HOST_NAME="app-node"
-HOST_NIC="ens18"
-HOST_IP="192.168.100.100"
-HOST_SUBNET="24"
-HOST_GATEWAY="192.168.100.254"
-HOST_DNS="192.168.100.254,8.8.8.8"
-
 APP_ADMIN="aadmin"
 APP_GROUP="appgroup"
 
@@ -25,60 +18,11 @@ DPUMP_DIR="${BASE_DIR}/dpump"
 ORADATA_DIR="${BASE_DIR}/oradata"
 ORBACKUP_DIR="${BASE_DIR}/orabackup"
 
-APP_ADMIN="aadmin"
-APP_GROUP="appgroup"
-
 GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"
 GIT_BRANCH="feature-devops"
 
 ORACLE_COMPOSE_FILE="${GITHUB_DIR}/oracledb/compose.oracledb.prod.yaml"
-CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.oracledb.prod.yaml"
-ORACLE_CON="oracle19cDB"
-
-echo
-echo "========================================================"
-echo "Configuring Network"
-echo "========================================================"
-echo
-
-# setup network
-sudo nmcli c modify $HOST_NIC ipv4.address $HOST_IP/$HOST_SUBNET
-sudo nmcli c modify $HOST_NIC ipv4.gateway $HOST_GATEWAY
-sudo nmcli c modify $HOST_NIC ipv4.dns $HOST_DNS
-sudo nmcli c modify $HOST_NIC ipv4.method manual
-sudo nmcli c down $HOST_NIC && sudo nmcli c up $HOST_NIC
-
-echo
-echo "========================================================"
-echo "Configuring hostname"
-echo "========================================================"
-echo
-
-# configure hostname
-sudo hostnamectl set-hostname $HOST_NAME
-echo "${HOST_IP}      ${HOST_NAME}" | sudo tee -a /etc/hosts
-echo "127.0.0.1           ${HOST_NAME}" | sudo tee -a /etc/hosts
-
-echo
-echo "========================================================"
-echo "Creating admin"
-echo "========================================================"
-echo
-
-sudo useradd $APP_ADMIN
-echo "Input password for ${APP_ADMIN}"
-sudo passwd $APP_ADMIN
-
-sudo groupadd $APP_GROUP
-sudo usermod -aG $APP_GROUP $APP_ADMIN
-
-echo
-echo "========================================================"
-echo "Upgrading packages"
-echo "========================================================"
-echo
-
-sudo dnf upgrade -y
+CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.cloudflare.prod.yaml"
 
 echo
 echo "========================================================"
@@ -129,7 +73,7 @@ sudo usermod -aG docker $APP_ADMIN
 # as aadmin
 # confirm as aadmin
 echo "Current user as: $APP_ADMIN"
-su - $APP_ADMIN -c "docker run hello-world"
+# su - $APP_ADMIN -c "docker run hello-world"
 
 echo
 echo "========================================================"
@@ -166,7 +110,7 @@ echo
 sudo rm -rf $GITHUB_DIR
 sudo mkdir -pv $GITHUB_DIR
 
-sudo git config --global --add safe.directory "${GITHUB_DIR}"
+# sudo git config --global --add safe.directory "${GITHUB_DIR}"
 sudo git clone --branch "${GIT_BRANCH}" "${GIT_REPO_URL}" "${GITHUB_DIR}"
 
 sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"

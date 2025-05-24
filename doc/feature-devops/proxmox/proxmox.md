@@ -72,7 +72,7 @@ ssh root@192.168.1.80 root@192.168.100.50
 - migrate
 
 ```sh
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/init.sh ./project/config root@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config root@192.168.100.100:~
 
 scp -r -o ProxyJump=root@192.168.1.80 ./project/data root@192.168.100.100:/project
 
