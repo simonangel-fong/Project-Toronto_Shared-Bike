@@ -32,6 +32,7 @@ GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git
 GIT_BRANCH="feature-devops"
 
 ORACLE_COMPOSE_FILE="${GITHUB_DIR}/oracledb/compose.oracledb.prod.yaml"
+CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.oracledb.prod.yaml"
 ORACLE_CON="oracle19cDB"
 
 echo
@@ -188,7 +189,8 @@ echo "Starting up oracle container..."
 echo "========================================================"
 echo
 
-su - $APP_ADMIN -c "docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d"
+# su - $APP_ADMIN -c "docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d"
+su - $APP_ADMIN -c "docker compose -f ${CLOUDFLARE_COMPOSE_FILE} up --build -d"
 
 echo
 echo "========================================================"

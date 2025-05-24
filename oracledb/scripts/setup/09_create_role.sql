@@ -24,11 +24,10 @@ SHOW user;
 CREATE ROLE roleAPIUser;
 
 -- Grant SELECT privileges on materialized views to the role
-GRANT SELECT ON dw_schema.mv_user_segmentation TO roleAPIUser;
-GRANT SELECT ON dw_schema.mv_time_trip TO roleAPIUser;
-GRANT SELECT ON dw_schema.mv_station_trip TO roleAPIUser;
-GRANT SELECT ON dw_schema.mv_station_route TO roleAPIUser;
-GRANT SELECT ON dw_schema.mv_bike_trip_duration TO roleAPIUser;
+GRANT SELECT ON dw_schema.mv_user_type TO roleAPIUser;
+GRANT SELECT ON dw_schema.mv_trip_station TO roleAPIUser;
+GRANT SELECT ON dw_schema.mv_duration_time TO roleAPIUser;
+GRANT SELECT ON dw_schema.mv_trip_time TO roleAPIUser;
 
 GRANT connect TO roleAPIUser;
 
@@ -45,11 +44,10 @@ GRANT SELECT ON dw_schema.dim_bike TO roleDataAnalysis;
 GRANT SELECT ON dw_schema.dim_user_type TO roleDataAnalysis;
 
 -- Grant SELECT privileges on materialized views to the role
-GRANT SELECT ON dw_schema.mv_user_segmentation TO roleDataAnalysis;
-GRANT SELECT ON dw_schema.mv_time_trip TO roleDataAnalysis;
-GRANT SELECT ON dw_schema.mv_station_trip TO roleDataAnalysis;
-GRANT SELECT ON dw_schema.mv_station_route TO roleDataAnalysis;
-GRANT SELECT ON dw_schema.mv_bike_trip_duration TO roleDataAnalysis;
+GRANT SELECT ON dw_schema.mv_user_type TO roleDataAnalysis;
+GRANT SELECT ON dw_schema.mv_trip_station TO roleDataAnalysis;
+GRANT SELECT ON dw_schema.mv_duration_time TO roleDataAnalysis;
+GRANT SELECT ON dw_schema.mv_trip_time TO roleDataAnalysis;
 
 GRANT connect TO roleDataAnalysis;
 
@@ -65,6 +63,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON dw_schema.dim_station TO roleDataEnginee
 GRANT SELECT, INSERT, UPDATE, DELETE ON dw_schema.dim_bike TO roleDataEngineer;
 GRANT SELECT, INSERT, UPDATE, DELETE ON dw_schema.dim_user_type TO roleDataEngineer;
 
+GRANT CREATE MATERIALIZED VIEW TO roleDataEngineer;
+GRANT DROP ANY MATERIALIZED VIEW TO roleDataEngineer;
+GRANT ALTER ANY MATERIALIZED VIEW TO roleDataEngineer;
+
 GRANT connect, resource TO roleDataEngineer;
 
 -- ========================================================
@@ -72,6 +74,5 @@ GRANT connect, resource TO roleDataEngineer;
 -- ========================================================
 SELECT 
     role
-    , password_required
 FROM dba_roles
 WHERE role IN ('ROLEAPIUSER','ROLEDATAANALYSIS', 'ROLEDATAENGINEER');

@@ -18,22 +18,23 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
-
 -- ============================================================================
 -- Creating MV LOG
 -- ============================================================================
 
 -- Create materialized view log on fact_trip for fast refresh support
+--DROP MATERIALIZED VIEW LOG ON dw_schema.fact_trip;
 CREATE MATERIALIZED VIEW LOG ON dw_schema.fact_trip
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
     fact_trip_start_time_id
     , fact_trip_start_station_id
-    , fact_trip_end_statio
+    , fact_trip_end_station_id
     )
 INCLUDING NEW VALUES;
 
 -- Create materialized view log on dim_time for fast refresh support
+--DROP MATERIALIZED VIEW LOG ON dw_schema.dim_time;
 CREATE MATERIALIZED VIEW LOG ON dw_schema.dim_time
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
@@ -45,6 +46,7 @@ WITH ROWID, SEQUENCE (
 INCLUDING NEW VALUES;
 
 -- Create materialized view log on dim_station for fast refresh support
+--DROP MATERIALIZED VIEW LOG ON dw_schema.dim_station;
 CREATE MATERIALIZED VIEW LOG ON dw_schema.dim_station
 TABLESPACE MV_TBSP
 WITH ROWID, SEQUENCE (
@@ -56,6 +58,7 @@ INCLUDING NEW VALUES;
 -- ============================================================================
 -- Creating MV for time-based trip analysis
 -- ============================================================================
+--DROP MATERIALIZED VIEW dw_schema.mv_trip_time;
 CREATE MATERIALIZED VIEW dw_schema.mv_trip_time
 TABLESPACE MV_TBSP
 PARTITION BY RANGE (dim_year) (
@@ -98,6 +101,7 @@ TABLESPACE MV_TBSP;
 -- ============================================================================
 -- Creating MV for time-based duration analysis
 -- ============================================================================
+--DROP MATERIALIZED VIEW dw_schema.mv_duration_time;
 CREATE MATERIALIZED VIEW dw_schema.mv_duration_time
 TABLESPACE MV_TBSP
 PARTITION BY RANGE (dim_year) (
@@ -111,7 +115,7 @@ PARTITION BY RANGE (dim_year) (
     , PARTITION p_max   VALUES LESS THAN (MAXVALUE)  -- Catch-all partition
 )
 BUILD IMMEDIATE
-REFRESH FAST ON DEMAND  -- Enable incremental updates
+REFRESH COMPLETE ON DEMAND
 ENABLE QUERY REWRITE
 AS
 SELECT
@@ -140,6 +144,7 @@ TABLESPACE MV_TBSP;
 -- ============================================================================
 -- Creating MV for station-based trip analysis
 -- ============================================================================
+--DROP MATERIALIZED VIEW dw_schema.mv_trip_station;
 CREATE MATERIALIZED VIEW dw_schema.mv_trip_station
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -148,8 +153,8 @@ ENABLE QUERY REWRITE
 AS
 SELECT
   COUNT(*)              AS  trip_count_by_start   -- Measure: Trips count
-  , s.dim_station_id    AS  station_id            -- Dimension: station id
-  , s.dim_station_name  AS  station_name          -- Dimension: station name
+  , s.dim_station_id    AS  dim_station_id            -- Dimension: station id
+  , s.dim_station_name  AS  dim_station_name          -- Dimension: station name
   , t.dim_time_year     AS  dim_year              -- Dimension: Year (e.g., 2025)
 FROM dw_schema.fact_trip f
 JOIN dw_schema.dim_station s
@@ -172,50 +177,10 @@ CREATE INDEX dw_schema.idx_mv_trip_station_station
 ON dw_schema.mv_trip_station (dim_station_id)
 TABLESPACE MV_TBSP;
 
--- -- Create materialized view for station route analysis
--- CREATE MATERIALIZED VIEW dw_schema.mv_station_route
--- TABLESPACE MV_TBSP
--- BUILD IMMEDIATE
--- REFRESH FAST ON DEMAND
--- ENABLE QUERY REWRITE
--- AS
--- SELECT
---     s_start.dim_station_id      AS start_station_id
---     , s_start.dim_station_name  AS start_station_name
---     , s_end.dim_station_id      AS end_station_id
---     , s_end.dim_station_name    AS end_station_name
---     , COUNT(*)                  AS trip_count
--- FROM dw_schema.fact_trip f
--- JOIN dw_schema.dim_station s_start
---     ON f.fact_trip_start_station_id = s_start.dim_station_id
--- JOIN dw_schema.dim_station s_end
---     ON f.fact_trip_end_station_id = s_end.dim_station_id
--- GROUP BY
---     s_start.dim_station_id
---     , s_start.dim_station_name
---     , s_end.dim_station_id
---     , s_end.dim_station_name;
-
--- -- Create materialized view for bike trip duration analysis
--- CREATE MATERIALIZED VIEW dw_schema.mv_bike_trip_duration
--- TABLESPACE MV_TBSP
--- BUILD IMMEDIATE
--- REFRESH COMPLETE ON DEMAND
--- ENABLE QUERY REWRITE
--- AS
--- SELECT
---     b.dim_bike_id                           AS bike_id
---     , COUNT(*)                              AS trip_count
---     , ROUND(AVG(f.fact_trip_duration), 2)   AS avg_trip_duration
--- FROM dw_schema.fact_trip f
--- JOIN dw_schema.dim_bike b
---     ON f.fact_trip_bike_id = b.dim_bike_id
--- GROUP BY
---     b.dim_bike_id;
-
 -- ============================================================================
 -- Creating MV for user segmentation analysis
 -- ============================================================================
+--DROP MATERIALIZED VIEW dw_schema.mv_user_type;
 CREATE MATERIALIZED VIEW dw_schema.mv_user_type
 TABLESPACE MV_TBSP
 BUILD IMMEDIATE
@@ -226,8 +191,8 @@ SELECT
   COUNT(*)                              AS  trip_count      -- Measure: Total trips per user type and year
   , ROUND(AVG(f.fact_trip_duration),2)  AS  duration_avg    -- Measure: Mean trip duration (seconds)
   , t.dim_time_year                     AS  dim_year        -- Dimension: Year of trips (e.g., 2025)
-  , u.dim_user_type_id                  AS  user_type_id    -- Dimension: Unique user type identifier
-  , u.dim_user_type_name                AS  user_type_name  -- Dimension: User type name (e.g., Casual, Member)
+  , u.dim_user_type_id                  AS  dim_user_type_id    -- Dimension: Unique user type identifier
+  , u.dim_user_type_name                AS  dim_user_type_name  -- Dimension: User type name (e.g., Casual, Member)
 FROM dw_schema.fact_trip f
 JOIN dw_schema.dim_user_type u
   ON f.fact_trip_user_type_id = u.dim_user_type_id

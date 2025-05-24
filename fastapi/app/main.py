@@ -20,7 +20,7 @@ app = FastAPI(
 async def get_root_with_db():
     return {
         "title": "Toronto Shared Bike Data Analysis Project",
-        "creater": CREATOR,
+        "creator": CREATOR,
         "datetime": datetime.now().strftime("%Y-%m-%d %H:%M")
 
     }
@@ -48,7 +48,7 @@ async def get_user(
 
         return {
             "title": "User Type Query",
-            "creater": CREATOR,
+            "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -109,7 +109,7 @@ async def get_trip_time(
 
         return {
             "title": "Time-based Query on Trip",
-            "creater": CREATOR,
+            "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -148,7 +148,7 @@ async def get_trip_station(
 
         return {
             "title": "Station-based Query on Trip",
-            "creater": CREATOR,
+            "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -177,7 +177,7 @@ async def get_trip_top_route(
 
         return {
             "title": "Top 10 Route by Trip",
-            "creater": CREATOR,
+            "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
