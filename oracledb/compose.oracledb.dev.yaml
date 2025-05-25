@@ -12,8 +12,8 @@ services:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # dev
-      # - oracledata:/opt/oracle/oradata # persist data
-      - testdata:/opt/oracle/oradata # test data
+      - oracledata:/opt/oracle/oradata # persist data
+      # - testdata:/opt/oracle/oradata # test data
       - ../project/orabackup:/opt/oracle/fast_recovery_area # backup
       - ../project/source:/project/source # source data
       - ../project/dpump:/project/dpump # export and import data
@@ -30,8 +30,8 @@ services:
       start_period: 2m
 
 volumes:
-  # oracledata:
-  testdata:
+  oracledata:
+  # testdata:
 
 networks:
   public-net:

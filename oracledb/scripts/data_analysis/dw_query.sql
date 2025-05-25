@@ -1,8 +1,8 @@
 -- ============================================================================
--- Script Name : 000_analysis_query.sql
+-- Script Name : dw_query.sql
 -- Purpose     : 
 -- Author      : Wenhao Fang
--- Date        : 2025-05-08
+-- Date        : 2025-05-25
 -- User        : Execute as a user with administrative privileges in the toronto_shared_bike PDB
 -- Notes       : 
 -- ============================================================================
@@ -17,27 +17,12 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
-DESC dw_schema.staging_trip
---Name               Null? Type          
--------------------- ----- ------------- 
---TRIP_ID                  VARCHAR2(15)  
---TRIP_DURATION            VARCHAR2(15)  
---START_TIME               VARCHAR2(50)  
---START_STATION_ID         VARCHAR2(15)  
---START_STATION_NAME       VARCHAR2(100) 
---END_TIME                 VARCHAR2(50)  
---END_STATION_ID           VARCHAR2(15)  
---END_STATION_NAME         VARCHAR2(100) 
---BIKE_ID                  VARCHAR2(15)  
---USER_TYPE                VARCHAR2(50)  
---MODEL                    VARCHAR2(50)  
-
 -- ============================================================================
 -- time dimension table
 -- ============================================================================
 SELECT 
-    *
---    COUNT(*)
+--    *
+    COUNT(*)
 FROM DW_SCHEMA.dim_time
 ORDER BY 
     dim_time_id DESC;
@@ -46,8 +31,8 @@ ORDER BY
 -- station dimension table
 -- ============================================================================
 SELECT 
-    *
---    COUNT(*)
+--    *
+    COUNT(*)
 FROM DW_SCHEMA.dim_station
 ORDER BY dim_station_id;
 
@@ -55,8 +40,8 @@ ORDER BY dim_station_id;
 -- bike dimension table
 -- ============================================================================
 SELECT 
-    *
---    COUNT(*)
+--    *
+    COUNT(*)
 FROM DW_SCHEMA.dim_bike
 ORDER BY dim_bike_id DESC;
 
@@ -64,14 +49,15 @@ ORDER BY dim_bike_id DESC;
 -- user type dimension table
 -- ============================================================================
 SELECT 
-    *
---    COUNT(*)
+--    *
+    COUNT(*)
 FROM DW_SCHEMA.dim_user_type;
 
 -- ============================================================================
 -- trip fact table
 -- ============================================================================
-SELECT COUNT(*)
+SELECT 
+    COUNT(*)
 FROM DW_SCHEMA.fact_trip;
 
 -- ============================================================================

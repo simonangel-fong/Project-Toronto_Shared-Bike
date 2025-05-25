@@ -243,7 +243,7 @@
 | `dim_time`    | MV_TBSP    | All key time parts (`year`, `quarter`, `month`, etc.) | Logged for time-based aggregations        |
 | `dim_station` | MV_TBSP    | `station_id`, `station_name`                          | Logged though data is relatively static   |
 
-- Materialized Views `MV_TIME_TRIP`
+- Materialized Views `mv_trip_time`
 
 | Configuration    | Value      | Description                                       |
 | ---------------- | ---------- | ------------------------------------------------- |
@@ -270,7 +270,7 @@
 | Refresh Strategy | FAST     | ON DEMAND with query rewrite enabled           |
 | Grouping         | By route | Trip counts grouped by start–end station pairs |
 
-- `MV_BIKE_TRIP_DURATION`
+- `mv_duration_time`
 
 | Configuration    | Value          | Description                                   |
 | ---------------- | -------------- | --------------------------------------------- |

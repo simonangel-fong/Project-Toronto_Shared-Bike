@@ -25,8 +25,10 @@
       - [Backup](#backup-1)
     - [6. Startup All](#6-startup-all)
   - [Init \& migrate](#init--migrate)
+  - [New Manual](#new-manual)
 
 ---
+
 ## Configure App Node
 
 ### Add Admin
@@ -40,6 +42,7 @@ sudo usermod -aG wheel aadmin
 su - aadmin
 sudo whoami
 ```
+
 ---
 
 ### Network
@@ -376,4 +379,24 @@ echo 'SELECT 1 FROM dual;' | sqlplus -s sys/$ORACLE_PWD@localhost:1521/toronto_s
 
 
 sqlplus -s sys/'SecurePassword!234'@localhost:1521/toronto_shared_bike as sysdba
+```
+
+---
+
+## New Manual
+
+- Migrate
+
+```sh
+# test
+scp -r ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config ./project/dpump root@192.168.128.100:~
+
+# prod
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config ./project/dpump root@192.168.100.100:~
+```
+
+- Deploy
+
+```sh
+bash ~/deploy.sh
 ```

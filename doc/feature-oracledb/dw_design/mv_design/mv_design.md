@@ -254,7 +254,7 @@ GROUP BY
 
   - Precompute total trips and mean duration per bike to evaluate utilization rates in the bike-sharing system.
 
-- **View Structure**: `MV_BIKE_TRIP_DURATION`
+- **View Structure**: `mv_duration_time`
 
 | Column              | Description                  |
 | ------------------- | ---------------------------- |

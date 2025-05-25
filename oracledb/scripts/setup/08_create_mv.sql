@@ -153,8 +153,8 @@ ENABLE QUERY REWRITE
 AS
 SELECT
   COUNT(*)              AS  trip_count_by_start   -- Measure: Trips count
-  , s.dim_station_id    AS  dim_station_id            -- Dimension: station id
-  , s.dim_station_name  AS  dim_station_name          -- Dimension: station name
+  , s.dim_station_id    AS  dim_station_id        -- Dimension: station id
+  , s.dim_station_name  AS  dim_station_name      -- Dimension: station name
   , t.dim_time_year     AS  dim_year              -- Dimension: Year (e.g., 2025)
 FROM dw_schema.fact_trip f
 JOIN dw_schema.dim_station s

@@ -18,7 +18,7 @@ WHENEVER SQLERROR EXIT SQL.SQLCODE;
 ALTER SESSION SET CONTAINER = CDB$ROOT;
 
 -- Set FRA configuration before enabling ARCHIVELOG
-ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 200G SCOPE=BOTH;
+ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 100G SCOPE=BOTH;
 ALTER SYSTEM SET DB_RECOVERY_FILE_DEST = '/opt/oracle/fast_recovery_area' SCOPE=BOTH;
 
 -- Confirm FRA settings
@@ -42,15 +42,9 @@ ALTER DATABASE OPEN;
 -- Confirm
 ARCHIVE LOG LIST;
 
--- Add additional log member
-ALTER DATABASE ADD LOGFILE MEMBER 
-  '/opt/oracle/oradata/ORCLCDB/redo01b.log' TO GROUP 1;
-
-ALTER DATABASE ADD LOGFILE MEMBER 
-  '/opt/oracle/oradata/ORCLCDB/redo02b.log' TO GROUP 2;
-
-ALTER DATABASE ADD LOGFILE MEMBER 
-  '/opt/oracle/oradata/ORCLCDB/redo03b.log' TO GROUP 3;
+---- Add additional log member
+--ALTER DATABASE ADD LOGFILE MEMBER 
+--  '/opt/oracle/oradata/ORCLCDB/redo01b.log' TO GROUP 1;
 
 -- Add additional log group
 ALTER DATABASE 

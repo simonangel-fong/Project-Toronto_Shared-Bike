@@ -118,3 +118,79 @@ SELECT SESSIONTIMEZONE, CURRENT_TIMESTAMP FROM DUAL;
 select to_char(start_time, 'dd-mon-yyyy@hh24:mi:ss') "Date", status, operation from v$rman_status;
 
 select name from v$obsolete_parameter where isspecified='TRUE';
+
+
+SELECT 
+    table_name,
+    owner,
+    tablespace_name,
+    partitioned
+FROM dba_tables
+WHERE owner = 'DW_SCHEMA'
+ORDER BY table_name;
+
+SELECT 
+    index_name,
+    index_type,
+    table_name,
+    uniqueness,
+    tablespace_name,
+    partitioned
+FROM dba_indexes
+WHERE owner = 'DW_SCHEMA'
+ORDER BY table_name, index_name;
+
+SELECT 
+    table_name,
+    partition_name,
+    high_value,
+    tablespace_name
+FROM dba_tab_partitions
+WHERE table_owner = 'DW_SCHEMA'
+ORDER BY table_name, partition_name;
+
+SELECT 
+    constraint_name,
+    constraint_type,
+    table_name,
+    status,
+    r_constraint_name
+FROM dba_constraints
+WHERE owner = 'DW_SCHEMA'
+ORDER BY table_name, constraint_name;
+
+SELECT 
+    tablespace_name,
+    block_size,
+    status,
+    extent_management,
+    allocation_type,
+    segment_space_management,
+    logging
+FROM dba_tablespaces
+WHERE tablespace_name IN ('FACT_TBSP', 'DIM_TBSP', 'INDEX_TBSP', 'STAGING_TBSP', 'MV_TBSP')
+ORDER BY tablespace_name;
+
+SELECT 
+    tablespace_name,
+    file_name,
+    bytes / 1024 / 1024 AS size_mb,
+    autoextensible,
+    increment_by * (SELECT block_size FROM dba_tablespaces WHERE tablespace_name = df.tablespace_name) / 1024 / 1024 AS increment_mb,
+    maxbytes / 1024 / 1024 AS maxsize_mb
+FROM dba_data_files df
+WHERE tablespace_name IN ('FACT_TBSP', 'DIM_TBSP', 'INDEX_TBSP', 'STAGING_TBSP', 'MV_TBSP')
+ORDER BY tablespace_name, file_name;
+
+
+SELECT 
+    tablespace_name,
+    SUM(bytes) / 1024 / 1024 AS free_space_mb
+FROM dba_free_space
+WHERE tablespace_name IN ('FACT_TBSP', 'DIM_TBSP', 'INDEX_TBSP', 'STAGING_TBSP', 'MV_TBSP')
+GROUP BY tablespace_name
+ORDER BY tablespace_name;
+
+
+
+

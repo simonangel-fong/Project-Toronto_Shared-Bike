@@ -20,7 +20,7 @@ SHOW user;
 
 -- time-based trip materialized view
 SELECT *
-FROM dw_schema.mv_time_trip
+FROM dw_schema.mv_trip_time
 ORDER BY dim_year DESC, dim_month DESC, dim_day DESC, dim_hour DESC
 FETCH FIRST 3 ROWS ONLY;
 
@@ -38,7 +38,7 @@ FETCH FIRST 3 ROWS ONLY;
 
 -- Query the bike trip duration materialized view
 SELECT *
-FROM dw_schema.mv_bike_trip_duration
+FROM dw_schema.mv_duration_time
 ORDER BY trip_count DESC, avg_trip_duration DESC
 FETCH FIRST 3 ROWS ONLY;
 

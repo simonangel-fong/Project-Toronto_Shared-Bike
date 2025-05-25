@@ -1,12 +1,15 @@
--- ============================================================================
--- Script Name : mv_refresh.sql
--- Purpose     : Refresh materialized views in the Data Warehouse to update 
---               aggregated data for reporting and analysis
--- Author      : Wenhao Fang
--- Date        : 2025-05-07
--- User        : Execute as a user with access to the toronto_shared_bike PDB and dw_schema
--- Notes       : Ensure all dimension and fact tables are populated before refreshing materialized views
--- ============================================================================
+#!/bin/bash
+
+# -----------------------------------------------------------------------------
+# Script Name:     mv_refresh.sh
+# Description:     Refreshes materialized views and confirms the operation
+#                  by executing SQL scripts.
+# Usage:           ./mv_refresh.sh
+# Requirements:    Must be run by a user with SYSDBA privileges.
+# -----------------------------------------------------------------------------
+
+# Execute SQL scripts to refresh and confirm materialized views
+sqlplus -s / as sysdba <<EOF
 
 -- Output from the DBMS_OUTPUT to standard output
 SET SERVEROUTPUT ON;
@@ -39,3 +42,6 @@ EXEC DBMS_MVIEW.REFRESH('dw_schema.mv_trip_station', 'F');
 EXEC DBMS_MVIEW.REFRESH('dw_schema.mv_user_type', 'C');
 
 COMMIT;
+
+exit
+EOF

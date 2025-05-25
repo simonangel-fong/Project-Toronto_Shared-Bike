@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ENV_FILE='../env/fastapi.env'
+ENV_FILE='../env/fastapi.dev.env'
 
 class Settings(BaseSettings):
 
@@ -12,9 +12,9 @@ class Settings(BaseSettings):
     ORCLDB_USER: str
     ORCLDB_PWD: str
 
-    model_config = SettingsConfigDict(
-        # env_file=ENV_FILE # dev: using env file
-        )
+    # model_config = SettingsConfigDict(
+    #     env_file=ENV_FILE # dev: using env file
+    #     )
 
 
 @lru_cache

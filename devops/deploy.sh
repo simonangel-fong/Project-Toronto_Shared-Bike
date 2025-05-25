@@ -24,6 +24,28 @@ GIT_BRANCH="feature-devops"
 ORACLE_COMPOSE_FILE="${GITHUB_DIR}/oracledb/compose.oracledb.prod.yaml"
 CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.cloudflare.prod.yaml"
 
+
+echo
+echo "========================================================"
+echo "Creating admin"
+echo "========================================================"
+echo
+
+sudo useradd $APP_ADMIN
+echo "Input password for ${APP_ADMIN}"
+sudo passwd $APP_ADMIN
+
+sudo groupadd $APP_GROUP
+sudo usermod -aG $APP_GROUP $APP_ADMIN
+
+echo
+echo "========================================================"
+echo "Upgrading packages"
+echo "========================================================"
+echo
+
+sudo dnf upgrade -y
+
 echo
 echo "========================================================"
 echo "Installing packages: git"
@@ -103,6 +125,16 @@ ls $CONFIG_DIR
 
 echo
 echo "========================================================"
+echo "Copy import data"
+echo "========================================================"
+echo
+
+sudo cp -r /root/config/ ${BASE_DIR}
+# confirm
+ls $DPUMP_DIR
+
+echo
+echo "========================================================"
 echo "Cloning GitHub repository..."
 echo "========================================================"
 echo
@@ -126,6 +158,8 @@ find "${BASE_DIR}" -type f -name "*.env" -exec chmod -v 666 {} +
 sudo chmod 0777 -v "${DPUMP_DIR}"
 sudo chmod 0777 -v "${ORADATA_DIR}"
 sudo chmod 0777 -v "${ORBACKUP_DIR}"
+
+sudo chown 54321:54321 -v "${ORADATA_DIR}"
 
 echo
 echo "========================================================"

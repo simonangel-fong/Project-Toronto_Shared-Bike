@@ -52,23 +52,3 @@ sudo hostnamectl set-hostname $HOST_NAME
 echo "${HOST_IP}      ${HOST_NAME}" | sudo tee -a /etc/hosts
 echo "127.0.0.1           ${HOST_NAME}" | sudo tee -a /etc/hosts
 
-echo
-echo "========================================================"
-echo "Creating admin"
-echo "========================================================"
-echo
-
-sudo useradd $APP_ADMIN
-echo "Input password for ${APP_ADMIN}"
-sudo passwd $APP_ADMIN
-
-sudo groupadd $APP_GROUP
-sudo usermod -aG $APP_GROUP $APP_ADMIN
-
-echo
-echo "========================================================"
-echo "Upgrading packages"
-echo "========================================================"
-echo
-
-sudo dnf upgrade -y

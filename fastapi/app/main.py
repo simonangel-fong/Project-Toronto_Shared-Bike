@@ -29,15 +29,15 @@ async def get_root_with_db():
 @app.get("/user")
 async def get_user(
     db: Annotated[Session, Depends(database.get_db)],
-    user: Optional[int] = Query(None, description="Filter by user type ID"),
+    user_type: Optional[int] = Query(None, description="Filter by user type ID"),
     year: Optional[int] = Query(None, description="Filter by year")
 ):
     try:
         query = db.query(database_models.User)
 
-        # when query for user
-        if user is not None:
-            query = query.filter(database_models.User.user_type_id == user)
+        # filter by user type id
+        if user_type is not None:
+            query = query.filter(database_models.User.dim_user_type_id == user_type)
 
         # when query for year
         if year is not None:
@@ -69,36 +69,19 @@ async def get_user(
 async def get_trip_time(
     db: Annotated[Session, Depends(database.get_db)],
     year: Optional[int] = Query(None, description="Filter by year"),
-    quarter: Optional[int] = Query(None, description="Filter by quarter"),
     month: Optional[int] = Query(None, description="Filter by month"),
-    day: Optional[int] = Query(None, description="Filter by day"),
-    weekday: Optional[int] = Query(None, description="Filter by weekday"),
     hour: Optional[int] = Query(None, description="Filter by hour")
 ):
     try:
         query = db.query(database_models.TripTime)
 
-        # when filtering by year
+        # filter by year
         if year is not None:
             query = query.filter(database_models.TripTime.dim_year == year)
 
-        # when filtering by quarter
-        if quarter is not None:
-            query = query.filter(
-                database_models.TripTime.dim_quarter == quarter)
-
-        # when filtering by month
+        # filter month
         if month is not None:
             query = query.filter(database_models.TripTime.dim_month == month)
-
-        # when filtering by day
-        if day is not None:
-            query = query.filter(database_models.TripTime.dim_day == day)
-
-        # when filtering by weekday
-        if weekday is not None:
-            query = query.filter(
-                database_models.TripTime.dim_weekday == weekday)
 
         # when filtering by hour
         if hour is not None:
@@ -108,7 +91,50 @@ async def get_trip_time(
         count = len(result)
 
         return {
-            "title": "Time-based Query on Trip",
+            "title": "Time-based Trip Query",
+            "creator": CREATOR,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
+    except Exception as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")
+
+
+@app.get("/duration-time")
+async def get_trip_time(
+    db: Annotated[Session, Depends(database.get_db)],
+    year: Optional[int] = Query(None, description="Filter by year"),
+    month: Optional[int] = Query(None, description="Filter by month"),
+    hour: Optional[int] = Query(None, description="Filter by hour")
+):
+    try:
+        query = db.query(database_models.TripTime)
+
+        # filter by year
+        if year is not None:
+            query = query.filter(database_models.TripTime.dim_year == year)
+
+        # filter by month
+        if month is not None:
+            query = query.filter(database_models.TripTime.dim_month == month)
+
+        # filter by hour
+        if hour is not None:
+            query = query.filter(database_models.TripTime.dim_hour == hour)
+
+        result = query.all()
+        count = len(result)
+
+        return {
+            "title": "Time-based Duration Query",
             "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
@@ -128,26 +154,38 @@ async def get_trip_time(
 @app.get("/trip-station")
 async def get_trip_station(
     db: Annotated[Session, Depends(database.get_db)],
+    year: Optional[int] = Query(None, description="Filter by year"),
+    station_id: Optional[int] = Query(None, description="Filter by station ID"),
+    limit: int = Query(100, ge=1, le=1000, description="Number of records to return (max 1000)"),
+    offset: int = Query(0, ge=0, description="Number of records to skip"),
     sort: Optional[str] = Query(
         "desc", description="Sort by trip_count_by_start ('asc' or 'desc')")
 ):
     try:
         query = db.query(database_models.TripStation)
 
-        # when ascend sort
+        # filter by year
+        if year is not None:
+            query = query.filter(database_models.TripStation.dim_year == year)
+
+        # filter by month
+        if station_id is not None:
+            query = query.filter(database_models.TripStation.dim_station_id == station_id)
+        
+        # sort
         if sort == "asc":
             query = query.order_by(
                 asc(database_models.TripStation.trip_count_by_start))
-        # when descend sort
+        # descend sort
         else:
             query = query.order_by(
                 desc(database_models.TripStation.trip_count_by_start))
 
-        result = query.all()
+        result = query.offset(offset).limit(limit).all()
         count = len(result)
 
         return {
-            "title": "Station-based Query on Trip",
+            "title": "Station-based Trip Query",
             "creator": CREATOR,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
@@ -163,31 +201,3 @@ async def get_trip_station(
             "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
         raise HTTPException(status_code=500, detail="Unexpected server error.")
 
-
-@app.get("/trip-top-route")
-async def get_trip_top_route(
-    db: Annotated[Session, Depends(database.get_db)],
-):
-    try:
-        query = db.query(database_models.TripRoute)
-
-        # top 10 route
-        result = query.limit(10).all()
-        count = len(result)
-
-        return {
-            "title": "Top 10 Route by Trip",
-            "creator": CREATOR,
-            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "status": "success",
-            "item_count": count,
-            "data": result
-        }
-    except SQLAlchemyError as e:
-        print(datetime.now().strftime(
-            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
-        raise HTTPException(status_code=500, detail="Database error occurred.")
-    except Exception as e:
-        print(datetime.now().strftime(
-            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
-        raise HTTPException(status_code=500, detail="Unexpected server error.")
