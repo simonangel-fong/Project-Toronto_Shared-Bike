@@ -389,16 +389,24 @@ sqlplus -s sys/'SecurePassword!234'@localhost:1521/toronto_shared_bike as sysdba
 
 ```sh
 # test
-scp -r ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config ./project/dpump root@192.168.128.100:~
+scp -r ./devops/shell ./project/config ./project/dpump root@192.168.128.100:~
+
+scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\devops\shell ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+
+scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\config ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+
+scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\dpump ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+
+project
 
 # prod
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config ./project/dpump root@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell ./project/config ./project/dpump root@192.168.100.100:~
 ```
 
 - Deploy
 
 ```sh
-bash ~/deploy.sh
+bash ~/shell/00_pre_deploy.sh
 
-bash ~/deploy.sh
+bash ~/shell/01_deploy.sh
 ```

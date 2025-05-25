@@ -7,11 +7,11 @@ set -u # Treat unset variables as error
 
 # ========== Environment Variables ==========
 HOST_NAME="app-node"
-HOST_NIC="ens18"
-HOST_IP="192.168.100.100"
+HOST_NIC="ens160"
+HOST_IP="192.168.128.100"
 HOST_SUBNET="24"
-HOST_GATEWAY="192.168.100.254"
-HOST_DNS="192.168.100.254,8.8.8.8"
+HOST_GATEWAY="192.168.128.2"
+HOST_DNS="192.168.128.2,8.8.8.8"
 
 APP_ADMIN="aadmin"
 APP_GROUP="appgroup"
@@ -49,6 +49,25 @@ echo
 
 # configure hostname
 sudo hostnamectl set-hostname $HOST_NAME
-echo "${HOST_IP}      ${HOST_NAME}" | sudo tee -a /etc/hosts
-echo "127.0.0.1           ${HOST_NAME}" | sudo tee -a /etc/hosts
+echo "${HOST_IP}    ${HOST_NAME}" | sudo tee -a /etc/hosts
+echo "127.0.0.1     ${HOST_NAME}" | sudo tee -a /etc/hosts
 
+echo
+echo "========================================================"
+echo "Upgrading packages"
+echo "========================================================"
+echo
+
+sudo dnf upgrade -y
+
+echo
+echo "========================================================"
+echo "Create a cron job to update at midnight"
+echo "========================================================"
+echo
+
+# automate update at midnight
+echo "0 0 * * * /usr/bin/dnf upgrade -y" | crontab -
+
+# confirm
+crontab -l

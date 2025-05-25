@@ -26,24 +26,37 @@ CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.cloudflare.prod.yaml"
 
 echo
 echo "========================================================"
-echo "Creating admin"
-echo "========================================================"
-echo
-
-sudo useradd $APP_ADMIN
-echo "Input password for ${APP_ADMIN}"
-sudo passwd $APP_ADMIN
-
-sudo groupadd $APP_GROUP
-sudo usermod -aG $APP_GROUP $APP_ADMIN
-
-echo
-echo "========================================================"
 echo "Upgrading packages"
 echo "========================================================"
 echo
 
 sudo dnf upgrade -y
+
+echo
+echo "========================================================"
+echo "Creating admin"
+echo "========================================================"
+echo
+
+# if exits
+if id "aadmin" &>/dev/null; then
+    sudo userdel -r -f aadmin
+    echo "User '${APP_ADMIN}' deleted"
+fi
+
+sudo useradd $APP_ADMIN
+echo "User '${APP_ADMIN}' is created"
+
+echo "Input password for ${APP_ADMIN}"
+sudo passwd $APP_ADMIN
+
+if getent group $APP_GROUP &>/dev/null; then
+    sudo groupdel ${APP_GROUP}
+    echo "Group '${APP_GROUP}' deleted"
+fi
+
+sudo groupadd $APP_GROUP
+sudo usermod -aG $APP_GROUP $APP_ADMIN
 
 echo
 echo "========================================================"
@@ -118,7 +131,7 @@ echo "Copy import data"
 echo "========================================================"
 echo
 
-sudo cp -r /root/config/ ${BASE_DIR}
+sudo cp -rv ~/dpump/ ${BASE_DIR}
 # confirm
 ls $DPUMP_DIR
 
@@ -128,7 +141,7 @@ echo "Copy conf and env file"
 echo "========================================================"
 echo
 
-sudo cp -r /root/config/ ${BASE_DIR}
+sudo cp -rv ~/config/ ${BASE_DIR}
 # confirm
 ls $CONFIG_DIR
 
@@ -150,15 +163,18 @@ sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"
 sudo find "${GITHUB_DIR}" -type f -name "*.sh" -exec chmod -v 755 {} +
 
 # Set permissions
-find "${BASE_DIR}" -type d -exec chmod -v 755 {} +
-find "${BASE_DIR}" -type f -name "*.conf" -exec chmod -v 666 {} +
-find "${BASE_DIR}" -type f -name "*.env" -exec chmod -v 666 {} +
+sudo find "${BASE_DIR}" -type d -exec sudo chmod -v 755 {} +
+sudo find "${BASE_DIR}" -type f -name "*.conf" -exec sudo chmod -v 666 {} +
+sudo find "${BASE_DIR}" -type f -name "*.env" -exec sudo chmod -v 666 {} +
 
-sudo chmod 0777 -v "${DPUMP_DIR}"
-sudo chmod 0777 -v "${ORADATA_DIR}"
-sudo chmod 0777 -v "${ORBACKUP_DIR}"
+# sudo chmod 0777 -v "${DPUMP_DIR}"
+# sudo chmod 0777 -v "${ORADATA_DIR}"
+# sudo chmod 0777 -v "${ORBACKUP_DIR}"
 
-sudo chown 54321:54321 -v "${ORADATA_DIR}"
+sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
+sudo chown 54321:54321 -Rv "${GITHUB_DIR}"
+sudo chown 54321:54321 -Rv "${DPUMP_DIR}"
+sudo chown 54321:54321 -Rv "${ORBACKUP_DIR}"
 
 echo
 echo "========================================================"
