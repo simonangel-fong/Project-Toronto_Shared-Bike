@@ -26,14 +26,13 @@ ORACLE_CON="oracle19cDB"
 
 echo
 echo "========================================================"
-echo "Update conf and env file"
+echo "Copy conf and env file"
 echo "========================================================"
 echo
 
-sudo rm -rfv $CONFIG_DIR
-sudo cp -rv /root/config/ $BASE_DIR
+sudo cp -r /root/config/ ${BASE_DIR}
 # confirm
-ls -l $CONFIG_DIR
+ls $CONFIG_DIR
 
 echo
 echo "========================================================"
@@ -41,25 +40,27 @@ echo "Cloning GitHub repository..."
 echo "========================================================"
 echo
 
-sudo rm -rfv $GITHUB_DIR
+sudo rm -rf $GITHUB_DIR
 sudo mkdir -pv $GITHUB_DIR
 
-su - $APP_ADMIN -c "git config --global --add safe.directory ${GITHUB_DIR}"
-sudo git clone --branch $GIT_BRANCH $GIT_REPO_URL $GITHUB_DIR
+# sudo git config --global --add safe.directory "${GITHUB_DIR}"
+sudo git clone --branch "${GIT_BRANCH}" "${GIT_REPO_URL}" "${GITHUB_DIR}"
 
-sudo chown $APP_ADMIN:$APP_GROUP -Rv $BASE_DIR
+sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"
 
 # Set shell script permissions
-sudo find $GITHUB_DIR -type f -name "*.sh" -exec chmod -v 755 {} +
+sudo find "${GITHUB_DIR}" -type f -name "*.sh" -exec chmod -v 755 {} +
 
 # Set permissions
-find $BASE_DIR -type d -exec chmod -v 755 {} +
-find $BASE_DIR -type f -name "*.conf" -exec chmod -v 666 {} +
-find $BASE_DIR -type f -name "*.env" -exec chmod -v 666 {} +
+find "${BASE_DIR}" -type d -exec chmod -v 755 {} +
+find "${BASE_DIR}" -type f -name "*.conf" -exec chmod -v 666 {} +
+find "${BASE_DIR}" -type f -name "*.env" -exec chmod -v 666 {} +
 
-sudo chmod -v 777 $DPUMP_DIR
-sudo chmod 0777 -v $ORADATA_DIR
-sudo chmod 0777 -v $ORBACKUP_DIR
+sudo chmod 0777 -v "${DPUMP_DIR}"
+sudo chmod 0777 -v "${ORADATA_DIR}"
+sudo chmod 0777 -v "${ORBACKUP_DIR}"
+
+sudo chown 54321:54321 -v "${ORADATA_DIR}"
 
 echo
 echo "========================================================"
@@ -67,4 +68,10 @@ echo "Starting up oracle container..."
 echo "========================================================"
 echo
 
-su - $APP_ADMIN -c "docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d"
+su - $APP_ADMIN -c "docker compose -f ${CLOUDFLARE_COMPOSE_FILE} up --build -d"
+
+echo
+echo "========================================================"
+echo "✅ Project setup completed successfully!"
+echo "========================================================"
+echo

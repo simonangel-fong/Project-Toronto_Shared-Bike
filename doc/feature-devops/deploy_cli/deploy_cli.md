@@ -399,4 +399,6 @@ scp -r -o ProxyJump=root@192.168.1.80 ./devops/deploy.sh ./devops/pre-deploy.sh 
 
 ```sh
 bash ~/deploy.sh
+
+bash ~/deploy.sh
 ```

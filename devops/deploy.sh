@@ -24,7 +24,6 @@ GIT_BRANCH="feature-devops"
 ORACLE_COMPOSE_FILE="${GITHUB_DIR}/oracledb/compose.oracledb.prod.yaml"
 CLOUDFLARE_COMPOSE_FILE="${GITHUB_DIR}/cloudflare/compose.cloudflare.prod.yaml"
 
-
 echo
 echo "========================================================"
 echo "Creating admin"
@@ -115,16 +114,6 @@ sudo mkdir -pv "${GITHUB_DIR}" "${CONFIG_DIR}" "${SOURCE_DIR}" "${DPUMP_DIR}" "$
 
 echo
 echo "========================================================"
-echo "Copy conf and env file"
-echo "========================================================"
-echo
-
-sudo cp -r /root/config/ ${BASE_DIR}
-# confirm
-ls $CONFIG_DIR
-
-echo
-echo "========================================================"
 echo "Copy import data"
 echo "========================================================"
 echo
@@ -132,6 +121,16 @@ echo
 sudo cp -r /root/config/ ${BASE_DIR}
 # confirm
 ls $DPUMP_DIR
+
+echo
+echo "========================================================"
+echo "Copy conf and env file"
+echo "========================================================"
+echo
+
+sudo cp -r /root/config/ ${BASE_DIR}
+# confirm
+ls $CONFIG_DIR
 
 echo
 echo "========================================================"
