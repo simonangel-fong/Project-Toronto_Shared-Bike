@@ -17,35 +17,41 @@ WHENEVER SQLERROR EXIT SQL.SQLCODE;
 
 ALTER SESSION SET CONTAINER = CDB$ROOT;
 
--- Set FRA configuration before enabling ARCHIVELOG
-ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 100G SCOPE=BOTH;
-ALTER SYSTEM SET DB_RECOVERY_FILE_DEST = '/opt/oracle/fast_recovery_area' SCOPE=BOTH;
+-- ============================================================================
+-- Configure Archive log mode
+-- ============================================================================
+-- -- Set FRA configuration before enabling ARCHIVELOG
+-- ALTER SYSTEM SET DB_RECOVERY_FILE_DEST_SIZE = 100G SCOPE=BOTH;
+-- ALTER SYSTEM SET DB_RECOVERY_FILE_DEST = '/opt/oracle/fast_recovery_area' SCOPE=BOTH;
 
--- Confirm FRA settings
-SHOW PARAMETER db_recovery_file_dest;
-SHOW PARAMETER db_recovery_file_dest_size;
+-- -- Confirm FRA settings
+-- SHOW PARAMETER db_recovery_file_dest;
+-- SHOW PARAMETER db_recovery_file_dest_size;
 
--- Shutdown
-SHUTDOWN IMMEDIATE;
+-- -- Shutdown
+-- SHUTDOWN IMMEDIATE;
 
--- Start CDB in MOUNT mode
-STARTUP MOUNT;
+-- -- Start CDB in MOUNT mode
+-- STARTUP MOUNT;
 
-ALTER SESSION SET CONTAINER = CDB$ROOT;
+-- ALTER SESSION SET CONTAINER = CDB$ROOT;
 
--- Enable ARCHIVELOG mode
-ALTER DATABASE ARCHIVELOG;
+-- -- Enable ARCHIVELOG mode
+-- ALTER DATABASE ARCHIVELOG;
 
--- Open the CDB
-ALTER DATABASE OPEN;
+-- -- Open the CDB
+-- ALTER DATABASE OPEN;
 
--- Confirm
-ARCHIVE LOG LIST;
+-- -- Confirm
+-- ARCHIVE LOG LIST;
 
 ---- Add additional log member
 --ALTER DATABASE ADD LOGFILE MEMBER 
 --  '/opt/oracle/oradata/ORCLCDB/redo01b.log' TO GROUP 1;
 
+-- ============================================================================
+-- Configure Redo log
+-- ============================================================================
 -- Add additional log group
 ALTER DATABASE 
 ADD LOGFILE GROUP 4 (

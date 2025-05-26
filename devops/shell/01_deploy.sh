@@ -172,7 +172,7 @@ sudo find "${BASE_DIR}" -type f -name "*.env" -exec sudo chmod -v 666 {} +
 # sudo chmod 0777 -v "${ORBACKUP_DIR}"
 
 sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
-sudo chown 54321:54321 -Rv "${GITHUB_DIR}"
+sudo chown 54321:54321 -Rv "${GITHUB_DIR}/oracledb/scripts"
 sudo chown 54321:54321 -Rv "${DPUMP_DIR}"
 sudo chown 54321:54321 -Rv "${ORBACKUP_DIR}"
 

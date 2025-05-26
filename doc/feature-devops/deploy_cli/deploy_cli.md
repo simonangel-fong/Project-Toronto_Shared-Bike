@@ -391,11 +391,11 @@ sqlplus -s sys/'SecurePassword!234'@localhost:1521/toronto_shared_bike as sysdba
 # test
 scp -r ./devops/shell ./project/config ./project/dpump root@192.168.128.100:~
 
-scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\devops\shell ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+scp -r -i "Argus_Lab.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\devops\shell ec2-user@ec2-3-95-163-80.compute-1.amazonaws.com:~
 
-scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\config ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+scp -r -i "Argus_Lab.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\config ec2-user@ec2-3-95-163-80.compute-1.amazonaws.com:~
 
-scp -r -i "EC_Deploy.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\dpump ec2-user@ec2-3-87-196-44.compute-1.amazonaws.com:~
+scp -r -i "Argus_Lab.pem" C:\Users\simon\OneDrive\Tech\Github\Project-Toronto_Shared-Bike\project\dpump ec2-user@ec2-3-95-163-80.compute-1.amazonaws.com:~
 
 project
 
