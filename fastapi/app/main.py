@@ -54,6 +54,10 @@ async def get_root_with_db():
             {
                 "name": "User-based Trip Duration Query",
                 "url": "https://trip.arguswatcher.net/user-trip-duration"
+            },
+            {
+                "name": "Tableau Dashboard",
+                "url": "https://tableau-dashboard.arguswatcher.net/"
             }
         ]
     }

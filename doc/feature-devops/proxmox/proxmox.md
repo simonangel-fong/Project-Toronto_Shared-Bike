@@ -72,16 +72,16 @@ ssh root@192.168.1.80 root@192.168.100.50
 - migrate
 
 ```sh
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/deploy.sh ./devops/pre-deploy.sh ./project/config root@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/01_deploy.sh ./devops/shell/00_pre_deploy.sh ./project/config root@192.168.100.108:~
 
-scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.100:~
+scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.108:~
 
 ```
 
 - ssh
 
 ```sh
-ssh -J root@192.168.1.80 aadmin@192.168.100.100
+ssh -J root@192.168.1.80 root@192.168.100.100
 ```
 
 - Map Jenkins GUI
