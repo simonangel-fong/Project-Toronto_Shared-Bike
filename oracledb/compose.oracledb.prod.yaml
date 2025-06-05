@@ -4,7 +4,7 @@ name: toronto-shared-bike
 services:
   oracle19cDB:
     container_name: oracle19cDB
-    # restart: unless-stopped
+    restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
       - /project/config/oracle19cDB.env
@@ -38,8 +38,8 @@ services:
       retries: 30
       start_period: 2m
 
-volumes:
-  oracledata:
+# volumes:
+#   oracledata:
 
 networks:
   public-net:

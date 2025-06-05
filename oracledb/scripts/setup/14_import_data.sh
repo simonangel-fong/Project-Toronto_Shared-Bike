@@ -1,4 +1,4 @@
-#!/bin/bash
+# #!/bin/bash
 
 ORCL_PDB="toronto_shared_bike"
 ORCL_USER="dataEngineer"

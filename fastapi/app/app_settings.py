@@ -1,10 +1,13 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ENV_FILE='../env/fastapi.dev.env'
+ENV_FILE = '../env/fastapi.dev.env'
+
 
 class Settings(BaseSettings):
 
+    CREATOR: str
+    DEPLOY_HOST: str
     ORCLDB_HOST: str
     ORCLDB_SID: str
     ORCLDB_PORT: str

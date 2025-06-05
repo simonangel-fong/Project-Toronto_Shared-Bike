@@ -5,7 +5,7 @@
 -- Author      : Wenhao Fang
 -- Date        : 2025-05-07
 -- User        : Execute as a user with administrative privileges in the toronto_shared_bike PDB
--- Notes       : Ensure the DW_SCHEMA and materialized views are created before running
+-- Notes       : Ensure the dw_schema and materialized views are created before running
 -- ============================================================================
 
 -- Output from the DBMS_OUTPUT to standard output

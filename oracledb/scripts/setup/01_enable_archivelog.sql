@@ -57,75 +57,93 @@ ALTER DATABASE
 ADD LOGFILE GROUP 4 (
     '/opt/oracle/oradata/ORCLCDB/redo04a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 5 (
     '/opt/oracle/oradata/ORCLCDB/redo05a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 6 (
     '/opt/oracle/oradata/ORCLCDB/redo06a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 7 (
     '/opt/oracle/oradata/ORCLCDB/redo07a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 8 (
     '/opt/oracle/oradata/ORCLCDB/redo08a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 9 (
     '/opt/oracle/oradata/ORCLCDB/redo09a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 10 (
     '/opt/oracle/oradata/ORCLCDB/redo10a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 11 (
     '/opt/oracle/oradata/ORCLCDB/redo11a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 12 (
     '/opt/oracle/oradata/ORCLCDB/redo12a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 13 (
     '/opt/oracle/oradata/ORCLCDB/redo13a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 14 (
     '/opt/oracle/oradata/ORCLCDB/redo14a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
 ALTER DATABASE 
 ADD LOGFILE GROUP 15 (
     '/opt/oracle/oradata/ORCLCDB/redo15a.log'
 )
-SIZE 200M;
+SIZE 400M;
 
--- confirm
+ALTER DATABASE 
+ADD LOGFILE GROUP 16 (
+    '/opt/oracle/oradata/ORCLCDB/redo16a.log'
+)
+SIZE 400M;
+
+ALTER DATABASE 
+ADD LOGFILE GROUP 17 (
+    '/opt/oracle/oradata/ORCLCDB/redo17a.log'
+)
+SIZE 400M;
+
+ALTER DATABASE 
+ADD LOGFILE GROUP 18 (
+    '/opt/oracle/oradata/ORCLCDB/redo18a.log'
+)
+SIZE 400M;
+
+-- confirm log group
   SELECT 
     GROUP#
     , THREAD#
@@ -138,6 +156,7 @@ FROM
     V$LOG
 ORDER BY GROUP#;
 
+-- confirm log file
 SELECT 
     GROUP#
     , MEMBER

@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     image: cloudflare/cloudflared:latest
     env_file:
-      - /project/config/cloudflare.env
+      - /project/config/cloudflare.prod.env
     command: tunnel run
     networks:
       - public-net

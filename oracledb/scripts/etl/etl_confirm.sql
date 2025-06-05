@@ -22,7 +22,7 @@ SHOW user;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_time
+FROM dw_schema.dim_time
 ORDER BY dim_time_year DESC
 FETCH FIRST 5 ROWS ONLY;
 
@@ -30,7 +30,7 @@ FETCH FIRST 5 ROWS ONLY;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_station
+FROM dw_schema.dim_station
 ORDER BY dim_station_id
 FETCH FIRST 5 ROWS ONLY;
 
@@ -38,7 +38,7 @@ FETCH FIRST 5 ROWS ONLY;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_bike
+FROM dw_schema.dim_bike
 ORDER BY dim_bike_id DESC
 FETCH FIRST 5 ROWS ONLY;
 
@@ -46,11 +46,11 @@ FETCH FIRST 5 ROWS ONLY;
 SELECT 
     *
 --    COUNT(*)
-FROM DW_SCHEMA.dim_user_type;
+FROM dw_schema.dim_user_type;
 
 -- Count the number of records in the trip fact table
 SELECT COUNT(*)
-FROM DW_SCHEMA.fact_trip;
+FROM dw_schema.fact_trip;
 
 SELECT *
 FROM dw_schema.fact_trip f

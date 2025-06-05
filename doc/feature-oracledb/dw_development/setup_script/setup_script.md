@@ -136,7 +136,7 @@
 
 | Configuration        | Value                     | Description                                                             |
 | -------------------- | ------------------------- | ----------------------------------------------------------------------- |
-| User Name            | `DW_SCHEMA`               | Dedicated schema for the Data Warehouse                                 |
+| User Name            | `dw_schema`               | Dedicated schema for the Data Warehouse                                 |
 | Authentication       | Password                  | Password-protected user:                                                |
 | Default Tablespace   | `FACT_TBSP`               | Fact data is stored here by default                                     |
 | Temporary Tablespace | `TEMP`                    | Used for sort and temporary operations                                  |
@@ -209,7 +209,7 @@
 
 | Configuration   | Value            | Description                                          |
 | --------------- | ---------------- | ---------------------------------------------------- |
-| Schema          | `DW_SCHEMA`      | Where the external table is defined                  |
+| Schema          | `dw_schema`      | Where the external table is defined                  |
 | Directory       | `data_dir`       | Logical path to `/tmp/2019`, holding CSV files       |
 | File Pattern    | `Ridership*.csv` | Supports multiple CSV files                          |
 | Loader Type     | ORACLE_LOADER    | External table uses Oracle Loader for CSV parsing    |
@@ -223,11 +223,11 @@
 
 | Configuration | Value        | Description                                            |
 | ------------- | ------------ | ------------------------------------------------------ |
-| Schema        | `DW_SCHEMA`  | Table created in the same schema as the external table |
+| Schema        | `dw_schema`  | Table created in the same schema as the external table |
 | Tablespace    | STAGING_TBSP | Data is stored in the staging tablespace               |
 | Logging       | NOLOGGING    | Reduces redo generation for performance                |
 | PCTFREE       | 0            | No free space reserved in each data block              |
-| Quota         | UNLIMITED    | `DW_SCHEMA` granted unlimited quota on STAGING_TBSP    |
+| Quota         | UNLIMITED    | `dw_schema` granted unlimited quota on STAGING_TBSP    |
 
 ---
 
@@ -299,7 +299,7 @@
 | ------------- | ---------------------------------- | ----------------------------------------------- |
 | Role Name     | `apiTesterRole`                    | Custom role for read-only API users             |
 | Privileges    | `SELECT` on `MV_USER_SEGMENTATION` | Grants access to key MV for analytics/testing   |
-| Schema Access | `DW_SCHEMA`                        | Permission restricted to materialized view only |
+| Schema Access | `dw_schema`                        | Permission restricted to materialized view only |
 
 - apiTester1
 

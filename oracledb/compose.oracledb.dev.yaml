@@ -2,8 +2,8 @@
 name: toronto-shared-bike
 
 services:
-  oracle19cDB:
-    container_name: oracle19cDB
+  oracle19cDB-dev:
+    container_name: oracle19cDB-dev
     restart: unless-stopped
     image: simonangelfong/oracledb19c:1.0
     env_file:
@@ -12,7 +12,7 @@ services:
       - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
       - ./scripts:/project/scripts # scripts
       # dev
-      - oracledata:/opt/oracle/oradata # persist data
+      - oracledata2:/opt/oracle/oradata # persist data
       # - testdata:/opt/oracle/oradata # test data
       - ../project/orabackup:/opt/oracle/fast_recovery_area # backup
       - ../project/source:/project/source # source data
@@ -30,7 +30,8 @@ services:
       start_period: 2m
 
 volumes:
-  oracledata:
+  # oracledata:
+  oracledata2:
   # testdata:
 
 networks:

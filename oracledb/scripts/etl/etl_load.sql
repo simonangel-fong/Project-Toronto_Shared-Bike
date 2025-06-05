@@ -23,23 +23,23 @@ SHOW user;
 -- ============================================================================
 
 -- Load the time dimension table with unique timestamps
-MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_time tgt
+MERGE /*+ APPEND */ INTO dw_schema.dim_time tgt
 USING (
   -- Union start_time and end_time to capture all timestamps
   SELECT DISTINCT
     TO_DATE(time_value, 'MM/DD/YYYY HH24:MI') AS timestamp_value
   FROM (
-    SELECT start_time AS time_value FROM DW_SCHEMA.staging_trip
+    SELECT start_time AS time_value FROM dw_schema.staging_trip
     UNION
-    SELECT end_time AS time_value FROM DW_SCHEMA.staging_trip
+    SELECT end_time AS time_value FROM dw_schema.staging_trip
     WHERE end_time IS NOT NULL
   )
 ) src
-ON (tgt.dim_time_timestamp = src.timestamp_value)
+ON (tgt.dim_time_id = src.timestamp_value)
 WHEN NOT MATCHED THEN
   INSERT (
     dim_time_id,
-    dim_time_timestamp,
+    -- dim_time_timestamp,
     dim_time_year,
     dim_time_quarter,
     dim_time_month,
@@ -50,8 +50,9 @@ WHEN NOT MATCHED THEN
     dim_time_minute
   )
   VALUES (
-    TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYYMMDDHH24MI')), -- Unique ID based on timestamp (YYYYMMDDHHMI)
-    src.timestamp_value,                                       -- Full timestamp
+    src.timestamp_value,
+    -- TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYYMMDDHH24MI')), -- Unique ID based on timestamp (YYYYMMDDHHMI)
+    -- src.timestamp_value,                                       -- Full timestamp
     TO_NUMBER(TO_CHAR(src.timestamp_value, 'YYYY')),           -- Extracted year
     TO_NUMBER(TO_CHAR(src.timestamp_value, 'Q')),              -- Extracted quarter (1-4)
     TO_NUMBER(TO_CHAR(src.timestamp_value, 'MM')),             -- Extracted month (1-12)
@@ -69,7 +70,7 @@ COMMIT;
 -- ============================================================================
 
 -- Load the station dimension table with unique station information
-MERGE INTO DW_SCHEMA.dim_station ds
+MERGE INTO dw_schema.dim_station ds
 USING (
     WITH station_times AS (
         -- Collect start station records
@@ -77,7 +78,7 @@ USING (
             start_station_id AS station_id,
             start_station_name AS station_name,
             TO_DATE(start_time, 'MM/DD/YYYY HH24:MI') AS trip_datetime
-        FROM DW_SCHEMA.staging_trip
+        FROM dw_schema.staging_trip
         WHERE 
             start_station_id IS NOT NULL 
             AND start_station_name IS NOT NULL
@@ -87,7 +88,7 @@ USING (
             end_station_id AS station_id,
             end_station_name AS station_name,
             TO_DATE(end_time, 'MM/DD/YYYY HH24:MI') AS trip_datetime
-        FROM DW_SCHEMA.staging_trip
+        FROM dw_schema.staging_trip
         WHERE end_station_id IS NOT NULL AND end_station_name IS NOT NULL
     ),
     latest_stations AS (
@@ -118,7 +119,7 @@ COMMIT;
 -- ============================================================================
 
 -- Load the bike dimension table with unique bike information
-MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_bike tgt
+MERGE /*+ APPEND */ INTO dw_schema.dim_bike tgt
 USING (
   -- Aggregate bike data, handling unknown models
   SELECT 
@@ -127,7 +128,7 @@ USING (
       MAX(CASE WHEN UPPER(TRIM(model)) != 'UNKNOWN' THEN TRIM(REPLACE(model, CHR(13), '')) END),
       'UNKNOWN'
     ) AS bike_model
-  FROM DW_SCHEMA.staging_trip
+  FROM dw_schema.staging_trip
   GROUP BY TO_NUMBER(TRIM(bike_id))
 ) src
 ON (tgt.dim_bike_id = src.bike_id)
@@ -148,11 +149,11 @@ COMMIT;
 -- ============================================================================
 
 -- Populate the user type dimension table with unique user types
-MERGE /*+ APPEND */ INTO DW_SCHEMA.dim_user_type tgt
+MERGE /*+ APPEND */ INTO dw_schema.dim_user_type tgt
 USING (
   -- Select distinct user types
   SELECT DISTINCT user_type AS user_type_name
-  FROM DW_SCHEMA.staging_trip
+  FROM dw_schema.staging_trip
   WHERE user_type IS NOT NULL
 ) src
 ON (tgt.dim_user_type_name = src.user_type_name)
@@ -173,59 +174,61 @@ COMMIT;
 -- ============================================================================
 
 -- Load the fact table with trip data
-MERGE /*+ APPEND */ INTO DW_SCHEMA.fact_trip tgt
+MERGE /*+ APPEND */ INTO dw_schema.fact_trip tgt
 USING (
   -- Transform staging data into fact table format
   SELECT 
-    TO_NUMBER(trip_id)                                                                                                  "FACT_TRIP_SOURCE_ID",
-    TO_NUMBER(trip_duration)                                                                                            "FACT_TRIP_DURATION",
-    (SELECT dim_time_id FROM dw_schema.dim_time WHERE dim_time_timestamp = TO_DATE(start_time,'MM/DD/YYYY HH24:MI'))    "FACT_TRIP_START_TIME_ID",
-    (SELECT dim_time_id FROM dw_schema.dim_time WHERE dim_time_timestamp = TO_DATE(end_time,'MM/DD/YYYY HH24:MI'))      "FACT_TRIP_END_TIME_ID",
-    TO_NUMBER(start_station_id)                                                                                         "FACT_TRIP_START_STATION_ID",
-    TO_NUMBER(end_station_id)                                                                                           "FACT_TRIP_END_STATION_ID",
-    TO_NUMBER(bike_id)                                                                                                  "FACT_TRIP_BIKE_ID",
-    (SELECT dim_user_type_id FROM dw_schema.dim_user_type WHERE dim_user_type_name = user_type)                         "FACT_TRIP_USER_TYPE_ID"
+    TO_NUMBER(trip_id)                                                                                                  AS  fact_trip_source_id
+    , TO_NUMBER(trip_duration)                                                                                          AS  fact_trip_duration
+    , TO_DATE(start_time, 'MM/DD/YYYY HH24:MI')                                                                         AS  fact_trip_start_time_id
+    , TO_DATE(end_time, 'MM/DD/YYYY HH24:MI')                                                                           AS  fact_trip_end_time_id
+    -- , (SELECT dim_time_id FROM dw_schema.dim_time WHERE dim_time_timestamp = TO_DATE(start_time,'MM/DD/YYYY HH24:MI'))    "fact_trip_start_time_id"
+    -- (SELECT dim_time_id FROM dw_schema.dim_time WHERE dim_time_timestamp = TO_DATE(end_time,'MM/DD/YYYY HH24:MI'))      "fact_trip_end_time_id",
+    , TO_NUMBER(start_station_id)                                                                                       AS  fact_trip_start_station_id
+    , TO_NUMBER(end_station_id)                                                                                         AS  fact_trip_end_station_id
+    , TO_NUMBER(bike_id)                                                                                                AS  fact_trip_bike_id
+    , (SELECT dim_user_type_id FROM dw_schema.dim_user_type WHERE dim_user_type_name = user_type)                       AS  fact_trip_user_type_id
   FROM dw_schema.staging_trip
 ) src
-ON (tgt.fact_trip_source_id = src.FACT_TRIP_SOURCE_ID)
+ON (tgt.fact_trip_source_id = src.fact_trip_source_id)
 WHEN MATCHED THEN
   -- Update existing trip records if any attributes have changed
   UPDATE SET 
-    tgt.fact_trip_duration = src.FACT_TRIP_DURATION,
-    tgt.fact_trip_start_time_id = src.FACT_TRIP_START_TIME_ID,
-    tgt.fact_trip_end_time_id = src.FACT_TRIP_END_TIME_ID,
-    tgt.fact_trip_start_station_id = src.FACT_TRIP_START_STATION_ID,
-    tgt.fact_trip_end_station_id = src.FACT_TRIP_END_STATION_ID,
-    tgt.fact_trip_bike_id = src.FACT_TRIP_BIKE_ID,
-    tgt.fact_trip_user_type_id = src.FACT_TRIP_USER_TYPE_ID
-  WHERE tgt.fact_trip_duration != src.FACT_TRIP_DURATION 
-     OR tgt.fact_trip_start_time_id != src.FACT_TRIP_START_TIME_ID 
-     OR tgt.fact_trip_end_time_id != src.FACT_TRIP_END_TIME_ID 
-     OR tgt.fact_trip_start_station_id != src.FACT_TRIP_START_STATION_ID 
-     OR tgt.fact_trip_end_station_id != src.FACT_TRIP_END_STATION_ID 
-     OR tgt.fact_trip_bike_id != src.FACT_TRIP_BIKE_ID 
-     OR tgt.fact_trip_user_type_id != src.FACT_TRIP_USER_TYPE_ID
+    tgt.fact_trip_duration              =   src.fact_trip_duration
+    , tgt.fact_trip_start_time_id       =   src.fact_trip_start_time_id
+    , tgt.fact_trip_end_time_id         =   src.fact_trip_end_time_id
+    , tgt.fact_trip_start_station_id    =   src.fact_trip_start_station_id
+    , tgt.fact_trip_end_station_id      =   src.fact_trip_end_station_id
+    , tgt.fact_trip_bike_id             =   src.fact_trip_bike_id
+    , tgt.fact_trip_user_type_id        =   src.fact_trip_user_type_id
+  WHERE tgt.fact_trip_duration          !=  src.fact_trip_duration 
+     OR tgt.fact_trip_start_time_id     !=  src.fact_trip_start_time_id 
+     OR tgt.fact_trip_end_time_id       !=  src.fact_trip_end_time_id 
+     OR tgt.fact_trip_start_station_id  !=  src.fact_trip_start_station_id 
+     OR tgt.fact_trip_end_station_id    !=  src.fact_trip_end_station_id 
+     OR tgt.fact_trip_bike_id           !=  src.fact_trip_bike_id 
+     OR tgt.fact_trip_user_type_id      !=  src.fact_trip_user_type_id
 WHEN NOT MATCHED THEN
   -- Insert new trip records
   INSERT (
-    fact_trip_source_id,
-    fact_trip_duration,
-    fact_trip_start_time_id,
-    fact_trip_end_time_id,
-    fact_trip_start_station_id,
-    fact_trip_end_station_id,
-    fact_trip_bike_id,
-    fact_trip_user_type_id
+    fact_trip_source_id
+    , fact_trip_duration
+    , fact_trip_start_time_id
+    , fact_trip_end_time_id
+    , fact_trip_start_station_id
+    , fact_trip_end_station_id
+    , fact_trip_bike_id
+    , fact_trip_user_type_id
   )
   VALUES (
-    src.FACT_TRIP_SOURCE_ID,
-    src.FACT_TRIP_DURATION,
-    src.FACT_TRIP_START_TIME_ID,
-    src.FACT_TRIP_END_TIME_ID,
-    src.FACT_TRIP_START_STATION_ID,
-    src.FACT_TRIP_END_STATION_ID,
-    src.FACT_TRIP_BIKE_ID,
-    src.FACT_TRIP_USER_TYPE_ID
+    src.fact_trip_source_id
+    , src.fact_trip_duration
+    , src.fact_trip_start_time_id
+    , src.fact_trip_end_time_id
+    , src.fact_trip_start_station_id
+    , src.fact_trip_end_station_id
+    , src.fact_trip_bike_id
+    , src.fact_trip_user_type_id
   );
 
 -- Commit the changes to the fact table

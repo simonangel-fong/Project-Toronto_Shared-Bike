@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Script Name : create_schema.sql
--- Purpose     : Create a dedicated schema (DW_SCHEMA) in the Toronto Shared Bike PDB
+-- Purpose     : Create a dedicated schema (dw_schema) in the Toronto Shared Bike PDB
 --               and assign necessary privileges and quotas
 -- Author      : Wenhao Fang
 -- Date        : 2025-05-07
@@ -18,8 +18,8 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
--- Create the DW_SCHEMA user with a secure password
-CREATE USER DW_SCHEMA
+-- Create the dw_schema user with a secure password
+CREATE USER dw_schema
 IDENTIFIED BY "SecurePassword!23"
 DEFAULT TABLESPACE FACT_TBSP
 TEMPORARY TABLESPACE TEMP
@@ -29,10 +29,10 @@ QUOTA UNLIMITED ON INDEX_TBSP
 QUOTA UNLIMITED ON STAGING_TBSP
 QUOTA UNLIMITED ON MV_TBSP;
 
--- Grant necessary privileges to DW_SCHEMA
-GRANT CONNECT TO DW_SCHEMA;
-GRANT CREATE TABLE TO DW_SCHEMA;
-GRANT CREATE MATERIALIZED VIEW TO DW_SCHEMA;
+-- Grant necessary privileges to dw_schema
+GRANT CONNECT TO dw_schema;
+GRANT CREATE TABLE TO dw_schema;
+GRANT CREATE MATERIALIZED VIEW TO dw_schema;
 
 -- confirm user
 SELECT

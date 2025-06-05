@@ -1,63 +1,152 @@
-<html>
-  <head></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John Doe - Personal Homepage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            padding-top: 56px; /* Adjust for fixed navbar if used */
+        }
+        .header-section {
+            background: #fff;
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        .main-content {
+            padding: 30px;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .portfolio-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .portfolio-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
 
-  <body>
-    <div
-      class="tableauPlaceholder"
-      id="viz1747774894168"
-      style="position: relative"
-    >
-      <noscript
-        ><a href="#"
-          ><img
-            alt="Dashboard 1 "
-            src="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard1&#47;1_rss.png"
-            style="border: none" /></a></noscript
-      ><object class="tableauViz" style="display: none">
-        <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
-        <param name="embed_code_version" value="3" />
-        <param name="site_root" value="" />
-        <param name="name" value="project_17476928016330&#47;Dashboard1" />
-        <param name="tabs" value="no" />
-        <param name="toolbar" value="yes" />
-        <param
-          name="static_image"
-          value="https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard1&#47;1.png"
-        />
-        <param name="animate_transition" value="yes" />
-        <param name="display_static_image" value="yes" />
-        <param name="display_spinner" value="yes" />
-        <param name="display_overlay" value="yes" />
-        <param name="display_count" value="yes" />
-        <param name="language" value="en-US" />
-        <param name="filter" value="publish=yes" />
-      </object>
+        /* Custom styles for Offcanvas */
+        .offcanvas-body .list-group-item {
+            border: none;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">John Doe</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Navigation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#portfolio">Portfolio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#portfolioModal">More Projects</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header-section">
+        <h1>John Doe</h1>
+        <p class="lead">Developer & Data Analyst</p>
     </div>
-    <script type="text/javascript">
-      var divElement = document.getElementById("viz1747774894168");
-      var vizElement = divElement.getElementsByTagName("object")[0];
-      if (divElement.offsetWidth > 800) {
-        vizElement.style.minWidth = "420px";
-        vizElement.style.maxWidth = "1600px";
-        vizElement.style.width = "100%";
-        vizElement.style.minHeight = "587px";
-        vizElement.style.maxHeight = "1027px";
-        vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
-      } else if (divElement.offsetWidth > 500) {
-        vizElement.style.minWidth = "420px";
-        vizElement.style.maxWidth = "1600px";
-        vizElement.style.width = "100%";
-        vizElement.style.minHeight = "587px";
-        vizElement.style.maxHeight = "1027px";
-        vizElement.style.height = divElement.offsetWidth * 0.75 + "px";
-      } else {
-        vizElement.style.width = "100%";
-        vizElement.style.height = "1777px";
-      }
-      var scriptElement = document.createElement("script");
-      scriptElement.src =
-        "https://public.tableau.com/javascripts/api/viz_v1.js";
-      vizElement.parentNode.insertBefore(scriptElement, vizElement);
-    </script>
-  </body>
+
+    <div class="main-content">
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p>I am a versatile professional with 2 years of experience as a developer and 3 years of experience as a data analyst. I enjoy building robust solutions and extracting valuable insights from data.</p>
+        </section>
+
+        <section id="portfolio" class="section">
+            <h2>Portfolio</h2>
+            <div class="portfolio-item">
+                <h3>1. Data Warehouse Dashboard using Tableau</h3>
+                <p>A comprehensive dashboard developed using Tableau, designed to visualize key metrics from a data warehouse. This project demonstrates my skills in data integration, ETL processes, and creating impactful visualizations for business intelligence.</p>
+                </div>
+            </section>
+
+        <section id="contact" class="section">
+            <h2>Contact</h2>
+            <p>You can reach me at: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+            <p>
+                </p>
+        </section>
+    </div>
+
+    <div class="modal fade" id="portfolioModal" tabindex="-1" aria-labelledby="portfolioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="portfolioModalLabel">Additional Projects</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>This is where you could list other projects or link to a dedicated portfolio page if you had one.</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">Project Alpha (e.g., Python Scripting)</li>
+                        <li class="list-group-item">Project Beta (e.g., SQL Database Design)</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
 </html>

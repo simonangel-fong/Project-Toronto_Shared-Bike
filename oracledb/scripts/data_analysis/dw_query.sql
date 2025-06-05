@@ -23,7 +23,7 @@ SHOW user;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_time
+FROM dw_schema.dim_time
 ORDER BY 
     dim_time_id DESC;
 
@@ -33,7 +33,7 @@ ORDER BY
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_station
+FROM dw_schema.dim_station
 ORDER BY dim_station_id;
 
 -- ============================================================================
@@ -42,7 +42,7 @@ ORDER BY dim_station_id;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_bike
+FROM dw_schema.dim_bike
 ORDER BY dim_bike_id DESC;
 
 -- ============================================================================
@@ -51,14 +51,14 @@ ORDER BY dim_bike_id DESC;
 SELECT 
 --    *
     COUNT(*)
-FROM DW_SCHEMA.dim_user_type;
+FROM dw_schema.dim_user_type;
 
 -- ============================================================================
 -- trip fact table
 -- ============================================================================
 SELECT 
     COUNT(*)
-FROM DW_SCHEMA.fact_trip;
+FROM dw_schema.fact_trip;
 
 -- ============================================================================
 -- full

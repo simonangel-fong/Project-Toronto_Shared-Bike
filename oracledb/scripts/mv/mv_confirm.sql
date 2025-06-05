@@ -44,6 +44,6 @@ FETCH FIRST 3 ROWS ONLY;
 
 -- Query the user segmentation materialized view
 SELECT *
-FROM DW_SCHEMA.MV_USER_SEGMENTATION
+FROM dw_schema.MV_USER_SEGMENTATION
 ORDER BY user_type_name ASC, dim_year ASC
 FETCH FIRST 3 ROWS ONLY;

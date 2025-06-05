@@ -4,17 +4,17 @@ include:
   - ../nginx/compose.nginx.dev.yaml
 
 services:
-  cloudflare-tunnel:
-    container_name: cloudflare-tunnel
+  cloudflare-tunnel-dev:
+    container_name: cloudflare-tunnel-dev
     restart: unless-stopped
     image: cloudflare/cloudflared:latest
     env_file:
-      - ./env/cloudflare.env
+      - ./env/cloudflare.dev.env
     command: tunnel run
     networks:
       - public-net
     depends_on:
-      - nginx-proxy
+      - "nginx-proxy-dev"
 
 networks:
   public-net:

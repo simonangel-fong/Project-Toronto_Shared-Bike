@@ -9,7 +9,7 @@ ALTER SESSION SET CONTAINER = toronto_shared_bike;
 SHOW con_name;
 SHOW user;
 
-
+-- MV LOG
 SELECT 
     log_owner,
     master AS table_name,
@@ -18,23 +18,19 @@ SELECT
     sequence,
     include_new_values
 FROM dba_mview_logs
-WHERE log_owner = 'DW_SCHEMA'
+WHERE log_owner = 'dw_schema'
 ORDER BY master;
 
-
-
+-- MV info
 SELECT 
     mview_name,
     owner,
-    
     refresh_method,
     refresh_mode,
     fast_refreshable,
-    
     build_mode
-
 FROM dba_mviews
-WHERE owner = 'DW_SCHEMA'
+WHERE owner = 'dw_schema'
 ORDER BY mview_name;
 
 
@@ -47,7 +43,7 @@ SELECT
     tablespace_name,
     partitioned
 FROM dba_indexes
-WHERE owner = 'DW_SCHEMA'
+WHERE owner = 'dw_schema'
 AND table_name IN ('MV_TRIP_TIME', 'MV_DURATION_TIME', 'MV_TRIP_STATION', 'MV_USER_TYPE')
 ORDER BY table_name, index_name;
 

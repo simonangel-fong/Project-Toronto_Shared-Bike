@@ -1,13 +1,19 @@
 from datetime import datetime
 from typing import Annotated, Optional
 from fastapi import FastAPI, HTTPException, Depends, Query,  Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-import database, database_models
+import database
+import database_models
+from app_settings import get_settings
 
-CREATOR = "Wenhao Fang"
+settings = get_settings()
+
+CREATOR = settings.CREATOR
+DEPLOY_HOST = settings.DEPLOY_HOST
 
 app = FastAPI(
     title="Toronto Shared Bike Data Analysis Project",
@@ -16,20 +22,48 @@ app = FastAPI(
 )
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 @app.get("/")
 async def get_root_with_db():
     return {
         "title": "Toronto Shared Bike Data Analysis Project",
         "creator": CREATOR,
-        "datetime": datetime.now().strftime("%Y-%m-%d %H:%M")
-
+        "deployed on": DEPLOY_HOST,
+        "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "urls": [
+            {
+                "name": "Time-based Trip Query",
+                "url": "https://trip.arguswatcher.net/time-trip"
+            },
+            {
+                "name": "Time-based Duration Query",
+                "url": "https://trip.arguswatcher.net/time-duration"
+            },
+            {
+                "name": "Station-based Trip Query",
+                "url": "https://trip.arguswatcher.net/station-trip"
+            },
+            {
+                "name": "User-based Trip Duration Query",
+                "url": "https://trip.arguswatcher.net/user-trip-duration"
+            }
+        ]
     }
 
 
-@app.get("/user")
+@app.get("/user-trip-duration")
 async def get_user(
     db: Annotated[Session, Depends(database.get_db)],
-    user_type: Optional[int] = Query(None, description="Filter by user type ID"),
+    user_type: Optional[int] = Query(
+        None, description="Filter by user type ID"),
     year: Optional[int] = Query(None, description="Filter by year")
 ):
     try:
@@ -37,7 +71,8 @@ async def get_user(
 
         # filter by user type id
         if user_type is not None:
-            query = query.filter(database_models.User.dim_user_type_id == user_type)
+            query = query.filter(
+                database_models.User.dim_user_type_id == user_type)
 
         # when query for year
         if year is not None:
@@ -47,8 +82,9 @@ async def get_user(
         count = len(result)
 
         return {
-            "title": "User Type Query",
+            "title": "User-based Trip & Duration Query",
             "creator": CREATOR,
+            "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -65,7 +101,7 @@ async def get_user(
         raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get("/trip-time")
+@app.get("/time-trip")
 async def get_trip_time(
     db: Annotated[Session, Depends(database.get_db)],
     year: Optional[int] = Query(None, description="Filter by year"),
@@ -93,6 +129,7 @@ async def get_trip_time(
         return {
             "title": "Time-based Trip Query",
             "creator": CREATOR,
+            "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -108,7 +145,7 @@ async def get_trip_time(
         raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get("/duration-time")
+@app.get("/time-duration")
 async def get_trip_time(
     db: Annotated[Session, Depends(database.get_db)],
     year: Optional[int] = Query(None, description="Filter by year"),
@@ -136,6 +173,7 @@ async def get_trip_time(
         return {
             "title": "Time-based Duration Query",
             "creator": CREATOR,
+            "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -151,12 +189,14 @@ async def get_trip_time(
         raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
-@app.get("/trip-station")
+@app.get("/station-trip")
 async def get_trip_station(
     db: Annotated[Session, Depends(database.get_db)],
     year: Optional[int] = Query(None, description="Filter by year"),
-    station_id: Optional[int] = Query(None, description="Filter by station ID"),
-    limit: int = Query(100, ge=1, le=1000, description="Number of records to return (max 1000)"),
+    station_id: Optional[int] = Query(
+        None, description="Filter by station ID"),
+    limit: int = Query(100, ge=1, le=1000,
+                       description="Number of records to return (max 1000)"),
     offset: int = Query(0, ge=0, description="Number of records to skip"),
     sort: Optional[str] = Query(
         "desc", description="Sort by trip_count_by_start ('asc' or 'desc')")
@@ -170,8 +210,9 @@ async def get_trip_station(
 
         # filter by month
         if station_id is not None:
-            query = query.filter(database_models.TripStation.dim_station_id == station_id)
-        
+            query = query.filter(
+                database_models.TripStation.dim_station_id == station_id)
+
         # sort
         if sort == "asc":
             query = query.order_by(
@@ -187,6 +228,7 @@ async def get_trip_station(
         return {
             "title": "Station-based Trip Query",
             "creator": CREATOR,
+            "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "status": "success",
             "item_count": count,
@@ -200,4 +242,3 @@ async def get_trip_station(
         print(datetime.now().strftime(
             "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
         raise HTTPException(status_code=500, detail="Unexpected server error.")
-

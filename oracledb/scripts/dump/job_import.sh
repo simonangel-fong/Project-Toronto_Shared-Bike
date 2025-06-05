@@ -43,19 +43,26 @@ EOF
 
     # Run data pump import for dim
     impdp ${ORCL_USER}/'SecurePassword!23'@${ORCL_PDB} \
-        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y \
-        tables=${ORCL_DPUMP_DIM_TABLES}     \
-        directory=${ORCL_DPUMP_DIR}         \
-        dumpfile=${ORCL_DPUMP_DIM_FILE}     \
-        logfile=${ORCL_DPUMP_DIM_LOGFILE}   \
-        content=data_only
+        tables=${ORCL_DPUMP_DIM_TABLES}         \
+        directory=${ORCL_DPUMP_DIR}             \
+        dumpfile=${ORCL_DPUMP_DIM_FILE}         \
+        logfile=${ORCL_DPUMP_DIM_LOGFILE}       \
+        content=data_only                       \
+        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y     \
+        PARALLEL=8                              \
+        DIRECT=YES                              \
+        BUFFER=1000000
+
 
     # Run data pump import for fact
     impdp ${ORCL_USER}/'SecurePassword!23'@${ORCL_PDB} \
-        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y     \
         tables=${ORCL_DPUMP_FACT_TABLES}        \
         directory=${ORCL_DPUMP_DIR}             \
         dumpfile=${ORCL_DPUMP_FACT_FILE}        \
         logfile=${ORCL_DPUMP_FACT_LOGFILE}      \
-        content=data_only
+        content=data_only                       \
+        TRANSFORM=DISABLE_ARCHIVE_LOGGING:y     \
+        PARALLEL=8                              \
+        DIRECT=YES                              \
+        BUFFER=1000000
 fi

@@ -47,13 +47,20 @@ EOF
         directory=${ORCL_DPUMP_DIR}         \
         tables=${ORCL_DPUMP_DIM_TABLES}     \
         dumpfile=${ORCL_DPUMP_DIM_FILE}     \
-        logfile=${ORCL_DPUMP_DIM_LOGFILE}
+        logfile=${ORCL_DPUMP_DIM_LOGFILE}   \
+        COMPRESSION=ALL                     \
+        PARALLEL=8                          \
+        DIRECT=YES                          \
+        BUFFER=1000000
 
     # Run data pump import for fact table
     expdp ${ORCL_USER}/'SecurePassword!23'@${ORCL_PDB} \
         directory=${ORCL_DPUMP_DIR}         \
         tables=${ORCL_DPUMP_FACT_TABLES}    \
         dumpfile=${ORCL_DPUMP_FACT_FILE}    \
-        logfile=${ORCL_DPUMP_FACT_LOGFILE}
-
+        logfile=${ORCL_DPUMP_FACT_LOGFILE}  \
+        COMPRESSION=ALL                     \
+        PARALLEL=8                          \
+        DIRECT=YES                          \
+        BUFFER=1000000
 fi
