@@ -18,10 +18,10 @@ DEPLOY_HOST = settings.DEPLOY_HOST
 app = FastAPI(
     title="Toronto Shared Bike Data Analysis Project",
     description="",
-    version="0.1.0"
+    version="1.0.0"
 )
 
-
+# enable cors
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,69 +40,36 @@ async def get_root_with_db():
         "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "urls": [
             {
-                "name": "Time-based Trip Query",
-                "url": "https://trip.arguswatcher.net/time-trip"
+                "name": "Web: Project homepage",
+                "url": "https://trip-web.arguswatcher.net"
             },
             {
-                "name": "Time-based Duration Query",
-                "url": "https://trip.arguswatcher.net/time-duration"
+                "name": "Web: Tableau Dashboard",
+                "url": "https://trip-web.arguswatcher.net/tableau/dashboard/"
             },
             {
-                "name": "Station-based Trip Query",
-                "url": "https://trip.arguswatcher.net/station-trip"
+                "name": "API homepage",
+                "url": "https://trip-api.arguswatcher.net/"
             },
             {
-                "name": "User-based Trip Duration Query",
-                "url": "https://trip.arguswatcher.net/user-trip-duration"
+                "name": "API: Time-based trip data for analysis over time",
+                "url": "https://trip-api.arguswatcher.net/time-trip"
             },
             {
-                "name": "Tableau Dashboard",
-                "url": "https://tableau-dashboard.arguswatcher.net/"
+                "name": "API: Time-based duration data for analysis over time",
+                "url": "https://trip-api.arguswatcher.net/time-duration"
+            },
+            {
+                "name": "API: Station-based trip data for analysis over stations",
+                "url": "https://trip-api.arguswatcher.net/station-trip"
+            },
+            {
+                "name": "API: User-based trip and duration data for analysis over user types",
+                "url": "https://trip-api.arguswatcher.net/user-trip-duration"
             }
         ]
+
     }
-
-
-@app.get("/user-trip-duration")
-async def get_user(
-    db: Annotated[Session, Depends(database.get_db)],
-    user_type: Optional[int] = Query(
-        None, description="Filter by user type ID"),
-    year: Optional[int] = Query(None, description="Filter by year")
-):
-    try:
-        query = db.query(database_models.User)
-
-        # filter by user type id
-        if user_type is not None:
-            query = query.filter(
-                database_models.User.dim_user_type_id == user_type)
-
-        # when query for year
-        if year is not None:
-            query = query.filter(database_models.User.dim_year == year)
-
-        result = query.all()
-        count = len(result)
-
-        return {
-            "title": "User-based Trip & Duration Query",
-            "creator": CREATOR,
-            "deployed on": DEPLOY_HOST,
-            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "status": "success",
-            "item_count": count,
-            "data": result
-        }
-
-    except SQLAlchemyError as e:
-        print(datetime.now().strftime(
-            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
-        raise HTTPException(status_code=500, detail="Database error occurred.")
-    except Exception as e:
-        print(datetime.now().strftime(
-            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
-        raise HTTPException(status_code=500, detail="Unexpected server error.")
 
 
 @app.get("/time-trip")
@@ -131,7 +98,7 @@ async def get_trip_time(
         count = len(result)
 
         return {
-            "title": "Time-based Trip Query",
+            "title": "Time-based Trip Data",
             "creator": CREATOR,
             "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -175,7 +142,7 @@ async def get_trip_time(
         count = len(result)
 
         return {
-            "title": "Time-based Duration Query",
+            "title": "Time-based Duration Data",
             "creator": CREATOR,
             "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -230,7 +197,7 @@ async def get_trip_station(
         count = len(result)
 
         return {
-            "title": "Station-based Trip Query",
+            "title": "Station-based Trip Data",
             "creator": CREATOR,
             "deployed on": DEPLOY_HOST,
             "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -238,6 +205,48 @@ async def get_trip_station(
             "item_count": count,
             "data": result
         }
+    except SQLAlchemyError as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Database error occurred.")
+    except Exception as e:
+        print(datetime.now().strftime(
+            "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")
+        raise HTTPException(status_code=500, detail="Unexpected server error.")
+
+
+@app.get("/user-trip-duration")
+async def get_user(
+    db: Annotated[Session, Depends(database.get_db)],
+    user_type: Optional[int] = Query(
+        None, description="Filter by user type ID"),
+    year: Optional[int] = Query(None, description="Filter by year")
+):
+    try:
+        query = db.query(database_models.User)
+
+        # filter by user type id
+        if user_type is not None:
+            query = query.filter(
+                database_models.User.dim_user_type_id == user_type)
+
+        # when query for year
+        if year is not None:
+            query = query.filter(database_models.User.dim_year == year)
+
+        result = query.all()
+        count = len(result)
+
+        return {
+            "title": "User-based Trip & Duration Data",
+            "creator": CREATOR,
+            "deployed on": DEPLOY_HOST,
+            "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "status": "success",
+            "item_count": count,
+            "data": result
+        }
+
     except SQLAlchemyError as e:
         print(datetime.now().strftime(
             "%Y-%m-%d %H:%M") + f":  [Error]: {str(e)}")

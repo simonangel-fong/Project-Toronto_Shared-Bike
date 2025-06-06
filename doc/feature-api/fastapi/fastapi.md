@@ -50,9 +50,11 @@ docker compose -f compose.fastapi.dev.yaml down
 ## Test
 
 ```sh
-https://trip-dev.arguswatcher.net/user/
-https://trip-dev.arguswatcher.net/trip-time/
-https://trip-dev.arguswatcher.net/trip-station/
-https://trip-dev.arguswatcher.net/route/
-https://trip-dev.arguswatcher.net/duration/
+# https://trip-api.arguswatcher.net/
+# https://trip-api.arguswatcher.net/time-tri
+# https://trip-api.arguswatcher.net/time-duration
+# https://trip-api.arguswatcher.net/station-trip
+# https://trip-api.arguswatcher.net/user-trip-duration
+
+docker exec -it fastapi-app-dev pytest /app/test_url_dev.py
 ```

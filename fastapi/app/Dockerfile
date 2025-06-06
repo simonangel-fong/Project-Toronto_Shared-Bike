@@ -1,6 +1,9 @@
 # Base image
 FROM python:3.9-slim
 
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
 # Set working directory
 WORKDIR /app
 
