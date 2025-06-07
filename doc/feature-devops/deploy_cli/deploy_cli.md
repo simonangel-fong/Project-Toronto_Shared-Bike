@@ -360,12 +360,10 @@ docker compose -f /project/github/cloudflare/compose.cloudflare.prod.yaml down
 ## Init & migrate
 
 ```sh
-mkdir -pv /home/aadmin/project
-# # set gid
-# sudo chown :jenkins -R /home/aadmin/project
+# as root
+scp -r ./devops/shell ./project/config root@192.168.128.100:~
 
-
-scp -r ./devops/shell/00_init.sh ./project/config ./project/env aadmin@192.168.128.100:~/project
+scp -r ./project/dpump root@192.168.128.100:~
 
 
 sudo cp /home/aadmin/project/config/* /project/config

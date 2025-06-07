@@ -57,4 +57,5 @@ docker compose -f compose.fastapi.dev.yaml down
 # https://trip-api.arguswatcher.net/user-trip-duration
 
 docker exec -it fastapi-app-dev pytest /app/test_url_dev.py
+docker exec -it fastapi-app pytest /app/test_url_prod.py
 ```
