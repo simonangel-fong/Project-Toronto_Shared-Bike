@@ -4,9 +4,11 @@
 
 - [Deployment: Proxmox Installation](#deployment-proxmox-installation)
   - [](#)
-  - [NAT](#nat)
+  - [Network Configuration](#network-configuration)
+    - [Map Wifi to Proxmox nic](#map-wifi-to-proxmox-nic)
+    - [Map Jenkins](#map-jenkins)
+  - [LVM Pre](#lvm-pre)
   - [Deploy](#deploy)
-    - [LVM](#lvm)
 
 ---
 
@@ -20,7 +22,9 @@ passwd padmin
 
 ---
 
-## NAT
+## Network Configuration
+
+### Map Wifi to Proxmox nic
 
 ```sh
 # List Filter Table
@@ -59,30 +63,9 @@ iptables -A FORWARD -i wlp7s0 -o vmbr0 -m state --state RELATED,ESTABLISHED -j A
 netfilter-persistent save
 ```
 
-- SSH
-
-```sh
-ssh root@192.168.1.80 root@192.168.100.50
-```
-
 ---
 
-## Deploy
-
-- migrate
-
-```sh
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell/01_deploy.sh ./devops/shell/00_pre_deploy.sh ./project/config root@192.168.100.108:~
-
-scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.108:~
-
-```
-
-- ssh
-
-```sh
-ssh -J root@192.168.1.80 root@192.168.100.100
-```
+### Map Jenkins
 
 - Map Jenkins GUI
 
@@ -107,7 +90,7 @@ netfilter-persistent save
 
 ---
 
-### LVM
+## LVM Pre
 
 ```sh
 ssh -J root@192.168.1.80 aadmin@192.168.100.100
@@ -122,10 +105,9 @@ fdisk /dev/sdb
 # Press Enter to accept default first/last sector
 # w: write and exit
 
-# mount swap
-mkswap /dev/sdb1
-echo "UUID=uuid_number swap    swap    pri=1   0   0" >> /etc/fstab
-
+# # mount swap
+# mkswap /dev/sdb1
+# echo "UUID=uuid_number swap    swap    pri=1   0   0" >> /etc/fstab
 
 # Create a Physical Volume on the New Disk
 sudo pvcreate /dev/sdb1
@@ -136,6 +118,39 @@ sudo lvextend -l +100%FREE /dev/vg/root
 # Resize the ext4 File System
 sudo resize2fs /dev/vg/root
 
-df -Th 
+df -Th
 
 ```
+
+## Deploy
+
+- Upload scripts and data
+
+```sh
+# as root
+# upload script and config via proxmox
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell ./project/config root@192.168.100.108:~
+# upload compress data
+scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.108:~
+```
+
+- Execute deploy shell script
+
+```sh
+# login
+ssh -J root@192.168.1.80 root@192.168.100.100
+
+# as root
+# configure network, hostname
+bash ~/shell/00_pre_deploy.sh
+# install git, docker; mkdir; copy config, dpump; start cloudflare
+bash ~/shell/deploy.sh
+```
+
+- Admin task
+
+| Task           | Command                            |
+| -------------- | ---------------------------------- |
+| Refresh github | `bash ~/shell/refresh_github.sh`   |
+| Stop services  | `bash ~/shell/stop_<con_name>.sh`  |
+| Start services | `bash ~/shell/start_<con_name>.sh` |

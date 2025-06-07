@@ -151,13 +151,21 @@ echo "Cloning GitHub repository..."
 echo "========================================================"
 echo
 
+cd ~
 sudo rm -rf $GITHUB_DIR
 sudo mkdir -pv $GITHUB_DIR
 
-# sudo git config --global --add safe.directory "${GITHUB_DIR}"
+# clone github
 sudo git clone --branch "${GIT_BRANCH}" "${GIT_REPO_URL}" "${GITHUB_DIR}"
 
+# set ownership for aadmin
 sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"
+
+# set ownership for oracle
+sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
+sudo chown 54321:54321 -Rv "${GITHUB_DIR}/oracledb/scripts"
+sudo chown 54321:54321 -Rv "${DPUMP_DIR}"
+sudo chown 54321:54321 -Rv "${ORBACKUP_DIR}"
 
 # Set shell script permissions
 sudo find "${GITHUB_DIR}" -type f -name "*.sh" -exec chmod -v 755 {} +
@@ -167,22 +175,12 @@ sudo find "${BASE_DIR}" -type d -exec sudo chmod -v 755 {} +
 sudo find "${BASE_DIR}" -type f -name "*.conf" -exec sudo chmod -v 666 {} +
 sudo find "${BASE_DIR}" -type f -name "*.env" -exec sudo chmod -v 666 {} +
 
-# sudo chmod 0777 -v "${DPUMP_DIR}"
-# sudo chmod 0777 -v "${ORADATA_DIR}"
-# sudo chmod 0777 -v "${ORBACKUP_DIR}"
-
-sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
-sudo chown 54321:54321 -Rv "${GITHUB_DIR}/oracledb/scripts"
-sudo chown 54321:54321 -Rv "${DPUMP_DIR}"
-sudo chown 54321:54321 -Rv "${ORBACKUP_DIR}"
-
 echo
 echo "========================================================"
-echo "Starting up oracle container..."
+echo "Starting Docker Compose..."
 echo "========================================================"
 echo
 
-# su - $APP_ADMIN -c "docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d"
 su - $APP_ADMIN -c "docker compose -f ${CLOUDFLARE_COMPOSE_FILE} up --build -d"
 
 echo
