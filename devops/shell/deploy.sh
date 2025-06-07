@@ -195,25 +195,25 @@ echo
 # echo "========================================================"
 # echo
 
-# sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-# sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-# sudo yum upgrade -y
-# # Add required dependencies for the jenkins package
-# sudo yum install -y fontconfig java-17-openjdk
-# sudo yum install -y jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y
+# Add required dependencies for the jenkins package
+sudo yum install -y fontconfig java-17-openjdk
+sudo yum install -y jenkins
 
-# # sudo update-alternatives --config java
-# sudo systemctl daemon-reload
+# sudo update-alternatives --config java
+sudo systemctl daemon-reload
 
-# sudo systemctl enable --now jenkins
+sudo systemctl enable --now jenkins
 
-# sudo firewall-cmd --add-port=8080/tcp --permanent
-# sudo firewall-cmd --reload
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
 
-# echo
-# echo "========================================================"
-# echo "Jenkins credential"
-# echo "========================================================"
-# echo
+echo
+echo "========================================================"
+echo "Jenkins credential"
+echo "========================================================"
+echo
 
-# sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword

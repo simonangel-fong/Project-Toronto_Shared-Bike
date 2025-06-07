@@ -14,9 +14,8 @@ scrape_configs:
   - job_name: 'cadvisor'
     scrape_interval: 5s
     static_configs:
-      - targets: ['192.168.128.100:8080']
+      - targets: ['192.168.100.100:8080']
   - job_name: 'node'
     scrape_interval: 5s
     static_configs:
-      # - targets: ['192.168.128.100:9100'] # cannot be the localhost
       - targets: ['node_exporter:9100']

@@ -13,9 +13,12 @@ services:
     command: tunnel run
     networks:
       - public-net
+      - monitoring
     depends_on:
       - nginx-proxy
 
 networks:
   public-net:
+    driver: bridge
+  monitoring:
     driver: bridge
