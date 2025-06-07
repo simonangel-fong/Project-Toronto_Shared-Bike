@@ -10,7 +10,6 @@ BASE_DIR="/project"
 GITHUB_DIR="${BASE_DIR}/github"
 CONFIG_DIR="${BASE_DIR}/config"
 
-SOURCE_DIR="${BASE_DIR}/source"
 DPUMP_DIR="${BASE_DIR}/dpump"
 ORADATA_DIR="${BASE_DIR}/oradata"
 ORBACKUP_DIR="${BASE_DIR}/orabackup"
@@ -51,10 +50,10 @@ sudo git clone --branch "${GIT_BRANCH}" "${GIT_REPO_URL}" "${GITHUB_DIR}"
 sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"
 
 # set ownership for oracle
-sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
-sudo chown 54321:54321 -Rv "${GITHUB_DIR}/oracledb/scripts"
 sudo chown 54321:54321 -Rv "${DPUMP_DIR}"
+sudo chown 54321:54321 -Rv "${ORADATA_DIR}"
 sudo chown 54321:54321 -Rv "${ORBACKUP_DIR}"
+sudo chown 54321:54321 -Rv "${GITHUB_DIR}/oracledb/scripts"
 
 # Set shell script permissions
 sudo find "${GITHUB_DIR}" -type f -name "*.sh" -exec chmod -v 755 {} +

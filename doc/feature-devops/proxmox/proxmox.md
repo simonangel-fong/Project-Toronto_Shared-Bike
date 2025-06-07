@@ -129,9 +129,9 @@ df -Th
 ```sh
 # as root
 # upload script and config via proxmox
-scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell ./project/config root@192.168.100.108:~
+scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell ./project/config root@192.168.100.100:~
 # upload compress data
-scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.108:~
+scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.100:~
 ```
 
 - Execute deploy shell script
