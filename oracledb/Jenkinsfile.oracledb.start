@@ -1,0 +1,47 @@
+// Jenkinsfile to build oracledb
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_DIR="/project/github"
+
+        GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"
+        GIT_BRANCH="feature-devops"
+
+        ORACLE_COMPOSE_FILE="/project/github/oracledb/compose.oracledb.prod.yaml"
+        ORACLE_CON="oracle19cDB"
+    }
+
+    stages {
+
+        stage('Clone github') {
+            steps {
+                echo 'Clone code from github...'
+                
+                sh 'sudo rm -rf ${GITHUB_DIR}'
+                sh 'sudo mkdir -pv ${GITHUB_DIR}'
+                sh 'sudo chown jenkins:jenkins -Rv ${GITHUB_DIR}'
+
+                // set git
+                sh 'git config --global --add safe.directory ${GITHUB_DIR}'
+                // clone code
+                sh 'git clone --branch ${GIT_BRANCH} ${GIT_REPO_URL} ${GITHUB_DIR}'
+
+                // set sh file permission
+                sh 'sudo find ${GITHUB_DIR} -type f -name *.sh -exec chmod -v 755 {} + ;'
+            }
+        }
+   
+        stage('Build Oracle Database') {
+            steps {
+                echo 'Building Oracle database...'
+
+                sh 'docker compose -f ${ORACLE_COMPOSE_FILE} up --build -d'
+
+                // // Wait until health status is "healthy"
+                // timeout 600 bash -c 'while [ "$(docker inspect -f {{.State.Health.Status}} oracle19cDB" != "healthy" ]; do sleep 10; done'
+                // echo "Oracle is healthy!"
+            }
+        }
+    }
+}

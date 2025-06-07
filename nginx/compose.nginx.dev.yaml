@@ -1,0 +1,31 @@
+name: toronto-shared-bike
+
+include:
+  - ../fastapi/compose.fastapi.dev.yaml
+
+services:
+  nginx-proxy-dev:
+    container_name: nginx-proxy-dev
+    restart: unless-stopped
+    image: nginx:latest
+    volumes:
+      - ./config/nginx.dev.conf:/etc/nginx/nginx.conf:ro # Mount Nginx config
+    networks:
+      - public-net
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "fastapi-app-dev"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true

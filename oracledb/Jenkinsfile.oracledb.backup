@@ -1,0 +1,20 @@
+// Jenkinsfile to build oracledb
+pipeline {
+    agent any
+
+    environment {
+        ORACLE_BACKUP_SCRIPT="/project/scripts/backup/rman_create_backup_with_tag.sh"
+        ORACLE_BACKUP_TAG="YEAR_2019"
+    }
+
+    stages {
+        
+        stage('Stop Oracle Database') {
+            steps {
+                echo 'Stopping Oracle database...'
+
+                sh'docker exec oracle19cDB ${ORACLE_BACKUP_SCRIPT} ${ORACLE_BACKUP_TAG}'
+            }
+        }
+    }
+}

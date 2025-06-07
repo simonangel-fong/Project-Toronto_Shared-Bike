@@ -1,0 +1,49 @@
+# docker compose for development Windows OS
+name: toronto-shared-bike
+
+services:
+  oracle19cDB:
+    container_name: oracle19cDB
+    restart: unless-stopped
+    image: simonangelfong/oracledb19c:1.0
+    env_file:
+      - /project/config/oracle19cDB.env
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "2.0"
+    #       memory: 8g
+    #     reservations:
+    #       memory: 4g
+    volumes:
+      - ./scripts/setup:/opt/oracle/scripts/setup # script to run after setup
+      - ./scripts:/project/scripts # scripts
+      # prod
+      - /project/oradata:/opt/oracle/oradata # persist data
+      - /project/orabackup:/opt/oracle/fast_recovery_area # backup data
+      - /project/source:/project/source # source data
+      - /project/dpump:/project/dpump # export and import data
+    networks:
+      - private-net # Private network for prod
+    ports:
+      - 1521:1521
+    healthcheck:
+      test: ["CMD-SHELL", "/project/scripts/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
+      start_period: 2m
+
+# volumes:
+#   oracledata:
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true

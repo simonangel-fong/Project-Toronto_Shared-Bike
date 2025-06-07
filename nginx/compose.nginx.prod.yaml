@@ -1,0 +1,29 @@
+name: toronto-shared-bike
+
+include:
+  - ../fastapi/compose.fastapi.prod.yaml
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    restart: unless-stopped
+    image: nginx:latest
+    volumes:
+      - /project/config/nginx.prod.conf:/etc/nginx/nginx.conf:ro # Mount Nginx config
+    networks:
+      - public-net
+    ports:
+      - "8000:8000"
+    depends_on:
+      - fastapi-app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+
+networks:
+  public-net:
+    driver: bridge

@@ -1,0 +1,24 @@
+name: toronto-shared-bike
+
+include:
+  - ../nginx/compose.nginx.dev.yaml
+
+services:
+  cloudflare-tunnel-dev:
+    container_name: cloudflare-tunnel-dev
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    env_file:
+      - ./env/cloudflare.dev.env
+    command: tunnel run
+    networks:
+      - public-net
+    depends_on:
+      - "nginx-proxy-dev"
+
+networks:
+  public-net:
+    driver: bridge
+  private-net:
+    driver: bridge
+    internal: true
