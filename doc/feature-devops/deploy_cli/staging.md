@@ -53,14 +53,15 @@ systemctl restart docker
 docker plugin ls
 
 # configure Docker to send logs from all containers
-vi etc/docker/daemon.json
-# {
-#     "debug" : true,
-#     "log-driver": "loki",
-#     "log-opts": {
-#         "loki-url": "http://192.168.128.100:3100/loki/api/v1/push"
-#     }
-# }
+cat > /etc/docker/daemon.json <<EOF
+{
+    "debug" : true,
+    "log-driver": "loki",
+    "log-opts": {
+        "loki-url": "http://192.168.128.100:3100/loki/api/v1/push"
+    }
+}
+EOF
 
 # restart the Docker service:
 systemctl restart docker
