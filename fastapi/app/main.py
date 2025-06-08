@@ -41,11 +41,15 @@ async def get_root_with_db():
         "urls": [
             {
                 "name": "Web: Project homepage",
-                "url": "https://trip-web.arguswatcher.net"
+                "url": "https://trip.arguswatcher.net"
             },
             {
                 "name": "Web: Tableau Dashboard",
-                "url": "https://trip-web.arguswatcher.net/tableau/dashboard/"
+                "url": "https://trip.arguswatcher.net/tableau-dashboard.html"
+            },
+            {
+                "name": "Web: Source Data Files",
+                "url": "https://trip.arguswatcher.net/source.html"
             },
             {
                 "name": "API homepage",

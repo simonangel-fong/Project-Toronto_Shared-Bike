@@ -44,7 +44,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>✅ Deployment Succeeded</h2>
-            <p>All files in <b>S3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b> successfully.</p>
+            <p>All files in <b>s3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b> successfully.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>
@@ -64,7 +64,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>❌ Deployment Failed</h2>
-            <p>There was an error uploading files from <b>S3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b>.</p>
+            <p>There was an error uploading files from <b>s3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b>.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>

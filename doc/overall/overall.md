@@ -25,9 +25,9 @@
 
 | Url                                                    | Type       | Description                                                    |
 | ------------------------------------------------------ | ---------- | -------------------------------------------------------------- |
-| `https://trip-web.arguswatcher.net`                    | Website    | Project homepage                                               |
-| `https://trip-web.arguswatcher.net/source/`            | Website    | Raw Data Source                                                |
-| `https://trip-web.arguswatcher.net/tableau/dashboard/` | Website    | Tableau Dashboard                                              |
+| `https://trip.arguswatcher.net`                    | Website    | Project homepage                                               |
+| `https://trip.arguswatcher.net/source/`            | Website    | Raw Data Source                                                |
+| `https://trip.arguswatcher.net/tableau/dashboard/` | Website    | Tableau Dashboard                                              |
 | `https://trip-api.arguswatcher.net/`                   | API (JSON) | Project API homepage                                           |
 | `https://trip-api.arguswatcher.net/time-trip`          | API (JSON) | Time-based trip data for analysis over time                    |
 | `https://trip-api.arguswatcher.net/time-duration`      | API (JSON) | Time-based duration data for analysis over time                |
