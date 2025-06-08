@@ -1,6 +1,6 @@
 # Deployment: Application Deployment (Manual Command)
 
-[Back](../../../README.md)
+[Back](../../README.md)
 
 - [Deployment: Application Deployment (Manual Command)](#deployment-application-deployment-manual-command)
   - [Staging](#staging)

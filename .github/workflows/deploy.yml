@@ -2,24 +2,70 @@ name: Deploy to S3
 
 on:
   push:
-    branches: [ feature-devops ]  
-  workflow_dispatch:    # Allows manual triggering
+    branches: [feature-devops]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
       
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ca-central-1  
-        
-    - name: Deploy to S3
-      run: |
-        aws s3 cp s3/ s3://${{ secrets.AWS_S3_BUCKET }}/ --recursive
+      # cp files to s3
+      - name: Deploy to S3
+        run: |
+          aws s3 cp S3/ s3://${{ secrets.AWS_S3_BUCKET }}/ --recursive
+
+      - name: Confirm
+        run: |
+          aws s3 ls s3://${{ secrets.AWS_S3_BUCKET }}/
+      
+      # notify
+      - name: Send email notification on success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ github.repository }} - S3 Upload Success"
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+          html_body: |
+            <h2>✅ Deployment Succeeded</h2>
+            <p>All files in <b>S3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b> successfully.</p>
+            <p>Branch: <b>feature-devops</b></p>
+            <p>Workflow: <b>${{ github.workflow }}</b></p>
+            <p>Commit: <b>${{ github.sha }}</b></p>
+            <p><a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a></p>
+
+      - name: Send email notification on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ github.repository }} - S3 Upload Failed"
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+          html_body: |
+            <h2>❌ Deployment Failed</h2>
+            <p>There was an error uploading files from <b>S3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b>.</p>
+            <p>Branch: <b>feature-devops</b></p>
+            <p>Workflow: <b>${{ github.workflow }}</b></p>
+            <p>Commit: <b>${{ github.sha }}</b></p>
+            <p><a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a></p>

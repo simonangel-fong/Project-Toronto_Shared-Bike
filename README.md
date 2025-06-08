@@ -7,6 +7,7 @@ A repo of data analysis project for Toronto shared bike.
   - [Data Warehouse (Oracle 19c)](#data-warehouse-oracle-19c)
   - [API](#api)
   - [Deployment](#deployment)
+  - [SDLC](#sdlc)
 
 ---
 
@@ -52,3 +53,12 @@ A repo of data analysis project for Toronto shared bike.
 
 - [Application Deployment(CLI)](./doc/feature-devops/deploy_cli/deploy_cli.md)
 - [Application Deployment(Jenkins)](./doc/feature-devops/deploy_jenkins/deploy_jenkins.md)
+
+---
+
+## SDLC
+
+- Design
+- Development & Test
+- [Stage](./doc/stage/stage.md)
+- [Production](./doc/production/production.md)
