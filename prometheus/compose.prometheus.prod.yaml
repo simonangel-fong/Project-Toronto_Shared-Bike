@@ -78,22 +78,22 @@ services:
     depends_on:
       - cloudflare-tunnel
 
-  # loki:
-  #   image: grafana/loki:3.0.0 
-  #   container_name: loki
-  #   volumes:
-  #     - ./loki-config.yaml:/mnt/config/loki-config.yaml # Loki configuration file.
-  #     - loki_data:/tmp
-  #   ports:
-  #     - "3100:3100" 
-  #   command: -config.file=/mnt/config/loki-config.yaml # specify configuration file.
+  loki:
+    image: grafana/loki:3.0.0 
+    container_name: loki
+    volumes:
+      - ./loki-config.yaml:/mnt/config/loki-config.yaml # Loki configuration file.
+      - loki_data:/tmp
+    ports:
+      - "3100:3100" 
+    command: -config.file=/mnt/config/loki-config.yaml # specify configuration file.
 
-  # promtail:
-  #   image: grafana/promtail:3.0.0
-  #   container_name: promtail
-  #   volumes:
-  #     - ./promtail-config.yaml:/mnt/config/promtail-config.yaml # Promtail configuration file.
-  #     - /var/log:/var/log # Mounts the host's log directory.
-  #   command: -config.file=/mnt/config/promtail-config.yaml # specify configuration file.
-  #   depends_on:
-  #     - loki
+  promtail:
+    image: grafana/promtail:3.0.0
+    container_name: promtail
+    volumes:
+      - ./promtail-config.yaml:/mnt/config/promtail-config.yaml # Promtail configuration file.
+      - /var/log:/var/log # Mounts the host's log directory.
+    command: -config.file=/mnt/config/promtail-config.yaml # specify configuration file.
+    depends_on:
+      - loki
