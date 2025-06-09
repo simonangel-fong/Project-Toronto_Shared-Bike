@@ -4,6 +4,7 @@
 
 - [Deployment: Application Deployment (Manual Command)](#deployment-application-deployment-manual-command)
   - [Staging](#staging)
+  - [Grafana](#grafana)
 
 ---
 
@@ -14,22 +15,26 @@
 ```sh
 # as root
 # upload script and config
-scp -r ./devops/shell ./project/config root@192.168.128.100:~
+ssh-keygen -R 192.168.100.100
+scp -r ./devops/shell ./project/config root@192.168.100.100:~
 # upload compress data
-scp -r ./project/dpump root@192.168.128.100:~
+scp -r ./project/dpump root@192.168.100.100:~
 ```
 
 - Execute deploy shell script
 
 ```sh
 # login
-ssh -J root@192.168.1.80 root@192.168.100.100
+ssh root@192.168.100.100
 
 # as root
-# configure network, hostname
-bash ~/shell/00_pre_deploy.sh
-# install git, docker; mkdir; copy config, dpump; start cloudflare
-bash ~/shell/deploy.sh
+# initialize system
+bash ~/shell/init_system.sh
+
+# pull github
+bash ~/shell/pull_github.sh
+
+bash ~/shell/download_data.sh
 ```
 
 - Admin task
@@ -58,7 +63,7 @@ cat > /etc/docker/daemon.json <<EOF
     "debug" : true,
     "log-driver": "loki",
     "log-opts": {
-        "loki-url": "http://192.168.128.100:3100/loki/api/v1/push"
+        "loki-url": "http://192.168.100.100:3100/loki/api/v1/push"
     }
 }
 EOF
@@ -69,3 +74,10 @@ systemctl restart docker
 # recreate your containers to start logging to Loki.
 docker-compose down && docker-compose up -d --build
 ```
+
+---
+
+## Grafana
+
+1860: Node Exporter Full
+21361: Docker - cAdvisor Compute Resources

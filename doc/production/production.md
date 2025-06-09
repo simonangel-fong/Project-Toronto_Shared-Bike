@@ -165,7 +165,7 @@ bash ~/shell/deploy.sh
 
 ```sh
 # upload source data
-aws s3 sync ./project/source s3://trip-source.arguswatcher.net
+aws s3 sync ./project/source s3://trip.arguswatcher.net/source
 # confirm
-aws s3 ls s3://trip-source.arguswatcher.net
+aws s3 ls s3://trip-source.arguswatcher.net/source
 ```
