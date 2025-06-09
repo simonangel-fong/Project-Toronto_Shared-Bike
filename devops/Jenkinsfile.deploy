@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_URL = 'https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git'
+        DOCKER_COMPOSE_FILE = 'compose.prometheus.prod.yaml'
+
+
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                dir("github") {
+                    git(
+                        url: "${env.GITHUB_URL}",
+                        branch: "feature-devops",
+                        changelog: true,
+                        poll: true
+                    )
+                }
+            }
+        }
+
+        stage('Build and Run Docker Compose') {
+            steps {
+                // Change to the directory containing Docker Compose file
+                dir('github/prometheus') {
+                    // Start Docker Compose
+                    sh "docker compose -f ${env.DOCKER_COMPOSE_FILE} up --build -d"
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Run tests using docker exec
+                dir('github/prometheus') {
+                    sh "docker exec fastapi-app pytest test_url_prod.py"
+                }
+            }
+        }
+    }
+
+
+    post {
+        success {
+            script {
+                echo "Pipeline completed successfully!"
+                // Send email notification for success
+                emailext(
+                    to: 'tech.arguswatcher@gmail.com',
+                    subject: '✅🌐 Pipeline Success Notification',
+                    body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike completed successfully."
+                )
+            }
+        }
+
+        failure {
+            script {
+                echo "Pipeline failed."
+                // Capture and log the error message
+                def errorDetails = currentBuild.rawBuild.getLog(100).join('\n')
+                echo "Error Details:\n$errorDetails"
+
+                // Send email notification for failure with error details
+                emailext(
+                    to: 'tech.arguswatcher@gmail.com',
+                    subject: '❌🌐 Pipeline Failure Notification',
+                    body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike failed with the following error:\n\n$errorDetails"
+                )
+            }
+        }
+    }
+}

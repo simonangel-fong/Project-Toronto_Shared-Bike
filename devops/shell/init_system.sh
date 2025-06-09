@@ -101,6 +101,7 @@ echo "Creating project directories..."
 echo "========================================================"
 echo
 
+sudo rm -rf "${BASE_DIR}"
 sudo mkdir -pv "${GITHUB_DIR}" "${CONFIG_DIR}" "${SOURCE_DIR}" "${DPUMP_DIR}" "${ORADATA_DIR}" "${ORBACKUP_DIR}"
 # Set ownership for admin
 sudo chown "${APP_ADMIN}":"${APP_GROUP}" -Rv "${BASE_DIR}"
@@ -112,6 +113,8 @@ echo "========================================================"
 echo
 
 sudo dnf install -y git
+
+git config --global --add safe.directory "${GITHUB_DIR}"
 
 echo
 echo "========================================================"
@@ -158,11 +161,12 @@ sudo yum upgrade -y
 sudo yum install -y fontconfig java-17-openjdk
 sudo yum install -y jenkins
 
-# Start Jenkins
-sudo systemctl enable --now jenkins
-
 # add jenkins to appgroup
 sudo usermod -aG $APP_GROUP jenkins
+sudo usermod -aG docker jenkins
+
+# Start Jenkins
+sudo systemctl enable --now jenkins
 
 # Open firewall for Jenkins
 sudo firewall-cmd --add-port=8080/tcp --permanent

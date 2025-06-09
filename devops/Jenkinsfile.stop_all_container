@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Stop Docker Containers') {
+            steps {
+                script {
+                    // Check if there are any running containers and stop them
+                    if (sh(script: 'docker ps -a -q', returnStatus: true) == 0) {
+                        sh 'docker stop $(docker ps -a -q)'
+                    }
+                }
+            }
+        }
+
+        stage('Prune Docker System') {
+            steps {
+                // Prune all Docker system resources forcefully
+                sh 'docker system prune -f'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Docker cleanup completed successfully!"
+        }
+        failure {
+            echo "Docker cleanup failed."
+        }
+    }
+}

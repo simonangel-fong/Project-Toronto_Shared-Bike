@@ -14,4 +14,8 @@ echo "========================================================"
 echo
 
 # stop all container and remove tangling resources
-sudo docker stop $(docker ps -a -q) && docker system prune -f
+if [ -n "$(docker ps -a -q)" ]; then
+    docker stop $(docker ps -a -q)
+fi
+
+docker system prune -f
