@@ -24,7 +24,7 @@ pipeline {
                 // Send email notification for success
                 emailext(
                     to: 'tech.arguswatcher@gmail.com',
-                    subject: '⛔✅ Notification: Project Offline Success',
+                    subject: '⛔✅ Notification: Project Offline Succeeded',
                     body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike completed successfully."
                 )
             }
@@ -40,7 +40,7 @@ pipeline {
                 // Send email notification for failure with error details
                 emailext(
                     to: 'tech.arguswatcher@gmail.com',
-                    subject: '⛔❌ Notification: Project Offline Failure',
+                    subject: '⛔❌ Notification: Project Offline Failed',
                     body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike failed with the following error:\n\n$errorDetails"
                 )
             }
