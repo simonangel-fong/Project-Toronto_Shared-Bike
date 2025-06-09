@@ -5,17 +5,13 @@ pipeline {
         stage('Stop Docker Containers') {
             steps {
                 script {
-                    // Check if there are any running containers and stop them
-                    if (sh(script: 'docker ps -a -q', returnStatus: true) == 0) {
-                        sh 'docker stop $(docker ps -a -q)'
-                    }
+                    sh 'docker stop $(docker ps -a -q)'
                 }
             }
         }
 
         stage('Prune Docker System') {
             steps {
-                // Prune all Docker system resources forcefully
                 sh 'docker system prune -f'
             }
         }
@@ -27,6 +23,36 @@ pipeline {
         }
         failure {
             echo "Docker cleanup failed."
+        }
+    }
+
+     post {
+        success {
+            script {
+                echo "Pipeline completed successfully!"
+                // Send email notification for success
+                emailext(
+                    to: 'tech.arguswatcher@gmail.com',
+                    subject: '✅⛔ All Containers Stop - Success Notification',
+                    body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike completed successfully."
+                )
+            }
+        }
+
+        failure {
+            script {
+                echo "Pipeline failed."
+                // Capture and log the error message
+                def errorDetails = currentBuild.rawBuild.getLog(100).join('\n')
+                echo "Error Details:\n$errorDetails"
+
+                // Send email notification for failure with error details
+                emailext(
+                    to: 'tech.arguswatcher@gmail.com',
+                    subject: '❌⛔ All Containers Stop - Failure Notification',
+                    body: "Your Jenkins pipeline for Project-Toronto_Shared-Bike failed with the following error:\n\n$errorDetails"
+                )
+            }
         }
     }
 }
