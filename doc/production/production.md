@@ -133,6 +133,7 @@ df -Th
 ```sh
 # as root
 # upload script and config via proxmox
+ssh-keygen -R 192.168.100.100
 scp -r -o ProxyJump=root@192.168.1.80 ./devops/shell ./project/config root@192.168.100.100:~
 # upload compress data
 scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.100:~
@@ -145,17 +146,19 @@ scp -r -o ProxyJump=root@192.168.1.80 ./project/dpump root@192.168.100.100:~
 ssh -J root@192.168.1.80 root@192.168.100.100
 
 # as root
-# configure network, hostname
-bash ~/shell/00_pre_deploy.sh
-# install git, docker; mkdir; copy config, dpump; start cloudflare
-bash ~/shell/deploy.sh
+# initialize system
+bash ~/shell/init_system.sh
+# pull github
+bash ~/shell/get_github.sh
+
+bash ~/shell/get_data.sh
 ```
 
 - Admin task
 
 | Task           | Command                            |
 | -------------- | ---------------------------------- |
-| Refresh github | `bash ~/shell/refresh_github.sh`   |
+| Refresh github | `bash ~/shell/get_github.sh`       |
 | Stop services  | `bash ~/shell/stop_<con_name>.sh`  |
 | Start services | `bash ~/shell/start_<con_name>.sh` |
 

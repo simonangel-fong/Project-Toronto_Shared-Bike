@@ -32,9 +32,9 @@ ssh root@192.168.100.100
 bash ~/shell/init_system.sh
 
 # pull github
-bash ~/shell/pull_github.sh
+bash ~/shell/get_github.sh
 
-bash ~/shell/download_data.sh
+bash ~/shell/get_data.sh
 ```
 
 - Admin task
