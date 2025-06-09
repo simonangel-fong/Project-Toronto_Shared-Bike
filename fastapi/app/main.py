@@ -34,7 +34,7 @@ app.add_middleware(
 @app.get("/")
 async def get_root_with_db():
     return {
-        "title": "Toronto Shared Bike Data Analysis Project",
+        "title": "Toronto Shared Bike Data Analysis Project!!",
         "creator": CREATOR,
         "deployed on": DEPLOY_HOST,
         "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
