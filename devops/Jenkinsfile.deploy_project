@@ -9,23 +9,22 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                dir("github") {
-                    git(
-                        url: "${env.GITHUB_URL}",
-                        branch: "feature-devops",
-                        changelog: true,
-                        poll: true
-                    )
-                }
-            }
-        }
-
+        // stage('Checkout') {
+        //     steps {
+        //         dir("github") {
+        //             git(
+        //                 url: "${env.GITHUB_URL}",
+        //                 branch: "feature-devops",
+        //                 changelog: true,
+        //                 poll: true
+        //             )
+        //         }
+        //     }
+        // }
         stage('Build and Run Docker Compose') {
             steps {
                 // Change to the directory containing Docker Compose file
-                dir('github/prometheus') {
+                dir('prometheus') {
                     // Start Docker Compose
                     sh "docker compose -f ${env.DOCKER_COMPOSE_FILE} up --build -d"
                 }
@@ -35,9 +34,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Run tests using docker exec
-                dir('github/prometheus') {
-                    sh "docker exec fastapi-app pytest test_url_prod.py"
-                }
+                sh 'sleep 30'
+                sh "docker exec fastapi-app pytest test_url_prod.py"
             }
         }
     }
