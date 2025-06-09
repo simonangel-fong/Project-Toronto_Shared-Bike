@@ -14,7 +14,7 @@ ORADATA_DIR="${BASE_DIR}/oradata"
 ORBACKUP_DIR="${BASE_DIR}/orabackup"
 CONFIG_DIR="${BASE_DIR}/config"
 
-APP_ADMIN="appadmin"
+APP_ADMIN="aadmin"
 APP_GROUP="appgroup"
 
 GIT_REPO_URL="https://github.com/simonangel-fong/Project-Toronto_Shared-Bike.git"

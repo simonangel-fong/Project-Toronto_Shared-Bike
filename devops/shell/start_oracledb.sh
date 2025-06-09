@@ -6,7 +6,7 @@ set -o pipefail
 set -u # Treat unset variables as error
 
 # ========== Environment Variables ==========
-APP_ADMIN="appadmin"
+APP_ADMIN="aadmin"
 
 BASE_DIR="/project"
 GITHUB_DIR="${BASE_DIR}/github"

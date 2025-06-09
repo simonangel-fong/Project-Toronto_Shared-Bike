@@ -34,7 +34,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Run tests using docker exec
-                sh 'sleep 60'
+                sh 'sleep 120'
                 sh "docker exec fastapi-app pytest test_url_prod.py"
             }
         }

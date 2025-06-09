@@ -72,7 +72,7 @@ EOF
 systemctl restart docker
 
 # recreate your containers to start logging to Loki.
-docker-compose down && docker-compose up -d --build
+docker compose down && docker compose up -d --build
 ```
 
 ---

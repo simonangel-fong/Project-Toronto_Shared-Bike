@@ -13,7 +13,7 @@ HOST_SUBNET="24"
 HOST_GATEWAY="192.168.100.254"
 HOST_DNS="192.168.100.254,8.8.8.8"
 
-APP_ADMIN="appadmin"
+APP_ADMIN="aadmin"
 APP_GROUP="appgroup"
 
 BASE_DIR="/project"

@@ -16,7 +16,7 @@ DPUMP_DIR="${BASE_DIR}/dpump"
 ORADATA_DIR="${BASE_DIR}/oradata"
 ORBACKUP_DIR="${BASE_DIR}/orabackup"
 
-APP_ADMIN="appadmin"
+APP_ADMIN="aadmin"
 APP_GROUP="appgroup"
 
 # List of URLs to download
