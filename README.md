@@ -62,4 +62,3 @@ A repo of data analysis project for Toronto shared bike.
 - Development & Test
 - [Stage](./doc/stage/stage.md)
 - [Production](./doc/production/production.md)
-- 
