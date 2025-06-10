@@ -19,7 +19,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ca-central-1
-      
+
       # cp files to s3
       - name: Deploy to S3
         run: |
@@ -28,8 +28,9 @@ jobs:
 
       - name: Confirm
         run: |
-          aws s3 ls s3://${{ secrets.AWS_S3_BUCKET }}/
-      
+          aws s3 ls s3://${{ secrets.AWS_S3_BUCKET_TRIP }}/
+          aws s3 ls s3://${{ secrets.AWS_S3_BUCKET_HOME }}/
+
       # notify
       - name: Send email notification on success
         if: success()
@@ -45,7 +46,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>Upload S3 Bucket Succeeded</h2>
-            <p>All files in <b>s3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b> successfully.</p>
+            <p>All files in <b>s3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b>, <b>${{ secrets.AWS_S3_BUCKET_HOME }}</b> successfully.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>
@@ -65,7 +66,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>Upload S3 Bucket Failed</h2>
-            <p>There was an error uploading files from <b>s3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET }}</b>.</p>
+            <p>There was an error uploading files from <b>s3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b>, <b>${{ secrets.AWS_S3_BUCKET_HOME }}</b>.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>

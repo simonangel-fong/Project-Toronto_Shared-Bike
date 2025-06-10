@@ -6,8 +6,6 @@ body {
   padding-top: 3rem;
   padding-bottom: 3rem;
   color: rgb(var(--bs-tertiary-color-rgb));
-
-  min-height: 100vh;
 }
 
 /* CUSTOMIZE THE CAROUSEL
@@ -16,6 +14,7 @@ body {
 /* Carousel base class */
 .carousel {
   margin-bottom: 4rem;
+  min-height: 100vh;
 }
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
