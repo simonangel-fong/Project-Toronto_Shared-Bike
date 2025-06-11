@@ -1,20 +1,9 @@
-/* GLOBAL STYLES
--------------------------------------------------- */
-/* Padding below the footer and lighter body text */
-
-body {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  color: rgb(var(--bs-tertiary-color-rgb));
-}
-
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
 /* Carousel base class */
 .carousel {
   margin-bottom: 4rem;
-  min-height: 100vh;
 }
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
@@ -24,38 +13,8 @@ body {
 
 /* Declare heights because of positioning of img element */
 .carousel-item {
-  height: 34rem;
+  height: 35rem;
 }
-
-/* MARKETING CONTENT
--------------------------------------------------- */
-
-/* Center align the text within the three columns below the carousel */
-.marketing .col-lg-4 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-/* rtl:begin:ignore */
-.marketing .col-lg-4 p {
-  margin-right: 0.75rem;
-  margin-left: 0.75rem;
-}
-/* rtl:end:ignore */
-
-/* Featurettes
-------------------------- */
-
-.featurette-divider {
-  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
-}
-
-/* Thin out the marketing headings */
-/* rtl:begin:remove */
-.featurette-heading {
-  letter-spacing: -0.05rem;
-}
-
-/* rtl:end:remove */
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */
@@ -79,9 +38,11 @@ body {
   }
 }
 
-/* -------------font ------------ */
-.audiowide-regular {
-  font-family: "Audiowide", sans-serif;
+/* font
+-------------------------------------------------- */
+.indie-flower-regular {
+  font-family: "Indie Flower", cursive;
   font-weight: 400;
   font-style: normal;
 }
+
