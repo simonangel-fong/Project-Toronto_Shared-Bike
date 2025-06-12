@@ -134,7 +134,7 @@
                             <h3 class="pt-2 mt-4 mb-4 display-6 lh-1 fw-bold text-center">
                                 Insight
                             </h3>
-                            <a href="#" class="stretched-link"></a>
+                            <a href="#insight" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                             <h3 class="pt-2 mt-4 mb-4 display-6 lh-1 fw-bold text-center">
                                 Technology
                             </h3>
-                            <a href="#" class="stretched-link"></a>
+                            <a href="#tech" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -161,59 +161,79 @@
 
         <!-- Dashboard -->
         <section id="dashboard" class="text-center container">
-            <div class="row py-4">
-                <div class="mx-auto">
+            <div class="row justify-content-center">
 
-                    <!-- Tableau dashboard -->
-                    <div class='tableauPlaceholder' id='viz1749705213948' style='position: relative'><noscript><a
-                                href='#'><img alt='Dashboard '
-                                    src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1_rss.png'
-                                    style='border: none' /></a></noscript><object class='tableauViz'
-                            style='display:none;'>
-                            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-                            <param name='embed_code_version' value='3' />
-                            <param name='site_root' value='' />
-                            <param name='name' value='project_17476928016330&#47;Dashboard' />
-                            <param name='tabs' value='no' />
-                            <param name='toolbar' value='yes' />
-                            <param name='static_image'
-                                value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1.png' />
-                            <param name='animate_transition' value='yes' />
-                            <param name='display_static_image' value='yes' />
-                            <param name='display_spinner' value='yes' />
-                            <param name='display_overlay' value='yes' />
-                            <param name='display_count' value='yes' />
-                            <param name='language' value='en-US' />
-                            <param name='filter' value='publish=yes' />
-                        </object>
-                    </div>
-                    <script type='text/javascript'>
-                        var divElement = document.getElementById('viz1749705213948');
-                        var vizElement = divElement.getElementsByTagName('object')[0];
-                        if (divElement.offsetWidth > 800) {
-                            vizElement.style.width = '1120px';
-                            vizElement.style.height = '657px';
-                        } else if (divElement.offsetWidth > 500) {
-                            vizElement.style.width = '1120px';
-                            vizElement.style.height = '657px';
-                        } else {
-                            vizElement.style.width = '100%';
-                            vizElement.style.height = '2127px';
-                        }
-
-                        var scriptElement = document.createElement('script');
-                        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                        vizElement.parentNode.insertBefore(scriptElement, vizElement);      
-                    </script>
+                <!-- Tableau dashboard -->
+                <div class='tableauPlaceholder' id='viz1749705213948' style='position: relative'><noscript><a
+                            href='#'><img alt='Dashboard '
+                                src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1_rss.png'
+                                style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'>
+                        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                        <param name='embed_code_version' value='3' />
+                        <param name='site_root' value='' />
+                        <param name='name' value='project_17476928016330&#47;Dashboard' />
+                        <param name='tabs' value='no' />
+                        <param name='toolbar' value='yes' />
+                        <param name='static_image'
+                            value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1.png' />
+                        <param name='animate_transition' value='yes' />
+                        <param name='display_static_image' value='yes' />
+                        <param name='display_spinner' value='yes' />
+                        <param name='display_overlay' value='yes' />
+                        <param name='display_count' value='yes' />
+                        <param name='language' value='en-US' />
+                        <param name='filter' value='publish=yes' />
+                    </object>
                 </div>
+                <script type='text/javascript'>
+                    var divElement = document.getElementById('viz1749705213948');
+                    var vizElement = divElement.getElementsByTagName('object')[0];
+                    if (divElement.offsetWidth > 800) {
+                        vizElement.style.width = '1120px';
+                        vizElement.style.height = '657px';
+                    } else if (divElement.offsetWidth > 500) {
+                        vizElement.style.width = '1120px';
+                        vizElement.style.height = '657px';
+                    } else {
+                        vizElement.style.width = '100%';
+                        vizElement.style.height = '2127px';
+                    }
+
+                    var scriptElement = document.createElement('script');
+                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                    vizElement.parentNode.insertBefore(scriptElement, vizElement);      
+                </script>
             </div>
         </section>
 
         <hr class="my-5">
 
         <!-- Insight -->
-        <section id="Insight" class="text-center container">
+        <section id="insight" class="text-center container">
             <div class="row py-4">
+
+
+                <div class="container col-xxl-8 px-4 py-5">
+                    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+                        <div class="col-10 col-sm-8 col-lg-6"> <img src="bootstrap-themes.png"
+                                class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500"
+                                loading="lazy"> </div>
+                        <div class="col-lg-6">
+                            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive left-aligned hero with
+                                image
+                            </h1>
+                            <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap,
+                                the
+                                world’s most popular front-end open source toolkit, featuring Sass variables and mixins,
+                                responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.
+                            </p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start"> <button type="button"
+                                    class="btn btn-primary btn-lg px-4 me-md-2">Primary</button> <button type="button"
+                                    class="btn btn-outline-secondary btn-lg px-4">Default</button> </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
