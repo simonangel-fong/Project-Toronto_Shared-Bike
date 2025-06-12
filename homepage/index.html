@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template</title>
+    <title>Arguswatcher</title>
+
     <link rel="shortcut icon" href="./img/ico_robot_head_16.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
@@ -50,24 +51,43 @@
                                 Toronto Shared Bike Project
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://trip.arguswatcher.net/">Project
-                                        Introduction</a>
+                                <li> <a class="dropdown-item" href="https://trip.arguswatcher.net/">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-bicycle" viewBox="0 0 16 16">
+                                            <path
+                                                d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5m1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139zM8 9.057 9.598 6.5H6.402zM4.937 9.5a2 2 0 0 0-.487-.877l-.548.877zM3.603 8.092A2 2 0 1 0 4.937 10.5H3a.5.5 0 0 1-.424-.765zm7.947.53a2 2 0 1 0 .848-.53l1.026 1.643a.5.5 0 1 1-.848.53z" />
+                                        </svg>
+                                        Introduction </a>
                                 </li>
                                 <li><a class="dropdown-item"
-                                        href="https://trip.arguswatcher.net/tableau-dashboard.html">Tableau
-                                        Dashboard</a>
+                                        href="https://trip.arguswatcher.net/tableau-dashboard.html">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07" />
+                                        </svg>
+                                        Dashboard </a>
                                 </li>
-                                <li><a class="dropdown-item" href="https://trip-api.arguswatcher.net/docs">API
-                                        Document</a>
+                                <li><a class="dropdown-item" href="https://trip-api.arguswatcher.net/docs">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-blockquote-left" viewBox="0 0 16 16">
+                                            <path
+                                                d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1zm.79-5.373q.168-.117.444-.275L3.524 6q-.183.111-.452.287-.27.176-.51.428a2.4 2.4 0 0 0-.398.562Q2 7.587 2 7.969q0 .54.217.873.217.328.72.328.322 0 .504-.211a.7.7 0 0 0 .188-.463q0-.345-.211-.521-.205-.182-.568-.182h-.282q.036-.305.123-.498a1.4 1.4 0 0 1 .252-.37 2 2 0 0 1 .346-.298zm2.167 0q.17-.117.445-.275L5.692 6q-.183.111-.452.287-.27.176-.51.428a2.4 2.4 0 0 0-.398.562q-.165.31-.164.692 0 .54.217.873.217.328.72.328.322 0 .504-.211a.7.7 0 0 0 .188-.463q0-.345-.211-.521-.205-.182-.568-.182h-.282a1.8 1.8 0 0 1 .118-.492q.087-.194.257-.375a2 2 0 0 1 .346-.3z" />
+                                        </svg>
+                                        API Document</a>
                                 </li>
                             </ul>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://aboutme.arguswatcher.net/">About Me</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-
+    
     <main class="container-fluid px-0">
 
         <!-- Carousel -->
@@ -83,7 +103,7 @@
             <!-- Main Carousel -->
             <div class="carousel-inner">
                 <!-- Carousel Item 1 -->
-                <div class="carousel-item active">
+                <div class="carousel-item active" data-bs-interval="5000">
                     <!-- Item 1: image -->
                     <img src="./img/carousel_toronto_shared_bike.jpg" class="d-block w-100"
                         alt="carousel_toronto_shared_bike">
@@ -104,7 +124,7 @@
                 </div>
 
                 <!-- Carousel Item 2 -->
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="5000">
                     <!-- Item 2: image -->
                     <img src="./img/carousel_ai.jpg" class="d-block w-100" alt="carousel_ai">
                     <!-- Item 2: Desciption -->
@@ -121,7 +141,7 @@
                 </div>
 
                 <!-- Carousel Item 3 -->
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="5000">
                     <!-- Item 3: image -->
                     <svg aria-hidden="true" class="bd-placeholder-img " height="100%"
                         preserveAspectRatio="xMidYMid slice" width="100%" xmlns="http://www.w3.org/2000/svg">
@@ -141,8 +161,9 @@
             <!-- Control button -->
             <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span> </button> <button class="carousel-control-next"
-                type="button" data-bs-target="#carousel" data-bs-slide="next">
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>

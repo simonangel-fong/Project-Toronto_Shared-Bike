@@ -1,0 +1,19 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+
+body {
+  padding-top: 3rem;
+}
+
+main {
+  min-height: 85vh;
+}
+
+/* Customized 
+-------------------------------------------------- */
+
+.card-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
