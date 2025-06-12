@@ -88,6 +88,7 @@
 
     <!-- Main -->
     <main class="container-fluid px-0">
+
         <!-- heroes -->
         <section id="heroes" class="container">
             <div class="px-5 pt-4 text-center bg-body-tertiary rounded-3">
@@ -109,17 +110,16 @@
         <!-- features -->
         <section id="feature-card" class="container px-4">
             <!-- <h2 class="pb-2 border-bottom text-center">Features </h2> -->
-            <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 align-items-stretch g-4 py-5">
 
                 <!-- Dashboard -->
                 <div class="col">
-                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 ratio ratio-16x9"
-                        style="background-image: url('./img/dashbaord.jpg');">
-                        <!-- card text -->
-                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white shadow">
-                            <h3 class="pt-2 mt-4 mb-4 display-6 lh-1 fw-bold text-center">
+                    <div class="card h-100 overflow-hidden text-bg-dark rounded-4">
+                        <img src="./img/dashbaord01.jpg" class="card-img" alt="dashbaord">
+                        <div class="card-img-overlay d-flex flex-column">
+                            <p class="card-title h2 text-white my-auto text-center align-middle">
                                 Dashboard
-                            </h3>
+                            </p>
                             <a href="#dashboard" class="stretched-link"></a>
                         </div>
                     </div>
@@ -127,28 +127,39 @@
 
                 <!-- Insight -->
                 <div class="col">
-                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 ratio ratio-16x9"
-                        style="background-image: url('./img/insight.jpg');">
-                        <!-- card text -->
-                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white shadow">
-                            <h3 class="pt-2 mt-4 mb-4 display-6 lh-1 fw-bold text-center">
+                    <div class="card h-100 overflow-hidden text-bg-dark rounded-4">
+                        <img src="./img/insight02.jpg" class="card-img" alt="dashbaord">
+                        <div class="card-img-overlay d-flex flex-column">
+                            <p class="card-title h2 text-white my-auto text-center align-middle">
                                 Insight
-                            </h3>
+                            </p>
                             <a href="#insight" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tech -->
+                <!-- tech -->
                 <div class="col">
-                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 ratio ratio-16x9"
-                        style="background-image: url('./img/tech.jpg');">
-                        <!-- card text -->
-                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white shadow">
-                            <h3 class="pt-2 mt-4 mb-4 display-6 lh-1 fw-bold text-center">
+                    <div class="card h-100 overflow-hidden text-bg-dark rounded-4">
+                        <img src="./img/tech01.jpg" class="card-img" alt="dashbaord">
+                        <div class="card-img-overlay d-flex flex-column">
+                            <p class="card-title h2 text-white my-auto text-center align-middle">
                                 Technology
-                            </h3>
+                            </p>
                             <a href="#tech" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance -->
+                <div class="col">
+                    <div class="card h-100 overflow-hidden text-bg-dark rounded-4">
+                        <img src="./img/performance.jpg" class="card-img" alt="dashbaord">
+                        <div class="card-img-overlay d-flex flex-column">
+                            <p class="card-title h2 text-white my-auto text-center align-middle">
+                                Performance
+                            </p>
+                            <a href="#test" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -211,13 +222,30 @@
         <!-- Insight -->
         <section id="insight" class="text-center container">
             <div class="row py-4">
+                <!-- Title -->
+                <div class="px-5 pt-4 text-center">
+                    <h1 class="text-body-emphasis align-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                        Shared Bike User Behavior Insight
+                    </h1>
+                    <div class="d-inline-flex gap-2 mb-3">
+                    </div>
+                </div>
 
+
+                <!-- Insight 01 -->
 
                 <div class="container col-xxl-8 px-4 py-5">
                     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+                        <!-- image -->
                         <div class="col-10 col-sm-8 col-lg-6"> <img src="bootstrap-themes.png"
                                 class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500"
                                 loading="lazy"> </div>
+                        <!-- description -->
                         <div class="col-lg-6">
                             <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive left-aligned hero with
                                 image
@@ -227,9 +255,6 @@
                                 world’s most popular front-end open source toolkit, featuring Sass variables and mixins,
                                 responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.
                             </p>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-start"> <button type="button"
-                                    class="btn btn-primary btn-lg px-4 me-md-2">Primary</button> <button type="button"
-                                    class="btn btn-outline-secondary btn-lg px-4">Default</button> </div>
                         </div>
                     </div>
                 </div>
