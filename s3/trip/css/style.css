@@ -9,7 +9,7 @@ body {
 
 header {
   min-height: 100vh;
-  background-image: url("../img/bg06.jpg");
+  background-image: url("../img/header/bg.jpg");
   background-size: cover; /* covers the entire area */
   background-position: center; /*Centers the image*/
   background-repeat: no-repeat; /* no repeating */
