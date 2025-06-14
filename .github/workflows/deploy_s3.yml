@@ -23,8 +23,8 @@ jobs:
       # cp files to s3
       - name: Deploy to S3
         run: |
-          aws s3 cp --recursive s3/ s3://${{ secrets.AWS_S3_BUCKET_TRIP }}/
-          aws s3 cp --recursive homepage/ s3://${{ secrets.AWS_S3_BUCKET_HOME }}/
+          aws s3 cp --recursive s3/homepage/ s3://${{ secrets.AWS_S3_BUCKET_TRIP }}/
+          aws s3 cp --recursive s3/trip/ s3://${{ secrets.AWS_S3_BUCKET_HOME }}/
 
       - name: Confirm
         run: |
