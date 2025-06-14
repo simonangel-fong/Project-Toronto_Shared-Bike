@@ -10,6 +10,7 @@ services:
     image: nginx:latest
     volumes:
       - /project/config/nginx.prod.conf:/etc/nginx/nginx.conf:ro # Mount Nginx config
+      - ./static/robots.txt:/usr/share/nginx/html/robots.txt:ro # Web crawl
     networks:
       - public-net
     ports:
@@ -22,7 +23,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-
 
 networks:
   public-net:

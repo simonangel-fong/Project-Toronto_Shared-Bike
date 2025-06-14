@@ -1,0 +1,5 @@
+# web crawl
+# apply all bots.
+User-agent: *
+# disallows access to all URLs
+Disallow:
