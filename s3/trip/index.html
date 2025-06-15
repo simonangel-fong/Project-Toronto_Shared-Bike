@@ -40,12 +40,18 @@
         </nav>
 
         <!-- header cover -->
-        <div class="header-cover d-flex align-items-center vh-100 mx-auto">
-            <div class="header-cover-text text-center p-4">
-                <h1>Cover your page.</h1>
-                <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download,
-                    edit
-                    the text, and add your own fullscreen background photo to make it your own.</p>
+        <div class="row vh-100 d-flex align-items-center">
+            <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+
+                <div class="header-cover-text text-center p-4">
+                    <h1 class="display-5 fw-bold mb-4">Toronto Shared Bike</h1>
+                    <p class="lead fs-3">
+                        A portfolio project to build a data warehouse to analyze and visualize shared bike user
+                        behavior, deploy
+                        an API on a homelab server, and manage the entire application lifecycle through a CI/CD
+                        pipeline.
+                    </p>
+                </div>
             </div>
         </div>
     </header>
@@ -138,7 +144,7 @@
                 </div>
 
                 <!-- Insight: monthly -->
-                <div class="row align-items-center g-5 p-lg-5 mb-5">
+                <div class="row align-items-center g-5 p-lg-5 p-0 mb-5">
 
                     <!-- description -->
                     <div class="col-lg-6 col-md-12">
@@ -146,21 +152,22 @@
                             Seasonal Patterns
                         </h1>
                         <p class="lead">
-                            Both <b>annual and casual users</b> ride more in <b>warmer season</b>.
+                            Both <u>annual and casual users</u> ride more frequently during the <b>warmer season</b>.
                         </p>
                         <p class="lead">
-                            <b>Annual users</b> show steady usage year-round, making shorter trips that reflect routine
-                            travel like commuting.
+                            <u>Annual users</u> maintain <b>steady usage</b> year-round, taking shorter trips that
+                            reflect
+                            routine, purpose-driven travel such as commuting.
                         </p>
                         <p class="lead">
-                            <b>Casual users</b> ride less often in winter but take longer trips in summer, indicating
-                            often for recreation or leisure.
+                            <u>Casual users</u> ride less during winter but take longer trips in summer, indicating
+                            usage primarily for recreation or leisure.
                         </p>
                     </div>
 
-                    <!-- image -->
-                    <div class="col-lg-6 col-md-12 shadow p-0">
-                        <video class="ratio ratio-4x3" autoplay muted controls>
+                    <!-- video -->
+                    <div class="col-lg-6 col-md-12 shadow p-0 m-0">
+                        <video class="ratio ratio-4x3 p-0 m-0" autoplay muted controls>
                             <source src="./img/insight/monthly.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -177,15 +184,16 @@
                             Hourly Patterns
                         </h1>
                         <p class="lead">
-                            Both <b>annual and casual users</b> are more active during <b>rush hours</b>.
+                            Both <u>annual and casual users</u> are most active during <b>rush-hour periods</b>.
                         </p>
                         <p class="lead">
-                            <b>Annual users</b> maintain short, consistent trip durations throughout the day, reflecting
-                            planned, purpose-driven usage, such as commuting.
+                            <u>Annual users</u> maintain short, consistent trip durations throughout the day, reflecting
+                            <b>planned, purpose-driven usage</b>, such as commuting.
                         </p>
                         <p class="lead">
-                            <b>Casual users</b> generally take longer trips,suggesting occasional use for convenience
-                            rather than routine. However, they also take short trip during morning peak hours.
+                            <u>Casual users</u> generally take longer trips, suggesting <b>occasional,
+                                convenience-focused or leisure use</b>. However, they also make shorter trips during the
+                            morning peak.
                         </p>
                     </div>
 
@@ -219,7 +227,7 @@
                         </p>
                     </div>
 
-                    <!-- image -->
+                    <!-- video -->
                     <div class="col-lg-6 col-md-12 shadow p-0">
                         <video class="ratio ratio-4x3" autoplay muted controls>
                             <source src="./img/insight/location.mp4" type="video/mp4">
@@ -315,7 +323,7 @@
 
             <!-- slide -->
             <div class="row">
-                <div id="techCarousel" class="carousel slide shadow shadow-lg col-10 mx-auto">
+                <div id="techCarousel" class="carousel slide shadow shadow-lg col-lg-8 col-md-10 col-sm-12 p-0 mx-auto">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#techCarousel" data-bs-slide-to="0" class="active"
                             aria-current="true" aria-label="Slide 1"></button>
@@ -326,10 +334,10 @@
                     </div>
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="./img/tech/conceptual.png" class="d-block w-100" alt="...">
+                            <img src="./img/tech/dw.gif" class="d-block w-100" alt="...">
                             <div class="carousel-caption d-none d-md-block">
-                                <h5>Application</h5>
-                                <p>Oracle Database Data Warehouse, API, Nginx</p>
+                                <!-- <h5 class="text-secondary-emphasis">Data Warehouse</h5> -->
+                                <!-- <p>Oracle Database Data Warehouse, API, Nginx</p> -->
                             </div>
                         </div>
                         <div class="carousel-item">
