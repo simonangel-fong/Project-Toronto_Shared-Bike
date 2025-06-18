@@ -24,12 +24,10 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 cp --recursive s3/trip/ s3://${{ secrets.AWS_S3_BUCKET_TRIP }}/
-          aws s3 cp --recursive s3/homepage/ s3://${{ secrets.AWS_S3_BUCKET_HOME }}/
 
       - name: Confirm
         run: |
           aws s3 ls s3://${{ secrets.AWS_S3_BUCKET_TRIP }}/
-          aws s3 ls s3://${{ secrets.AWS_S3_BUCKET_HOME }}/
 
       # notify
       - name: Send email notification on success
@@ -46,7 +44,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>Upload S3 Bucket Succeeded</h2>
-            <p>All files in <b>s3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b>, <b>${{ secrets.AWS_S3_BUCKET_HOME }}</b> successfully.</p>
+            <p>All files in <b>s3/</b> have been uploaded to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b> successfully.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>
@@ -66,7 +64,7 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           html_body: |
             <h2>Upload S3 Bucket Failed</h2>
-            <p>There was an error uploading files from <b>s3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b>, <b>${{ secrets.AWS_S3_BUCKET_HOME }}</b>.</p>
+            <p>There was an error uploading files from <b>s3/</b> to S3 bucket <b>${{ secrets.AWS_S3_BUCKET_TRIP }}</b>.</p>
             <p>Branch: <b>feature-devops</b></p>
             <p>Workflow: <b>${{ github.workflow }}</b></p>
             <p>Commit: <b>${{ github.sha }}</b></p>
