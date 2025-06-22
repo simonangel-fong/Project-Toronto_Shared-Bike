@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap">
 </head>
 
-<body>
+<!-- enable scroll spy -->
+
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="50">
     <!-- header -->
     <header class="container-fluid text-bg-dark mb-5">
         <!-- header nav -->
@@ -25,17 +27,16 @@
             <a class="navbar-brand fw-bold py-1 px-0 active" aria-current="page" href="#">
                 Toronto Shared Bike
             </a>
-            <ul class="nav nav-pills nav-masthead justify-content-center">
+            <ul class="nav nav-masthead justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link fw-bold py-1 px-0 me-2" href="#insight">Insight</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-bold py-1 px-0 me-2" href="#dashboard">Dashboard</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link fw-bold py-1 px-0 me-2" href="#tech">Technology</a>
                 </li>
-                <!-- <a class="nav-link fw-bold py-1 px-0" href="#test">Performance</a> -->
+                <li class="nav-item">
+                    <a class="nav-link fw-bold py-1 px-0 me-2" href="#dashboard">Dashboard</a>
+                </li>
             </ul>
         </nav>
 
@@ -163,12 +164,12 @@
                             <u>Casual users</u> ride <b>less during winter</b> but take <b>longer trips in summer</b>,
                             indicating usage primarily for recreation or leisure.
                         </p>
-                        <a class="btn btn-success" href="#dashboard">Explore Detailed in Dashboard</a>
+                        <a class="btn btn-success" href="#dashboard">Explore Details in Dashboard</a>
                     </div>
 
                     <!-- video -->
                     <div class="col-lg-6 col-md-12 m-0">
-                        <video class="ratio ratio-4x3 shadow p-0 m-0" autoplay muted controls>
+                        <video class="ratio ratio-4x3 shadow p-0 m-0" loading="lazy" autoplay muted controls>
                             <source src="./img/insight/monthly.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -197,12 +198,12 @@
                             convenience-focused or leisure use. However, they also make shorter trips during the
                             morning peak.
                         </p>
-                        <a class="btn btn-success" href="#dashboard">Explore Detailed in Dashboard</a>
+                        <a class="btn btn-success" href="#dashboard">Explore Details in Dashboard</a>
                     </div>
 
                     <!-- video -->
                     <div class="col-lg-6 col-md-12 p-0">
-                        <video class="ratio ratio-4x3 shadow p-0 m-0" autoplay muted controls>
+                        <video class="ratio ratio-4x3 shadow p-0 m-0" loading="lazy" autoplay muted controls>
                             <source src="./img/insight/hourly.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -226,77 +227,18 @@
                         <p class="lead">
                             Bikes are also popular in <u>recreational areas</u>, reflecting leisure-oriented usage.
                         </p>
-                        <a class="btn btn-success" href="#dashboard">Explore Detailed in Dashboard</a>
+                        <a class="btn btn-success" href="#dashboard">Explore Details in Dashboard</a>
                     </div>
 
                     <!-- video -->
                     <div class="col-lg-6 col-md-12 m-0">
-                        <video class="ratio ratio-4x3 shadow p-0 m-0" autoplay muted controls>
+                        <video class="ratio ratio-4x3 shadow p-0 m-0" loading="lazy" autoplay muted controls>
                             <source src="./img/insight/location.mp4" type="video/mp4">
                         </video>
                     </div>
                 </div>
             </div>
 
-        </section>
-
-        <!-- divider -->
-        <hr class="col-8 mx-auto py-lg-4 py-sm-2">
-
-        <!-- Dashboard -->
-        <section id="dashboard" class="container pb-5">
-            <div class="row text-center">
-
-                <!-- Tableau dashboard -->
-                <div class='tableauPlaceholder mx-auto' id='viz1749863467121' style='position: relative'>
-                    <noscript>
-                        <a href='#'>
-                            <img alt='Dashboard '
-                                src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1_rss.png'
-                                style='border: none' />
-                        </a>
-                    </noscript>
-                    <object class='tableauViz' style='display:none;'>
-                        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-                        <param name='embed_code_version' value='3' />
-                        <param name='site_root' value='' />
-                        <param name='name' value='project_17476928016330&#47;Dashboard' />
-                        <param name='tabs' value='no' />
-                        <param name='toolbar' value='yes' />
-                        <param name='static_image'
-                            value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1.png' />
-                        <param name='animate_transition' value='yes' />
-                        <param name='display_static_image' value='yes' />
-                        <param name='display_spinner' value='yes' />
-                        <param name='display_overlay' value='yes' />
-                        <param name='display_count' value='yes' />
-                        <param name='language' value='en-US' />
-                        <param name='filter' value='publish=yes' />
-                    </object>
-                </div>
-                <script type='text/javascript'>
-                    var divElement = document.getElementById('viz1749863467121');
-                    var vizElement = divElement.getElementsByTagName('object')[0];
-
-                    if (divElement.offsetWidth > 800) {
-                        vizElement.style.width = '1120px';
-                        vizElement.style.height = '657px';
-
-                    } else if (divElement.offsetWidth > 500) {
-                        vizElement.style.width = '1120px';
-                        vizElement.style.height = '657px';
-
-                    } else {
-                        vizElement.style.width = '100%';
-                        vizElement.style.height = '2127px';
-
-                    }
-
-                    var scriptElement = document.createElement('script');
-                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                    vizElement.parentNode.insertBefore(scriptElement, vizElement); 
-                </script>
-            </div>
         </section>
 
         <!-- divider -->
@@ -311,7 +253,7 @@
 
                     <!-- title text -->
                     <h1 class="display-5 fw-bold text-body-emphasis text-center pb-3">
-                        Technology Stack
+                        Technology
                         <!-- sign -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                             class="bi bi-tools" viewBox="0 0 16 16">
@@ -319,14 +261,23 @@
                                 d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z" />
                         </svg>
                     </h1>
+
                     <hr class="border-5 border-top border-black col-2 col-md-3 mx-auto">
+
+
                 </div>
             </div>
 
             <!-- tech stack -->
+            <div class="row py-3">
+                <div class=" text-center">
+                    <img class="col-md-8 col-sm-10 img-fluid rounded shadow" src="./img/tech/tech_stack.png"
+                        alt="tech_stack">
+                </div>
+            </div>
 
             <!-- slide -->
-            <div class="row">
+            <div class="row py-3">
                 <div id="techCarousel" class="carousel slide shadow col-md-8 col-sm-12  p-0 mx-auto">
 
                     <!-- indicator -->
@@ -379,47 +330,92 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- challenge & response -->
+            </div>
+            <!-- challenge & response -->
         </section>
 
         <!-- divider -->
-        <hr class="col-8 mx-auto py-4">
+        <hr class="col-8 mx-auto py-lg-4 py-sm-2">
 
-        <!-- test -->
-        <!-- <section id="test" class="container pb-5">
+        <!-- Dashboard -->
+        <section id="dashboard" class="container pb-5">
 
-            <div class="row row-cols-1 pb-2">
-                <div class="px-5 py-4">
+            <!-- Title -->
+            <div class="row">
+                <div class="px-5 py-5">
+
+                    <!-- title text -->
                     <h1 class="display-5 fw-bold text-body-emphasis text-center pb-3">
-                        Performance Test
+                        Dashboard
+                        <!-- sign -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
-                            class="bi bi-flask" viewBox="0 0 16 16">
+                            class="bi bi-bar-chart-line-fill" viewBox="0 0 16 16">
                             <path
-                                d="M4.5 0a.5.5 0 0 0 0 1H5v5.36L.503 13.717A1.5 1.5 0 0 0 1.783 16h12.434a1.5 1.5 0 0 0 1.28-2.282L11 6.359V1h.5a.5.5 0 0 0 0-1zM10 2H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1v1H9a.5.5 0 0 0 0 1h1.22l.61 1H10a.5.5 0 1 0 0 1h1.442l.611 1H11a.5.5 0 1 0 0 1h1.664l.611 1H12a.5.5 0 1 0 0 1h1.886l.758 1.24a.5.5 0 0 1-.427.76H1.783a.5.5 0 0 1-.427-.76l4.57-7.48A.5.5 0 0 0 6 6.5V1h4z" />
+                                d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1z" />
                         </svg>
                     </h1>
                     <hr class="border-5 border-top border-black col-2 col-md-3 mx-auto">
-                </div>
-            </div>
-
-            <div class="row align-items-center g-5 p-5 mb-4">
-
-                <div class="col-lg-5 col-md-12">
-                    <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">
-                        Performance Test Diagram
-                    </h1>
-                    <p class="lead">
-                        Bike usage peaks in the warmer months, especially among casual members, while annual members
-                        maintain steadier usage throughout the year, reflecting commuting versus recreational use.
+                    <p class="text-center lead pt-4">
+                        Explore year-to-year changes by selecting different years in the Tableau dashboard below.
                     </p>
                 </div>
-
-                <div class="col-lg-7 col-md-12 shadow">
-                    <img src="./img/demo.gif" class="d-block img-fluid" alt="insight 01" loading="lazy">
-                </div>
             </div>
-        </section> -->
+
+            <div class="row text-center">
+
+                <!-- Tableau dashboard -->
+                <div class='tableauPlaceholder mx-auto' id='viz1749863467121' style='position: relative'>
+                    <noscript>
+                        <a href='#'>
+                            <img alt='Dashboard '
+                                src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1_rss.png'
+                                style='border: none' />
+                        </a>
+                    </noscript>
+                    <object class='tableauViz' style='display:none;'>
+                        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                        <param name='embed_code_version' value='3' />
+                        <param name='site_root' value='' />
+                        <param name='name' value='project_17476928016330&#47;Dashboard' />
+                        <param name='tabs' value='no' />
+                        <param name='toolbar' value='yes' />
+                        <param name='static_image'
+                            value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pr&#47;project_17476928016330&#47;Dashboard&#47;1.png' />
+                        <param name='animate_transition' value='yes' />
+                        <param name='display_static_image' value='yes' />
+                        <param name='display_spinner' value='yes' />
+                        <param name='display_overlay' value='yes' />
+                        <param name='display_count' value='yes' />
+                        <param name='language' value='en-US' />
+                        <param name='filter' value='publish=yes' />
+                    </object>
+                </div>
+                <script type='text/javascript'>
+                    var divElement = document.getElementById('viz1749863467121');
+                    var vizElement = divElement.getElementsByTagName('object')[0];
+
+                    if (divElement.offsetWidth > 768) {
+                        vizElement.style.width = '1120px';
+                        vizElement.style.height = '657px';
+
+                    } else if (divElement.offsetWidth > 576) {
+                        vizElement.style.width = '640px';
+                        vizElement.style.height = '360px';
+
+                    } else {
+                        vizElement.style.width = '100%';
+                        vizElement.style.height = '2127px';
+                    }
+
+                    var scriptElement = document.createElement('script');
+                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                    vizElement.parentNode.insertBefore(scriptElement, vizElement); 
+                </script>
+            </div>
+        </section>
+
+
+
     </main>
 
     <!-- footer -->
