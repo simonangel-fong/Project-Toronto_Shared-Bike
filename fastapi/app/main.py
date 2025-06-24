@@ -14,42 +14,43 @@ settings = get_settings()
 
 CREATOR = settings.CREATOR
 DEPLOY_HOST = settings.DEPLOY_HOST
+meta_description = """
+## Toronto Shared Bike Data Analysis Project API
+
+This API provides access to comprehensive bike-sharing data analysis for Toronto.
+
+### Features
+
+* **Time-based Analysis**: Get trip and duration data filtered by year, month, and hour
+* **Station Analysis**: Analyze trip patterns by bike stations with sorting and pagination
+* **User Analysis**: Explore trip patterns by different user types
+* **Real-time Data**: Access up-to-date bike sharing statistics
+
+### Data Sources
+
+The API aggregates data from Toronto's bike sharing system, providing insights into:
+- Trip patterns over time
+- Popular stations and routes
+- User behavior analysis
+- Duration statistics
+
+### Usage Tips
+
+- All endpoints support optional filtering parameters
+- Use pagination (limit/offset) for large datasets
+- Combine filters for more specific analysis
+- Check the item_count in responses to understand result sizes
+
+### External Resources
+
+- [Project Homepage](https://trip.arguswatcher.net)
+- [Tableau Dashboard](https://trip.arguswatcher.net/tableau-dashboard.html)
+- [Source Data](https://trip.arguswatcher.net/source.html)
+"""
 
 app = FastAPI(
     title="Toronto Shared Bike Data Analysis Project",
-    description="""
-    ## Toronto Shared Bike Data Analysis Project API
-
-    This API provides access to comprehensive bike-sharing data analysis for Toronto.
-
-    ### Features
-
-    * **Time-based Analysis**: Get trip and duration data filtered by year, month, and hour
-    * **Station Analysis**: Analyze trip patterns by bike stations with sorting and pagination
-    * **User Analysis**: Explore trip patterns by different user types
-    * **Real-time Data**: Access up-to-date bike sharing statistics
-
-    ### Data Sources
-
-    The API aggregates data from Toronto's bike sharing system, providing insights into:
-    - Trip patterns over time
-    - Popular stations and routes
-    - User behavior analysis
-    - Duration statistics
-
-    ### Usage Tips
-
-    - All endpoints support optional filtering parameters
-    - Use pagination (limit/offset) for large datasets
-    - Combine filters for more specific analysis
-    - Check the item_count in responses to understand result sizes
-
-    ### External Resources
-
-    - [Project Homepage](https://trip.arguswatcher.net)
-    - [Tableau Dashboard](https://trip.arguswatcher.net/tableau-dashboard.html)
-    - [Source Data](https://trip.arguswatcher.net/source.html)
-    """,
+    description=meta_description,
     version="1.0.0",
     contact={
         "name": "API Support",
